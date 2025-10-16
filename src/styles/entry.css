@@ -1,0 +1,64 @@
+@import url('https://fonts.bunny.net/css2?family=Outfit:wght@300;400;500;700;900&display=swap');
+
+@import 'tailwindcss';
+
+@theme {
+  --color-*: initial;
+  --color-white: hsl(0, 0%, 100%);
+  --color-lightGray: hsl(210, 14%, 83%);
+  --color-silver: hsl(0, 0%, 79%);
+  --color-cornflowerBlue: hsl(207, 91%, 64%);
+  --color-gray: hsl(0, 0%, 51%);
+  --color-blueViolet: hsl(255, 67%, 55%);
+  --color-forestGreen: hsl(131, 54%, 40%);
+  --color-fireBrick: hsl(0, 59%, 41%);
+  --color-steelBlue: hsl(209, 77%, 43%);
+  --color-darkOrange: hsl(35, 100%, 47%);
+  --color-teal: hsl(162, 88%, 30%);
+  --color-charcoal: hsl(0, 0%, 26%);
+  --color-darkGray: hsl(210, 11%, 15%);
+  --color-black: hsl(0, 0%, 0%);
+
+  --font-sans: 'Outfit', sans-serif;
+}
+
+@layer base {
+  :root {
+    @apply text-white font-sans;
+  }
+
+  body {
+    @apply min-h-screen px-4 pb-20 bg-[#141313];
+    &::before {
+      content: '';
+      background: radial-gradient(circle at 50% 30%, #242da84d, #141313 70%);
+      animation: pulse-glow 6s ease-in-out infinite alternate;
+      @apply fixed inset-0 -z-10 blur-[40px];
+    }
+  }
+}
+
+@keyframes pulse-glow {
+  from {
+    opacity: 0.8;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes progress {
+  0% {
+    width: 0%;
+  }
+  50% {
+    width: 70%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+@utility animate-progress {
+  animation: progress 1.2s ease-in-out infinite;
+}
