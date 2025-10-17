@@ -51,12 +51,12 @@ function RouteComponent() {
                 <HorizontalScroller items={data.results}>
                   {(item) => (
                     <Link
-                      to='/overview/$media/$id'
+                      to='/$media/$id/overview/$similar'
                       params={{
                         media: headers[i].endsWith('ovies') ? 'movie' : 'tv',
-                        id: String(item.id),
+                        id: item.id,
+                        similar: 1,
                       }}
-                      search={{ similar: 1 }}
                     >
                       <PreviewCard item={item} />
                     </Link>

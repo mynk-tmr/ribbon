@@ -47,7 +47,7 @@ export function HorizontalScroller<T>({
       {/* Scrollable container */}
       <div
         ref={containerRef}
-        className='scrollbar-hide flex snap-x snap-mandatory gap-2 overflow-x-hidden p-1 *:shrink-0 *:snap-start'
+        className='scrollbar-hide flex snap-x snap-mandatory gap-2 overflow-x-auto p-1 *:shrink-0 *:snap-start'
       >
         {items.map(children)}
       </div>

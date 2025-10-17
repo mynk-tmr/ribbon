@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev:c": "vite",
+    "dev:c": "vite --port 3001",
     "dev:s": "bun --hot server/index.ts",
     "dev": "bun concurrently dev:c dev:s",
     "build": "vite build",

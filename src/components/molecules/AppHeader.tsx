@@ -3,7 +3,7 @@ import { link } from '@/styles/typography'
 import { Link } from '@tanstack/react-router'
 import { Logo } from '../atoms/Logo'
 
-function LoginButton() {
+function AuthButton() {
   return (
     <Link to='/auth' className={button({ intent: 'secondary', shape: 'pill' })}>
       Login
@@ -18,7 +18,7 @@ export function AppHeader() {
       link: '/discover',
     },
     {
-      name: 'Search 🔎',
+      name: 'Search 💭',
       link: '/search',
     },
   ] as const
@@ -41,7 +41,7 @@ export function AppHeader() {
             ))
           }
         </nav>
-        <LoginButton />
+        <AuthButton />
       </div>
     </header>
   )

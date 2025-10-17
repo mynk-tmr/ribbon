@@ -22,6 +22,7 @@ export function Poster({ path, size = 'w342', alt, ...props }: PosterProps) {
 
   return (
     <img
+      loading='lazy'
       src={error ? fallbackFailed : src}
       alt={alt}
       onError={() => setError(true)}

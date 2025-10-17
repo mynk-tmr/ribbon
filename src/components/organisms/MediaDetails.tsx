@@ -3,10 +3,10 @@ import badge from '@/styles/badge'
 import button from '@/styles/button'
 import { headings, text } from '@/styles/typography'
 import { Icon } from '@iconify/react'
-import { Link } from '@tanstack/react-router'
 import { MetaItem } from '../atoms/MetaItem'
 import { Poster } from '../atoms/Poster'
 import { RatingBadge } from '../atoms/RatingBadge'
+import { StreamButton } from '../molecules/StreamButton'
 
 export function MediaDetails({
   details,
@@ -113,21 +113,13 @@ export function MediaDetails({
 
         {/* Bottom Button Links */}
         <footer className='space-x-4'>
-          <Link
-            className={button()}
-            to={`/stream/$media/$id`}
-            params={{
-              media: is_movie ? 'movie' : 'tv',
-              id: String(details.id),
-            }}
-          >
-            {is_movie ? 'Stream' : 'View Episodes'}
-          </Link>
-
+          <StreamButton isMovie={is_movie} id={details.id} />
           {details.homepage && (
             <a
               className={button({ style: 'outline', intent: 'info' })}
               href={details.homepage}
+              target='_blank'
+              rel='noopener noreferrer'
             >
               Homepage
             </a>

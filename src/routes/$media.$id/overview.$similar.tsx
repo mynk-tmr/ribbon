@@ -4,25 +4,22 @@ import { Pagination } from '@/components/organisms/Pagination'
 import { tmdb } from '@/lib/tmdb/api'
 import { headings } from '@/styles/typography'
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { type } from 'arktype'
 
-export const Route = createFileRoute('/overview/$media/$id')({
+export const Route = createFileRoute('/$media/$id/overview/$similar')({
   component: RouteComponent,
-  validateSearch: type({ similar: 'number.integer' }),
-  loaderDeps({ search }) {
-    return { search }
+  params: {
+    parse: (raw) => {
+      const similar = Number(raw.similar) || 1
+      return { similar }
+    },
   },
-  async loader({ params, deps: { search } }) {
-    const { id, media } = type({
-      id: 'string.integer.parse',
-      media: "'tv' | 'movie'",
-    }).assert(params)
-    const [details, similar] = await Promise.all([
+  async loader({ params: { id, media, similar } }) {
+    const [details, recs] = await Promise.all([
       tmdb[media].details(id),
-      tmdb[media].recommendations(id, search.similar),
+      tmdb[media].recommendations(id, similar),
     ])
 
-    return [details, similar] as const
+    return [details, recs] as const
   },
 })
 
@@ -86,12 +83,12 @@ function Recommendations() {
           <Link
             className='max-w-40'
             key={item.id}
-            to='/overview/$media/$id'
+            to='.'
             params={{
-              id: String(item.id),
+              id: item.id,
               media: tmdb.isMovie(item) ? 'movie' : 'tv',
+              similar: 1,
             }}
-            search={{ similar: 1 }}
           >
             <PreviewCard item={item} />
           </Link>
@@ -103,9 +100,9 @@ function Recommendations() {
         currentPage={similar.data.page}
         onChange={(p) => {
           goto({
-            search: { similar: p },
+            params: { similar: p },
             hash: 'recommendations',
-            resetScroll: true,
+            hashScrollIntoView: { behavior: 'smooth' },
           })
         }}
       />
