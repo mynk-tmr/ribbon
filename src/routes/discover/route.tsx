@@ -3,7 +3,7 @@ import { HorizontalScroller } from '@/components/molecules/HorizontalScroller'
 import { PreviewCard } from '@/components/molecules/PreviewCard'
 import { tmdb } from '@/lib/tmdb/api'
 import { headings } from '@/styles/typography'
-import { Await, createFileRoute } from '@tanstack/react-router'
+import { Await, createFileRoute, Link } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/discover')({
   component: RouteComponent,
@@ -15,7 +15,7 @@ export const Route = createFileRoute('/discover')({
       tmdb.tv.trending('week'),
       tmdb.tv.popular(1),
       tmdb.tv.top_rated(1),
-    ]
+    ] as const
   },
 })
 
@@ -49,10 +49,26 @@ function RouteComponent() {
             {({ data }) =>
               data ? (
                 <HorizontalScroller items={data.results}>
-                  {(item) => <PreviewCard item={item} />}
+                  {(item) => (
+                    <Link
+                      to='/overview/$media/$id'
+                      params={{
+                        media: headers[i].endsWith('ovies') ? 'movie' : 'tv',
+                        id: String(item.id),
+                      }}
+                      search={{ similar: 1 }}
+                    >
+                      <PreviewCard item={item} />
+                    </Link>
+                  )}
                 </HorizontalScroller>
               ) : (
-                <p className='text-fireBrick h-[200px] px-6 text-center'>
+                <p
+                  className={headings({
+                    level: 'h4',
+                    className: 'text-fireBrick text-center',
+                  })}
+                >
                   Something went wrong. Please try again
                 </p>
               )

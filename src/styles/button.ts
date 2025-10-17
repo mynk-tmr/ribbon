@@ -43,44 +43,37 @@ const button = tv({
     {
       style: 'outline',
       intent: 'primary',
-      class:
-        'border-blueViolet text-blueViolet hover:bg-blueViolet hover:border-blueViolet/80 hover:text-white',
+      class: 'border-blueViolet text-blueViolet hover:bg-blueViolet/20',
     },
     {
       style: 'outline',
       intent: 'secondary',
-      class:
-        'border-silver text-silver hover:bg-silver hover:text-charcoal hover:border-silver/80',
+      class: 'border-silver text-silver hover:bg-silver/20',
     },
     {
       style: 'outline',
       intent: 'destructive',
-      class:
-        'border-fireBrick text-fireBrick hover:bg-fireBrick hover:border-fireBrick/80 hover:text-white',
+      class: 'border-fireBrick text-fireBrick hover:bg-fireBrick/20',
     },
     {
       style: 'outline',
       intent: 'success',
-      class:
-        'border-forestGreen text-forestGreen hover:bg-forestGreen hover:border-forestGreen/80 hover:text-white',
+      class: 'border-forestGreen text-forestGreen hover:bg-forestGreen/20',
     },
     {
       style: 'outline',
       intent: 'warning',
-      class:
-        'border-darkOrange text-darkOrange hover:bg-darkOrange hover:border-darkOrange/80 hover:text-white',
+      class: 'border-darkOrange text-darkOrange hover:bg-darkOrange/20',
     },
     {
       style: 'outline',
       intent: 'info',
-      class:
-        'border-steelBlue text-steelBlue hover:bg-steelBlue hover:border-steelBlue/80 hover:text-white',
+      class: 'border-steelBlue text-steelBlue hover:bg-steelBlue/20',
     },
     {
       style: 'outline',
       intent: 'ghost',
-      class:
-        'border-silver text-charcoal hover:bg-lightGray hover:text-charcoal hover:border-silver/80',
+      class: 'border-silver text-charcoal hover:bg-lightGray/20',
     },
     { shape: 'circular', size: 'icon', class: 'h-10 w-10 p-0' },
     { shape: 'square', size: 'icon', class: 'h-10 w-10 p-0' },

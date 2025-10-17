@@ -53,37 +53,37 @@ const badge = tv({
     {
       intent: 'primary',
       style: 'outline',
-      class: 'border-blueViolet text-blueViolet border bg-white',
+      class: 'border-blueViolet text-blueViolet border',
     },
     {
       intent: 'secondary',
       style: 'outline',
-      class: 'border-darkGray text-darkGray border bg-white',
+      class: 'border-silver text-silver border',
     },
     {
       intent: 'success',
       style: 'outline',
-      class: 'border-forestGreen text-forestGreen border bg-white',
+      class: 'border-forestGreen text-forestGreen border',
     },
     {
       intent: 'warning',
       style: 'outline',
-      class: 'border-darkOrange text-darkOrange border bg-white',
+      class: 'border-darkOrange text-darkOrange border',
     },
     {
       intent: 'destructive',
       style: 'outline',
-      class: 'border-fireBrick text-fireBrick border bg-white',
+      class: 'border-fireBrick text-fireBrick border',
     },
     {
       intent: 'info',
       style: 'outline',
-      class: 'border-steelBlue text-steelBlue border bg-white',
+      class: 'border-steelBlue text-steelBlue border',
     },
     {
       intent: 'ghost',
       style: 'outline',
-      class: 'border-gray text-gray border bg-white',
+      class: 'border-gray text-gray border',
     },
     // Size/shape tweaks
     {

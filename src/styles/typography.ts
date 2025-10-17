@@ -37,3 +37,12 @@ export const link = tv({
     disabled: false,
   },
 })
+
+export const text = tv({
+  variants: {
+    as: {
+      tagline: 'text-silver italic',
+      body: 'text-silver leading-6 md:text-lg',
+    },
+  },
+})
