@@ -33,10 +33,8 @@ export function AppHeader() {
           {
             // TODO: add active class
             routes.map((route) => (
-              <Link key={route.name} to={route.link}>
-                {({ isActive }) => (
-                  <span className={link({ isActive })}>{route.name}</span>
-                )}
+              <Link className={link()} key={route.name} to={route.link}>
+                {route.name}
               </Link>
             ))
           }

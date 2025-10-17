@@ -20,7 +20,7 @@ export const RatingBadge = ({
   const circumference = 2 * Math.PI * radius
   const offset = circumference - (rating / 100) * circumference
   const strokeColor =
-    rating >= 70 ? 'darkgreen' : rating >= 40 ? 'orange' : 'red'
+    rating >= 70 ? 'hsl(131, 63%, 34%)' : rating >= 40 ? 'orange' : 'red'
 
   return (
     <div

@@ -7,9 +7,16 @@ interface PosterProps extends VariantProps<typeof poster> {
   path?: string | null
   size?: PosterSize
   alt: string
+  className?: string
 }
 
-export function Poster({ path, size = 'w342', alt, ...props }: PosterProps) {
+export function Poster({
+  path,
+  size = 'w342',
+  alt,
+  className,
+  ...props
+}: PosterProps) {
   const [error, setError] = useState(false)
 
   // Fallback 1 → when path is missing
@@ -26,7 +33,7 @@ export function Poster({ path, size = 'w342', alt, ...props }: PosterProps) {
       src={error ? fallbackFailed : src}
       alt={alt}
       onError={() => setError(true)}
-      className={poster({ ...props })}
+      className={poster({ ...props, className })}
     />
   )
 }

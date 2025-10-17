@@ -1,7 +1,7 @@
 import { tv } from 'tailwind-variants'
 
 export const poster = tv({
-  base: 'aspect-[2/3] w-full rounded-md object-cover transition-transform duration-300 ease-in-out',
+  base: 'aspect-[2/3] size-full rounded-md object-cover transition-transform duration-300 ease-in-out',
   variants: {
     withHover: {
       true: 'group-hover:scale-110',

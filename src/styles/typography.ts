@@ -20,29 +20,31 @@ export const headings = tv({
 })
 
 export const link = tv({
-  base: 'hover:text-darkGray relative px-2 py-1 font-medium transition-colors hover:bg-white',
+  base: 'font-medium transition-all duration-200',
   variants: {
-    intent: {
-      primary: 'text-lightGray bg-darkGray rounded',
-    },
     disabled: {
       true: 'pointer-events-none opacity-50',
     },
-    isActive: {
-      true: 'bg-teal text-white',
+    style: {
+      text: 'text-silver [&.active]:border-steelBlue border-b-2 border-transparent [&.active]:scale-110',
+      wrapper:
+        'absolute inset-0 grid h-full place-items-center bg-black/80 transition-all duration-200',
     },
   },
   defaultVariants: {
-    intent: 'primary',
     disabled: false,
+    style: 'text',
   },
 })
 
 export const text = tv({
+  base: 'text-silver',
   variants: {
     as: {
-      tagline: 'text-silver italic',
-      body: 'text-silver leading-6 md:text-lg',
+      tagline: 'text-sm not-italic',
+      body: 'leading-6 md:text-lg',
+      small: 'text-sm leading-5',
+      label: 'text-sm font-medium',
     },
   },
 })

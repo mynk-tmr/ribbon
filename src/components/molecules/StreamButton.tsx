@@ -1,7 +1,13 @@
 import button from '@/styles/button'
 import { Link } from '@tanstack/react-router'
 
-export function StreamButton(props: { isMovie: boolean; id: number }) {
+type Props = {
+  isMovie: boolean
+  id: number
+  lastSeason: number
+}
+
+export function StreamButton(props: Props) {
   if (props.isMovie) {
     return (
       <Link
@@ -19,10 +25,11 @@ export function StreamButton(props: { isMovie: boolean; id: number }) {
     return (
       <Link
         className={button()}
-        to='/$media/$id/season/$num'
+        to='/$media/$id/season/$num/$end'
         params={{
           id: props.id,
           num: '1',
+          end: String(props.lastSeason),
           media: 'tv',
         }}
       >

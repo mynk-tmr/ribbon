@@ -32,14 +32,13 @@ function RouteComponent() {
   return (
     <main className='my-6 space-y-10'>
       {promises.map((p, i) => (
-        <section>
+        <section key={i}>
           <h2 className={headings({ level: 'h3', className: 'mb-4' })}>
             {headers[i]}
           </h2>
           <Await
             /* @ts-expect-error p is movie or tv */
             promise={p}
-            key={i}
             fallback={
               <div className='min-h-[204px] py-5'>
                 <Skeleton />
@@ -51,6 +50,7 @@ function RouteComponent() {
                 <HorizontalScroller items={data.results}>
                   {(item) => (
                     <Link
+                      key={item.id}
                       to='/$media/$id/overview/$similar'
                       params={{
                         media: headers[i].endsWith('ovies') ? 'movie' : 'tv',

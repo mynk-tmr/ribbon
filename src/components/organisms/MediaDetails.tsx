@@ -113,7 +113,11 @@ export function MediaDetails({
 
         {/* Bottom Button Links */}
         <footer className='space-x-4'>
-          <StreamButton isMovie={is_movie} id={details.id} />
+          <StreamButton
+            isMovie={is_movie}
+            id={details.id}
+            lastSeason={is_movie ? 0 : details.number_of_seasons}
+          />
           {details.homepage && (
             <a
               className={button({ style: 'outline', intent: 'info' })}

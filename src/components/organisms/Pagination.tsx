@@ -14,6 +14,9 @@ const pagination = tv({
       sm: {},
       md: {},
     },
+    circular: {
+      true: {},
+    },
   },
   defaultVariants: {
     size: 'md',
@@ -38,6 +41,11 @@ const pagination = tv({
     { slots: ['item', 'prev', 'next'], size: 'xs', class: 'h-7 w-7 text-xs' },
     { slots: ['item', 'prev', 'next'], size: 'sm', class: 'h-8 w-8 text-sm' },
     { slots: ['item', 'prev', 'next'], size: 'md', class: 'h-9 w-9 text-base' },
+    {
+      slots: ['item', 'prev', 'next'],
+      circular: true,
+      class: 'rounded-full',
+    },
   ],
 })
 
@@ -46,6 +54,7 @@ interface Props extends VariantProps<typeof pagination> {
   currentPage: number
   onChange: (page: number) => void
   siblingCount?: number
+  showFirstAndLast?: boolean
 }
 
 export function Pagination({
@@ -54,8 +63,10 @@ export function Pagination({
   onChange,
   size,
   siblingCount = 5,
+  showFirstAndLast = true,
+  circular,
 }: Props) {
-  const { base, item, prev, next } = pagination({ size })
+  const { base, item, prev, next } = pagination({ size, circular })
 
   // Utility to safely change page
   const goTo = (page: number) => {
@@ -86,16 +97,18 @@ export function Pagination({
   return (
     <ul aria-label='Pagination navigation' className={base()}>
       {/* Previous */}
-      <li>
-        <button
-          className={next()}
-          onClick={() => goTo(currentPage - 1)}
-          disabled={currentPage === 1}
-          aria-label='Previous page'
-        >
-          <Icon icon='material-symbols:chevron-left-rounded' fontSize={16} />
-        </button>
-      </li>
+      {showFirstAndLast && (
+        <li>
+          <button
+            className={prev()}
+            onClick={() => goTo(currentPage - 1)}
+            disabled={currentPage === 1}
+            aria-label='Previous page'
+          >
+            <Icon icon='material-symbols:chevron-left-rounded' fontSize={16} />
+          </button>
+        </li>
+      )}
 
       {/* Pages */}
       {pages.map((p, i) =>
@@ -124,16 +137,18 @@ export function Pagination({
       )}
 
       {/* Next */}
-      <li>
-        <button
-          className={prev()}
-          onClick={() => goTo(currentPage + 1)}
-          disabled={currentPage === totalPages}
-          aria-label='Next page'
-        >
-          <Icon icon='material-symbols:chevron-right-rounded' fontSize={16} />
-        </button>
-      </li>
+      {showFirstAndLast && (
+        <li>
+          <button
+            className={next()}
+            onClick={() => goTo(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            aria-label='Next page'
+          >
+            <Icon icon='material-symbols:chevron-right-rounded' fontSize={16} />
+          </button>
+        </li>
+      )}
     </ul>
   )
 }

@@ -1,5 +1,4 @@
-import { link } from '@/styles/typography'
-import { Link } from '@tanstack/react-router'
+import { useEffect } from 'react'
 
 type Props =
   | {
@@ -17,6 +16,11 @@ export function VidSrc(props: Props) {
   const BASE_URL = `https://vidsrc.net/embed/${props.type}/${props.id}${
     props.type === 'tv' ? `/${props.season}/${props.episode}` : ''
   }`
+
+  useEffect(() => {
+    window.scrollBy(0, 1999)
+  }, [props])
+
   return (
     <div className='mx-auto max-w-5xl px-4 pt-8'>
       {/* Responsive video container */}
@@ -29,28 +33,6 @@ export function VidSrc(props: Props) {
           allow='autoplay; picture-in-picture'
         />
       </div>
-      <div
-        ref={(el) => el?.scrollIntoView({ behavior: 'smooth' })}
-        className='flex flex-wrap justify-between gap-3 px-2'
-      >
-        <BackButton {...props} />
-      </div>
     </div>
   )
-}
-
-function BackButton(props: { type: 'movie' | 'tv'; id: number }) {
-  if (props.type === 'movie') {
-    return (
-      <Link
-        className={link()}
-        replace
-        to='/$media/$id/overview/$similar'
-        params={{ media: 'movie', id: props.id, similar: 1 }}
-      >
-        Back to Movie
-      </Link>
-    )
-  }
-  return null
 }

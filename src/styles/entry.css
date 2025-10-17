@@ -24,7 +24,7 @@
 
 @layer base {
   :root {
-    @apply font-sans text-white;
+    @apply font-sans text-white scheme-dark;
   }
 
   body {
@@ -34,6 +34,15 @@
       background: radial-gradient(circle at 50% 30%, #242da84d, #141313 70%);
       animation: pulse-glow 6s ease-in-out infinite alternate;
       @apply fixed inset-0 -z-10 blur-[40px];
+    }
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+    &::-webkit-scrollbar-track {
+      @apply bg-darkGray;
+    }
+    &::-webkit-scrollbar-thumb {
+      @apply bg-silver/40 rounded-full;
     }
   }
 }
