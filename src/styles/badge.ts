@@ -20,13 +20,13 @@ const badge = tv({
       regular: 'rounded px-2 py-0.5',
       pill: 'rounded-full px-4 py-0.5',
       square: 'rounded-xs px-2 py-0.5',
-      circular: 'rounded-full w-8 h-8 justify-center p-0',
+      circular: 'h-8 w-8 justify-center rounded-full p-0',
     },
     size: {
       sm: 'text-xs',
       md: 'text-sm',
       lg: 'text-base',
-      icon: 'w-8 h-8 p-0 flex items-center justify-center',
+      icon: 'flex h-8 w-8 items-center justify-center p-0',
     },
     iconOnly: {
       true: '',
@@ -53,43 +53,43 @@ const badge = tv({
     {
       intent: 'primary',
       style: 'outline',
-      class: 'border border-blueViolet text-blueViolet bg-white',
+      class: 'border-blueViolet text-blueViolet border bg-white',
     },
     {
       intent: 'secondary',
       style: 'outline',
-      class: 'border border-darkGray text-darkGray bg-white',
+      class: 'border-darkGray text-darkGray border bg-white',
     },
     {
       intent: 'success',
       style: 'outline',
-      class: 'border border-forestGreen text-forestGreen bg-white',
+      class: 'border-forestGreen text-forestGreen border bg-white',
     },
     {
       intent: 'warning',
       style: 'outline',
-      class: 'border border-darkOrange text-darkOrange bg-white',
+      class: 'border-darkOrange text-darkOrange border bg-white',
     },
     {
       intent: 'destructive',
       style: 'outline',
-      class: 'border border-fireBrick text-fireBrick bg-white',
+      class: 'border-fireBrick text-fireBrick border bg-white',
     },
     {
       intent: 'info',
       style: 'outline',
-      class: 'border border-steelBlue text-steelBlue bg-white',
+      class: 'border-steelBlue text-steelBlue border bg-white',
     },
     {
       intent: 'ghost',
       style: 'outline',
-      class: 'border border-gray text-gray bg-white',
+      class: 'border-gray text-gray border bg-white',
     },
     // Size/shape tweaks
     {
       shape: 'circular',
       size: 'icon',
-      class: 'w-8 h-8 p-0 flex items-center justify-center',
+      class: 'flex h-8 w-8 items-center justify-center p-0',
     },
     { shape: 'pill', size: 'lg', class: 'px-6' },
     { shape: 'pill', size: 'md', class: 'px-4' },

@@ -24,11 +24,11 @@
 
 @layer base {
   :root {
-    @apply text-white font-sans;
+    @apply font-sans text-white;
   }
 
   body {
-    @apply min-h-screen px-4 pb-20 bg-[#141313];
+    @apply min-h-screen bg-[#141313] px-4 pb-20 sm:pb-10 md:pb-6;
     &::before {
       content: '';
       background: radial-gradient(circle at 50% 30%, #242da84d, #141313 70%);
@@ -61,4 +61,18 @@
 
 @utility animate-progress {
   animation: progress 1.2s ease-in-out infinite;
+}
+
+@utility scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@utility indicator {
+  &::after {
+    @apply bg-teal absolute top-0 z-20 me-3 inline-block size-3 rounded-full content-[''];
+  }
 }

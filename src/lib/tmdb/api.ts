@@ -13,25 +13,13 @@ function isError(item: unknown): item is TMDB.Error {
   return 'status_code' in item
 }
 
-async function call<T>(...args: Parameters<typeof api>): Promise<
-  | {
-      data: null
-      error: TMDB.Error
-    }
-  | { data: T; error: null }
-> {
-  try {
-    const res = await api(...args)
-    if (isError(res)) return { data: null, error: res }
-    return { data: res as T, error: null }
-  } catch (err) {
-    const error: TMDB.Error = {
-      status_code: -1,
-      status_message: err instanceof Error ? err.message : 'Unknown error',
-      success: false,
-    }
-    return { data: null, error }
-  }
+async function call<T>(...args: Parameters<typeof api>): Promise<{
+  data: null | T
+  error: null | TMDB.Error
+}> {
+  const res = await api(...args)
+  if (isError(res)) return { data: null, error: res }
+  return { data: res as T, error: null }
 }
 
 function makeapi<T, Detail>(type: 'tv' | 'movie') {
