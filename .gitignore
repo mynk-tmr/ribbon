@@ -25,3 +25,5 @@ dist-ssr
 #artifacts
 env*
 routeTree*
+_api
+.vercel

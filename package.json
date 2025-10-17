@@ -11,7 +11,8 @@
     "lint": "bunx --bun eslint .",
     "preview": "vite preview",
     "format": "prettier --write .",
-    "typecheck": "tsc -b --noEmit"
+    "typecheck": "tsc -b --noEmit",
+    "prebuild": "bun build server/index.ts --minify --target node --outdir _api"
   },
   "dependencies": {
     "@iconify/react": "^6.0.2",
