@@ -11,13 +11,13 @@ export const Route = createFileRoute('/$media/$id/season/$num/$end/')({
   async loader({ parentMatchPromise }) {
     const out = (await parentMatchPromise).loaderData
     if (!out) throw new Error('No Data Provided from Parent Route')
-    return { ...out }
+    return out
   },
 })
 
 function RouteComponent() {
   const { season } = Route.useLoaderData()
-
+  console.log(season)
   return (
     <main className='mx-auto mt-4 max-w-7xl space-y-12 px-6'>
       <div>

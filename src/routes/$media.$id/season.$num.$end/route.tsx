@@ -1,5 +1,5 @@
 import { tmdb } from '@/lib/tmdb/api'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Outlet } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/$media/$id/season/$num/$end')({
   async loader({ params: { id, num, end } }) {
@@ -8,4 +8,5 @@ export const Route = createFileRoute('/$media/$id/season/$num/$end')({
     if (error || !data) throw error
     return { season: data, number, end: Number(end) }
   },
+  component: Outlet,
 })
