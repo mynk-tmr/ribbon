@@ -4,7 +4,7 @@ import type * as TMDB from './+types'
 const { DEV } = import.meta.env
 
 const api = ofetch.create({
-  baseURL: DEV ? 'http://localhost:3000/api/tmdb' : 'api/tmdb',
+  baseURL: DEV ? 'http://localhost:3000/api/tmdb' : '/api/tmdb',
   ignoreResponseError: true,
 })
 
