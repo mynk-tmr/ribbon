@@ -25,7 +25,7 @@ export function AppHeader() {
 
   return (
     <header className='border-b p-4 sm:px-6'>
-      <div className='space-between flex items-center'>
+      <div className='space-between flex flex-wrap items-center gap-y-4'>
         <Link to='/' title='Go to Home'>
           <Logo />
         </Link>

@@ -15,7 +15,7 @@ export function PreviewCard({ item }: Props) {
     release_date: tmdb.isMovie(item) ? item.release_date : item.first_air_date,
   }
 
-  const year = release_date.split('-')[0] ?? '—'
+  const year = release_date ? new Date(release_date).getFullYear() : 'Unknown'
   return (
     <article className='group relative w-36 overflow-hidden rounded-md bg-white/10 p-1 shadow-sm md:w-44'>
       <Poster path={poster_path} alt={title} />

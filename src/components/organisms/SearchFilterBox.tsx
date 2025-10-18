@@ -22,7 +22,7 @@ export function SearchFilterBox(props: Props) {
         e.preventDefault()
         props.onSearch(query, media, year)
       }}
-      className='flex justify-center gap-4'
+      className='flex flex-wrap justify-center gap-4'
     >
       <InputField
         value={query}
