@@ -1,21 +1,20 @@
 import { PreviewCard } from '@/components/molecules/PreviewCard'
 import { Pagination } from '@/components/organisms/Pagination'
 import { SearchFilterBox } from '@/components/organisms/SearchFilterBox'
-import { tmdb, type TMDB } from '@/lib/tmdb/api'
+import { tmdb } from '@/lib/tmdb/api'
 import { headings } from '@/styles/typography'
 import { createFileRoute, Link } from '@tanstack/react-router'
+import { type } from 'arktype'
+
+const schema = type({
+  query: 'string=""',
+  media: '"movie" | "tv" = "tv"',
+  page: 'number.integer = 1',
+})
 
 export const Route = createFileRoute('/search')({
   component: RouteComponent,
-  validateSearch: (search: TMDB.SearchParams & { media: 'movie' | 'tv' }) => {
-    return Object.keys(search).length > 0
-      ? search
-      : {
-          query: '',
-          media: 'tv' as const,
-          page: 1,
-        }
-  },
+  validateSearch: schema,
   loaderDeps: ({ search }) => search,
   loader: async ({ deps: { query, media, page } }) => {
     if (query === '') return { data: null }
@@ -26,18 +25,9 @@ export const Route = createFileRoute('/search')({
 
 function RouteComponent() {
   const { data } = Route.useLoaderData()
-  const goto = Route.useNavigate()
-  const search = Route.useSearch()
   return (
     <main className='mx-auto grid'>
-      <SearchFilterBox
-        defaults={{ ...search }}
-        onSearch={(query, media, year) => {
-          goto({
-            search: { query, media, year, page: 1 },
-          })
-        }}
-      />
+      <SearchFilterBox />
       <section className='mt-8'>{data ? <Results /> : <NoData />}</section>
     </main>
   )
@@ -57,13 +47,17 @@ function Results() {
   const { data } = Route.useLoaderData()
   if (!data) throw new Error('Route component has bad ternary')
   const search = Route.useSearch()
-  const searchText = Object.values({ ...search, page: undefined }).join(' ')
+  const searchText = Object.values({
+    ...search,
+    page: `page ${search.page}`,
+  }).join(' / ')
   const goto = Route.useNavigate()
   return (
     <>
       <header>
-        <h2 className={headings({ level: 'h3' })}>
-          {data.total_results} results for <small>{searchText}</small>
+        <h2 className={headings({ level: 'h5', class: 'text-center' })}>
+          {data.total_results} results for{' '}
+          <span className='text-teal'>{searchText}</span>
         </h2>
       </header>
       <div className='mt-9 flex flex-wrap justify-center gap-4'>

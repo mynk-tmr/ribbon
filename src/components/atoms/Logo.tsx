@@ -7,8 +7,7 @@ export function Logo({ className = '' }: { className?: string }) {
         decoding='async'
         src='/favicon.svg'
         alt='Ribbon'
-        width={40}
-        height={40}
+        className='size-8 sm:size-10'
       />
       <span className={headings({ level: 'h3', intent: 'info' })}>Ribbon</span>
     </figure>

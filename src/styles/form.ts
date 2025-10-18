@@ -14,7 +14,7 @@ export const formControl = tv({
     textarea:
       'border-lightGray bg-darkGray text-silver placeholder:text-gray focus:ring-cornflowerBlue focus:border-cornflowerBlue min-h-[100px] w-full rounded-lg border px-3 py-2 text-sm transition-colors duration-150 focus:ring-2 focus:outline-none',
     helper: 'text-gray text-xs',
-    error: 'text-fireBrick text-xs',
+    error: 'text-fireBrick text-sm',
     chevron:
       'text-silver pointer-events-none absolute right-3 flex items-center justify-center',
   },

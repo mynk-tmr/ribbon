@@ -10,12 +10,14 @@ export function InputField({
   state,
   disabled,
   size,
+  onValueChange = () => {},
   ...props
 }: React.InputHTMLAttributes<HTMLInputElement> & {
   label?: string
   helper?: string
   error?: string
   icon?: string // iconify name like "mdi:email-outline"
+  onValueChange?: (value: string) => void
 } & FormControlVariants) {
   const {
     root,
@@ -40,7 +42,12 @@ export function InputField({
             <Icon icon={icon} width='1em' height='1em' />
           </span>
         )}
-        <input {...props} className={input()} disabled={disabled} />
+        <input
+          {...props}
+          onChange={(e) => onValueChange(e.target.value)}
+          className={input()}
+          disabled={disabled}
+        />
       </div>
       {error ? (
         <span className={errorCls()}>{error}</span>
