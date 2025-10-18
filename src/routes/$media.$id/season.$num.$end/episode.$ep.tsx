@@ -18,7 +18,7 @@ function RouteComponent() {
   const { season, episode } = Route.useLoaderData()
   const { id } = Route.useParams()
   return (
-    <main className='px-6 pt-8'>
+    <main className='relative'>
       <VidSrc
         type='tv'
         id={id}
@@ -37,9 +37,7 @@ function BackButton() {
   const params = Route.useParams()
   return (
     <Link
-      className={link({
-        class: 'hover:border-b-lightGray hover:border-b',
-      })}
+      className={link()}
       replace
       to='/$media/$id/season/$num/$end'
       params={params}

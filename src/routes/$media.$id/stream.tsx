@@ -9,7 +9,7 @@ export const Route = createFileRoute('/$media/$id/stream')({
 function RouteComponent() {
   const { id } = Route.useParams()
   return (
-    <main className='px-6 pt-8'>
+    <main>
       <VidSrc type='movie' id={id} />
       <div className='mx-auto w-fit'>
         <BackButton />
@@ -22,9 +22,7 @@ function BackButton() {
   const params = Route.useParams()
   return (
     <Link
-      className={link({
-        class: 'hover:border-b-lightGray hover:border-b',
-      })}
+      className={link()}
       replace
       to='/$media/$id/overview/$similar'
       params={{ media: 'movie', id: params.id, similar: 1 }}

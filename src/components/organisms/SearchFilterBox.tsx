@@ -28,7 +28,6 @@ export function SearchFilterBox(props: Props) {
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         required
-        style={{ width: '20rem' }}
         icon='mdi:magnify'
         placeholder='Search movies, TV shows...'
       />

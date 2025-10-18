@@ -17,14 +17,13 @@ export const Route = createFileRoute('/$media/$id/season/$num/$end/')({
 
 function RouteComponent() {
   const { season } = Route.useLoaderData()
-  console.log(season)
   return (
-    <main className='mx-auto mt-4 max-w-7xl space-y-12 px-6'>
+    <main className='space-y-12'>
       <div>
         <GoBack />
         <SeasonDetails />
       </div>
-      <section className='mt-10 grid grid-cols-[repeat(auto-fill,minmax(225px,1fr))] gap-8'>
+      <section className='grid grid-cols-[repeat(auto-fill,minmax(225px,1fr))] gap-8'>
         {season.episodes.map((episode) => (
           <Episode key={episode.id} index={episode.episode_number - 1} />
         ))}

@@ -25,16 +25,9 @@ export const Route = createFileRoute('/$media/$id/overview/$similar')({
 
 function RouteComponent() {
   const [details] = Route.useLoaderData()
-  if (details.error || details.data === null) {
-    return (
-      <main className='mt-4 space-y-6'>
-        <p>Error: {details.error?.status_message || 'Unknown Error'}</p>
-      </main>
-    )
-  }
   return (
-    <main className='mt-4'>
-      <MediaDetails details={details.data} />
+    <main>
+      <MediaDetails details={details} />
       <section className='px-4'>
         <header id='recommendations' className='my-12'>
           <span className={headings({ level: 'h3' })}>
@@ -50,18 +43,8 @@ function RouteComponent() {
 function Recommendations() {
   const [, similar] = Route.useLoaderData()
   const goto = Route.useNavigate()
-  if (similar.error || similar.data === null) {
-    return (
-      <article>
-        <p>
-          Could not load similar:{' '}
-          {similar.error?.status_message || 'Unknown Error'}
-        </p>
-      </article>
-    )
-  }
 
-  if (similar.data.results.length == 0) {
+  if (similar.results.length == 0) {
     return (
       <article className='flex justify-center space-y-6'>
         <p
@@ -79,7 +62,7 @@ function Recommendations() {
   return (
     <section className='flex flex-col items-center gap-4'>
       <div className='mb-10 flex flex-wrap justify-center gap-6'>
-        {similar.data.results.map((item) => (
+        {similar.results.map((item) => (
           <Link
             className='max-w-40'
             key={item.id}
@@ -96,8 +79,8 @@ function Recommendations() {
       </div>
 
       <Pagination
-        totalPages={similar.data.total_pages}
-        currentPage={similar.data.page}
+        totalPages={similar.total_pages}
+        currentPage={similar.page}
         onChange={(p) => {
           goto({
             params: { similar: p },

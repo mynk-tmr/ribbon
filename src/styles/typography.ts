@@ -20,20 +20,26 @@ export const headings = tv({
 })
 
 export const link = tv({
-  base: 'font-medium transition-all duration-200',
+  base: 'px-1 font-medium transition-all duration-200',
   variants: {
     disabled: {
       true: 'pointer-events-none opacity-50',
     },
     style: {
-      text: 'text-silver [&.active]:border-steelBlue border-b-2 border-transparent [&.active]:scale-110',
+      text: 'text-silver [&.active]:border-steelBlue border-b-2 border-transparent hover:scale-105',
       wrapper:
-        'absolute inset-0 grid h-full place-items-center bg-black/80 transition-all duration-200',
+        'absolute top-0 flex size-full justify-center bg-black/80 transition-all duration-200',
+    },
+    icon: {
+      sameline: 'flex items-center gap-1',
+      stack:
+        '[&.active]:text-steelBlue grid gap-1 border-0 text-center text-xs',
     },
   },
   defaultVariants: {
     disabled: false,
     style: 'text',
+    icon: 'sameline',
   },
 })
 

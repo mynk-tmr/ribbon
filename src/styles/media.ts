@@ -9,6 +9,9 @@ export const poster = tv({
     withBorder: {
       true: 'border border-neutral-200 p-1',
     },
+    asBackground: {
+      true: 'absolute inset-0 -z-10 opacity-10',
+    },
   },
   defaultVariants: {
     withHover: true,

@@ -15,7 +15,7 @@ export const ErrorBoundary: React.FC<ErrorComponentProps> = (props) => {
     reset()
   }
   return (
-    <main className='grid place-items-center space-y-9 py-8'>
+    <main className='grid place-items-center space-y-9'>
       <Icon
         icon='mdi:bug'
         className='text-fireBrick/60'

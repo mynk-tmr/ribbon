@@ -14,10 +14,12 @@ export const Route = createRootRoute({
 function RootComponent() {
   return (
     <>
-      <TanStackRouterDevtools />
+      <TanStackRouterDevtools position='top-left' />
       <TopLoadingBar />
       <AppHeader />
-      <Outlet />
+      <div className='mx-auto max-w-7xl pt-8'>
+        <Outlet />
+      </div>
     </>
   )
 }

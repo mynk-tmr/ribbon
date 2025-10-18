@@ -5,7 +5,7 @@ import { Link } from '@tanstack/react-router'
 
 export function NotFound() {
   return (
-    <main className='grid place-items-center space-y-9 py-8'>
+    <main className='grid place-items-center space-y-9'>
       <Icon icon='mdi:emoticon-sad' width={100} height={100} />
       <h1 className={headings({ level: 'h1', className: 'italic' })}>
         Page Not Found

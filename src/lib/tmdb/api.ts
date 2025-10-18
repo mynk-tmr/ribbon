@@ -13,13 +13,10 @@ function isError(item: unknown): item is TMDB.Error {
   return 'status_code' in item
 }
 
-async function call<T>(...args: Parameters<typeof api>): Promise<{
-  data: null | T
-  error: null | TMDB.Error
-}> {
+async function call<T>(...args: Parameters<typeof api>) {
   const res = await api(...args)
-  if (isError(res)) return { data: null, error: res }
-  return { data: res as T, error: null }
+  if (isError(res)) throw res
+  return res as T
 }
 
 function makeapi<T, Detail>(type: 'tv' | 'movie') {
