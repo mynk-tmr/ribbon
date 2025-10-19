@@ -12,7 +12,8 @@
     "preview": "vite preview",
     "format": "prettier --write .",
     "typecheck": "tsc -b --noEmit",
-    "prebuild": "bun build server/index.ts --minify --target node --outdir _api"
+    "prebuild": "bun --tsconfig-override=tsconfig.node.json build server/index.ts --minify --target node --outdir _api",
+    "clean": "rm -r _api && rm -r dist && rm -r .vercel"
   },
   "dependencies": {
     "@iconify/react": "^6.0.2",
