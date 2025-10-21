@@ -6,9 +6,7 @@ import globals from 'globals'
 import tseslint from 'typescript-eslint'
 
 export default defineConfig([
-  {
-    ignores: ['dist'],
-  },
+  { ignores: ['dist'] },
   {
     files: ['**/*.{ts,tsx}'],
     extends: [
@@ -17,9 +15,13 @@ export default defineConfig([
       reactRefresh.configs.vite,
       tseslint.configs.recommended,
     ],
-    languageOptions: {
-      ecmaVersion: 2023,
-      globals: globals.browser,
+    languageOptions: { ecmaVersion: 2023, globals: globals.browser },
+    rules: {
+      'no-unused-vars': ['off'],
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { varsIgnorePattern: '^_', argsIgnorePattern: '^_' },
+      ],
     },
   },
 ])

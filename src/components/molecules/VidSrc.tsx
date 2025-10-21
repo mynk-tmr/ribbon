@@ -1,16 +1,8 @@
 import { useEffect } from 'react'
 
 type Props =
-  | {
-      type: 'movie'
-      id: number
-    }
-  | {
-      type: 'tv'
-      id: number
-      season: number
-      episode: number
-    }
+  | { type: 'movie'; id: number }
+  | { type: 'tv'; id: number; season: number; episode: number }
 
 export function VidSrc(props: Props) {
   const BASE_URL = `https://vidsrc.net/embed/${props.type}/${props.id}${

@@ -10,21 +10,15 @@ export const headings = tv({
       h5: 'text-lg leading-snug font-medium md:text-xl',
       h6: 'text-base leading-snug font-medium tracking-wide md:text-lg',
     },
-    intent: {
-      info: 'text-steelBlue',
-    },
+    intent: { info: 'text-steelBlue', secondary: 'text-white' },
   },
-  defaultVariants: {
-    level: 'h1',
-  },
+  defaultVariants: { level: 'h1', intent: 'secondary' },
 })
 
 export const link = tv({
   base: 'px-1 font-medium transition-all duration-200',
   variants: {
-    disabled: {
-      true: 'pointer-events-none opacity-50',
-    },
+    disabled: { true: 'pointer-events-none opacity-50' },
     style: {
       text: 'text-silver [&.active]:border-steelBlue border-b-2 border-transparent hover:scale-105',
       wrapper:
@@ -36,11 +30,7 @@ export const link = tv({
         '[&.active]:text-steelBlue grid gap-1 border-0 text-center text-xs',
     },
   },
-  defaultVariants: {
-    disabled: false,
-    style: 'text',
-    icon: 'sameline',
-  },
+  defaultVariants: { disabled: false, style: 'text', icon: 'sameline' },
 })
 
 export const text = tv({
@@ -50,7 +40,7 @@ export const text = tv({
       tagline: 'text-sm not-italic',
       body: 'leading-6 md:text-lg',
       small: 'text-sm leading-5',
-      label: 'text-sm font-medium',
+      label: 'cursor-pointer text-sm font-medium',
     },
   },
 })

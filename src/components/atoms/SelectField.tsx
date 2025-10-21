@@ -20,9 +20,9 @@ export function SelectField<
   size,
   options,
   value,
-  onChange,
+  onValueChange,
   ...props
-}: Omit<React.SelectHTMLAttributes<HTMLSelectElement>, 'onChange' | 'value'> & {
+}: Omit<React.SelectHTMLAttributes<HTMLSelectElement>, 'value'> & {
   label?: string
   helper?: string
   error?: string
@@ -31,7 +31,7 @@ export function SelectField<
   icon?: string
   options: T
   value?: T[number]['value']
-  onChange?: (value: T[number]['value']) => void
+  onValueChange?: (value: T[number]['value']) => void
 }) {
   const {
     root,
@@ -50,7 +50,7 @@ export function SelectField<
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const val = e.target.value as T[number]['value']
-    onChange?.(val)
+    onValueChange?.(val)
   }
 
   return (

@@ -1,16 +1,17 @@
-import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
+import { AuthGuard } from '@/lib/firebase/AuthGuard'
+import { createFileRoute, Navigate, Outlet } from '@tanstack/react-router'
 
-export const Route = createFileRoute('/auth')({
-  component: RouteComponent,
-  beforeLoad({ context: { app_user } }) {
-    if (app_user) throw redirect({ to: '/user/profile' })
-  },
-})
+export const Route = createFileRoute('/auth')({ component: RouteComponent })
 
 function RouteComponent() {
   return (
-    <main className='mx-auto max-w-96'>
-      <Outlet />
-    </main>
+    <AuthGuard
+      whenAbsent={
+        <div className='mx-auto max-w-[400px]'>
+          <Outlet />
+        </div>
+      }
+      whenExists={<Navigate replace to='/user/profile' />}
+    />
   )
 }

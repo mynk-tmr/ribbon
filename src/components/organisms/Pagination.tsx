@@ -8,20 +8,8 @@ const pagination = tv({
     prev: 'cursor-pointer rounded-md disabled:pointer-events-none disabled:opacity-40',
     next: 'cursor-pointer rounded-md disabled:pointer-events-none disabled:opacity-40',
   },
-  variants: {
-    size: {
-      xs: {},
-      sm: {},
-      md: {},
-    },
-    circular: {
-      true: {},
-    },
-  },
-  defaultVariants: {
-    size: 'md',
-    active: false,
-  },
+  variants: { size: { xs: {}, sm: {}, md: {} }, circular: { true: {} } },
+  defaultVariants: { size: 'md', active: false },
   compoundSlots: [
     {
       slots: ['item', 'prev', 'next'],
@@ -41,11 +29,7 @@ const pagination = tv({
     { slots: ['item', 'prev', 'next'], size: 'xs', class: 'h-7 w-7 text-xs' },
     { slots: ['item', 'prev', 'next'], size: 'sm', class: 'h-8 w-8 text-sm' },
     { slots: ['item', 'prev', 'next'], size: 'md', class: 'h-9 w-9 text-base' },
-    {
-      slots: ['item', 'prev', 'next'],
-      circular: true,
-      class: 'rounded-full',
-    },
+    { slots: ['item', 'prev', 'next'], circular: true, class: 'rounded-full' },
   ],
 })
 

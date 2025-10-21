@@ -10,11 +10,7 @@ const tanstackRouterPlugin = tanstackRouter({
   target: 'react',
 })
 
-const reactJS = react({
-  babel: {
-    plugins: [['babel-plugin-react-compiler']],
-  },
-})
+const reactJS = react({ babel: { plugins: [['babel-plugin-react-compiler']] } })
 
 export default defineConfig({
   plugins: [

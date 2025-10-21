@@ -45,9 +45,6 @@
     }
   ],
   "protocol_handlers": [
-    {
-      "protocol": "web+tmdb",
-      "url": "/protocol-not-supported?url=%s"
-    }
+    { "protocol": "web+tmdb", "url": "/protocol-not-supported?url=%s" }
   ]
 }

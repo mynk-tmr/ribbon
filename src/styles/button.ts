@@ -1,7 +1,7 @@
 import { tv } from 'tailwind-variants'
 
 const button = tv({
-  base: 'inline-flex cursor-pointer items-center justify-center font-semibold transition-colors focus:ring-2 focus:ring-offset-2 focus:outline-none active:scale-[0.99]',
+  base: 'disable:opacity-50 inline-flex cursor-pointer items-center justify-center font-semibold transition-colors focus:ring-2 focus:ring-offset-2 focus:outline-none active:scale-[0.99] disabled:pointer-events-none',
   variants: {
     intent: {
       primary:
@@ -34,10 +34,8 @@ const button = tv({
       lg: 'px-6 py-3 text-lg',
       icon: 'h-10 w-10 text-base',
     },
-    disabled: {
-      true: 'pointer-events-none cursor-not-allowed opacity-50',
-      false: '',
-    },
+    disabled: { false: '' },
+    hasIcon: { true: 'flex items-center gap-2' },
   },
   compoundVariants: [
     {

@@ -37,11 +37,7 @@ function GoBack() {
     <Link
       to='/$media/$id/overview/$similar'
       className={`text-silver mb-4 flex items-center gap-3`}
-      params={(p) => ({
-        media: p.media!,
-        id: p.id!,
-        similar: 1,
-      })}
+      params={(p) => ({ media: p.media!, id: p.id!, similar: 1 })}
     >
       <Icon icon='material-symbols:arrow-back-rounded' /> Back to Series
     </Link>

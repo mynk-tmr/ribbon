@@ -61,10 +61,7 @@ export function Episode(props: { index: number }) {
             class: 'opacity-0 group-hover:opacity-100',
           })}
           to='/$media/$id/season/$num/$end/episode/$ep'
-          params={{
-            ...params,
-            ep: String(episode.episode_number),
-          }}
+          params={{ ...params, ep: String(episode.episode_number) }}
         >
           Stream Now
         </Link>

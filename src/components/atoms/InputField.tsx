@@ -1,6 +1,5 @@
-import { formControl, type FormControlVariants } from '@/styles/form'
+import { type FormControlVariants, formControl } from '@/styles/form'
 import { Icon } from '@iconify/react'
-import React from 'react'
 
 export function InputField({
   label,
@@ -43,10 +42,10 @@ export function InputField({
           </span>
         )}
         <input
-          {...props}
           onChange={(e) => onValueChange(e.target.value)}
           className={input()}
           disabled={disabled}
+          {...props}
         />
       </div>
       {error ? (

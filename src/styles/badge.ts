@@ -12,10 +12,7 @@ const badge = tv({
       info: '',
       ghost: '',
     },
-    style: {
-      filled: '',
-      outline: '',
-    },
+    style: { filled: '', outline: '' },
     shape: {
       regular: 'rounded px-2 py-0.5',
       pill: 'rounded-full px-4 py-0.5',
@@ -28,17 +25,11 @@ const badge = tv({
       lg: 'text-base',
       icon: 'flex h-8 w-8 items-center justify-center p-0',
     },
-    iconOnly: {
-      true: '',
-    },
+    iconOnly: { true: '' },
   },
   compoundVariants: [
     // Filled styles: swapped fg/bg using theme
-    {
-      intent: 'primary',
-      style: 'filled',
-      class: 'bg-blueViolet text-white',
-    },
+    { intent: 'primary', style: 'filled', class: 'bg-blueViolet text-white' },
     { intent: 'secondary', style: 'filled', class: 'bg-charcoal text-white' },
     { intent: 'success', style: 'filled', class: 'bg-forestGreen text-white' },
     { intent: 'warning', style: 'filled', class: 'bg-darkOrange text-white' },

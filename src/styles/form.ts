@@ -54,31 +54,15 @@ export const formControl = tv({
       },
     },
     withIcon: {
-      true: {
-        select: 'pl-2',
-        input: 'pl-2',
-        textarea: 'pl-2',
-      },
+      true: { select: 'pl-2', input: 'pl-2', textarea: 'pl-2' },
       false: {},
     },
   },
   compoundVariants: [
-    {
-      withIcon: true,
-      size: 'sm',
-      class: { icon: 'text-sm' },
-    },
-    {
-      withIcon: true,
-      size: 'lg',
-      class: { icon: 'text-lg' },
-    },
+    { withIcon: true, size: 'sm', class: { icon: 'text-sm' } },
+    { withIcon: true, size: 'lg', class: { icon: 'text-lg' } },
   ],
-  defaultVariants: {
-    state: 'default',
-    size: 'md',
-    withIcon: false,
-  },
+  defaultVariants: { state: 'default', size: 'md', withIcon: false },
 })
 
 export type FormControlVariants = VariantProps<typeof formControl>
