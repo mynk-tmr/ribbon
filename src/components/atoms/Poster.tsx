@@ -29,6 +29,7 @@ export function Poster({
 
   return (
     <img
+      key={path}
       loading='lazy'
       src={error ? fallbackFailed : src}
       alt={alt}

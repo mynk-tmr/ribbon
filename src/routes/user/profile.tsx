@@ -20,7 +20,7 @@ export function UserProfile() {
 
 function Introduction() {
   const { USER } = useFireAuth()
-  const avatar = linkToDiceBear(USER.uid)
+  const avatar = USER.photoURL ?? linkToDiceBear(USER.uid)
   const emailVerifiedIcon = (
     <Icon
       className='inline-block align-text-bottom'
@@ -33,13 +33,16 @@ function Introduction() {
       <img
         src={avatar}
         alt='App generated avatar'
-        className={poster({ class: 'size-24 rounded-full', withBorder: true })}
+        className={poster({
+          class: 'size-24 shrink-0 rounded-full',
+          withBorder: true,
+        })}
       />
       <div className='grid gap-y-2'>
         <span className={headings({ level: 'h4' })}>
-          Hello, {USER.displayName ?? 'Anon'}
+          {USER.displayName ?? 'Anon'}
         </span>
-        <small className='text-silver'>
+        <small className='text-silver wrap-anywhere'>
           {USER.email} {emailVerifiedIcon}
         </small>
       </div>

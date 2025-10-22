@@ -18,7 +18,7 @@ function RouteComponent() {
         search={{ isLogin: true }}
         className={button({ intent: 'secondary', size: 'sm' })}
       >
-        Go to Profile
+        Sign In
       </Link>
     </div>
   )

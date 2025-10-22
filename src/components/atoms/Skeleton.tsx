@@ -1,6 +1,6 @@
 export function Skeleton() {
   return (
-    <div role='status' className='max-w-sm animate-pulse'>
+    <div role='status' className='max-w-lg animate-pulse'>
       <div className='bg-lightGray mb-4 h-2.5 w-48 rounded-full'></div>
       <div className='bg-lightGray mb-2.5 h-2 max-w-[360px] rounded-full'></div>
       <div className='bg-lightGray mb-2.5 h-2 rounded-full'></div>

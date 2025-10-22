@@ -1,15 +1,14 @@
 import { InputField } from '@/components/atoms/InputField'
+import { useFireBaseAction } from '@/hooks/useFireBaseAction'
 import { auth } from '@/lib/firebase/init'
-import { prettifyFireAuthErrors } from '@/lib/firebase/utils'
 import button from '@/styles/button'
 import { headings, link, text } from '@/styles/typography'
-import { Icon } from '@iconify/react'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from 'firebase/auth'
-import { useState, useTransition } from 'react'
+import { useState } from 'react'
 
 export const Route = createFileRoute('/auth/')({
   component: RouteComponent,
@@ -26,26 +25,25 @@ function RouteComponent() {
     : createUserWithEmailAndPassword
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [error, setError] = useState<string | null>(null)
   const [reveal, setReveal] = useState(false)
 
-  const [isPending, startTransition] = useTransition()
+  const [status, action, isPending] = useFireBaseAction(() =>
+    fireApi(auth, email, password),
+  )
 
   return (
-    <form
-      className='flex flex-col gap-4'
-      onSubmit={(e) => {
-        e.preventDefault()
-        startTransition(() => {
-          setError(null)
-          fireApi(auth, email, password).catch((e) => {
-            setError(prettifyFireAuthErrors(e.message))
-          })
-        })
-      }}
-    >
+    <form className='flex flex-col gap-4' action={action}>
       <Header />
-      {error && <ErrorDisplay error={error} onClear={() => setError(null)} />}
+      {status.error && !isPending && (
+        <b
+          className={text({
+            as: 'tagline',
+            className: 'text-fireBrick capitalize',
+          })}
+        >
+          {status.error}
+        </b>
+      )}
       <InputField
         required
         value={email}
@@ -97,38 +95,13 @@ function Header() {
   )
 }
 
-function ErrorDisplay(props: { error: string; onClear: () => void }) {
-  return (
-    <div className='flex items-center justify-between'>
-      <b className={text({ as: 'tagline', className: 'text-fireBrick' })}>
-        {props.error}
-      </b>
-      <Icon
-        role='button'
-        icon='mdi:close-circle'
-        className='cursor-pointer'
-        color='white'
-        onClick={props.onClear}
-      />
-    </div>
-  )
-}
-
 function BottomLinks() {
   return (
     <div className='text-silver grid gap-2 *:mx-auto'>
-      <Link
-        to='/auth/passwordless'
-        search={{ t: 'login' }}
-        className={link({})}
-      >
+      <Link to='/auth/passwordless' search={{ t: 'login' }} className={link()}>
         Try Passwordless Auth ✨
       </Link>
-      <Link
-        to='/auth/passwordless'
-        search={{ t: 'reset' }}
-        className={link({})}
-      >
+      <Link to='/auth/passwordless' search={{ t: 'reset' }} className={link()}>
         Forgot Password ?
       </Link>
     </div>

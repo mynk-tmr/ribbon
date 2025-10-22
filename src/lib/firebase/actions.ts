@@ -1,9 +1,12 @@
 import {
+  EmailAuthProvider,
   isSignInWithEmailLink,
+  reauthenticateWithCredential,
   sendEmailVerification,
   sendPasswordResetEmail,
   sendSignInLinkToEmail,
   signInWithEmailLink,
+  verifyBeforeUpdateEmail,
 } from 'firebase/auth'
 import { auth } from './init'
 
@@ -35,6 +38,20 @@ export async function sendResetPassword(email: string) {
 export async function sendEmailVerificationLink() {
   if (!auth.currentUser) throw new Error('No signed-in user')
   await sendEmailVerification(auth.currentUser, {
+    url: `${window.location.origin}/magic/verifyEmail`,
+    handleCodeInApp: true,
+  })
+}
+
+export async function changeEmail(email: string, password: string) {
+  const user = auth.currentUser
+  if (!user) throw new Error('No user is signed in.')
+
+  const credential = EmailAuthProvider.credential(user.email!, password)
+  await reauthenticateWithCredential(user, credential)
+
+  // Sends verification link to the new email
+  await verifyBeforeUpdateEmail(user, email, {
     url: `${window.location.origin}/magic/verifyEmail`,
     handleCodeInApp: true,
   })

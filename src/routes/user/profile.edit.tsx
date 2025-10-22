@@ -15,7 +15,6 @@ function EditProfile() {
   const [values, update] = useMergedState({
     displayName: USER.displayName ?? '',
     photoURL: USER.photoURL ?? '',
-    email: USER.email ?? '',
   })
 
   const [state, formAction, isPending] = useFireBaseAction(async () => {
@@ -29,9 +28,8 @@ function EditProfile() {
   if (state.success) return <Navigate replace to='/user/profile' />
 
   return (
-    <form action={formAction}>
-      {state.error && <p className='bg-fireBrick mb-2 px-2'>{state.error}</p>}
-      <fieldset disabled={isPending} className='grid w-full gap-y-6'>
+    <form action={formAction} className='w-full'>
+      <fieldset disabled={isPending} className='grid gap-y-6'>
         <InputField
           icon='mdi:robot-happy'
           name='displayName'
@@ -46,15 +44,7 @@ function EditProfile() {
           value={values.photoURL}
           onValueChange={(value) => update({ photoURL: value })}
           type='url'
-        />
-        <InputField
-          icon='mdi:email'
-          name='email'
-          label='Email'
-          value={values.email}
-          onValueChange={(value) => update({ email: value })}
-          type='email'
-          helper='Your old email will recieve a link to revert this, if needed.'
+          error={isPending ? undefined : state.error}
         />
         <div className='space-x-4 text-end'>
           <button

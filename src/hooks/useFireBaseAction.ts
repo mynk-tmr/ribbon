@@ -1,7 +1,7 @@
 import { prettifyFireAuthErrors } from '@/lib/firebase/utils'
 import { useActionState } from 'react'
 
-export function useFireBaseAction(cb: () => Promise<void>) {
+export function useFireBaseAction<T>(cb: () => Promise<T>) {
   return useActionState(
     async () => {
       try {

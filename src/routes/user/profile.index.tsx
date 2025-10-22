@@ -14,7 +14,7 @@ export const Route = createFileRoute('/user/profile/')({ component: Page })
 
 interface IAction {
   name: string
-  action: () => Promise<void>
+  action: () => Promise<unknown>
   onsuccess?: string
   onpending?: string
   icon: string
@@ -31,28 +31,33 @@ function Page() {
     emailVerified
       ? {
           name: 'Email is Verified',
-          action: async () => void null,
+          action: async () => null,
           icon: 'mdi:check-circle',
           disabled: true,
         }
       : {
           name: 'Verify Email',
           action: () => sendEmailVerificationLink(),
-          onsuccess: 'Email Sent',
+          onsuccess: 'Email Sent for Verification',
           onpending: 'Sending Email',
           icon: 'material-symbols:verified',
         },
     {
       name: 'Reset Password',
       action: () => sendResetPassword(email!),
-      onsuccess: 'Email Sent',
+      onsuccess: 'Email Sent for Password Reset',
       onpending: 'Sending Email',
       icon: 'mdi:lock-reset',
     },
     {
       name: 'Edit Profile',
       action: () => goto({ to: '/user/profile/edit' }),
-      icon: 'material-symbols:edit',
+      icon: 'mdi:tag-edit',
+    },
+    {
+      name: 'Change Email',
+      action: () => goto({ to: '/user/profile/emailchange' }),
+      icon: 'mdi:email-edit',
     },
     {
       name: 'Logout',
