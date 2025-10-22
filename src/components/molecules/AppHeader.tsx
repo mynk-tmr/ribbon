@@ -1,5 +1,5 @@
 import { useMediaQuery } from '@/hooks/useMediaQuery'
-import { useAuth } from '@/lib/firebase/hooks'
+import { useFireAuth } from '@/lib/firebase/store'
 import { link } from '@/styles/typography'
 import { Icon } from '@iconify/react'
 import { Link } from '@tanstack/react-router'
@@ -7,15 +7,21 @@ import { Logo } from '../atoms/Logo'
 
 export function AppHeader() {
   const isMobile = useMediaQuery('(max-width: 640px)')
-  const { user } = useAuth()
-  const userRoute = user
-    ? ({ name: 'Profile', link: '/user/profile', icon: 'mdi:account' } as const)
-    : ({ name: 'Login', link: '/auth', icon: 'mdi:login' } as const)
+  const { user, loading } = useFireAuth()
+  const userRoute = loading
+    ? ({ name: 'Wait ..', link: '/', icon: 'mdi:dots-grid' } as const)
+    : user
+      ? ({
+          name: 'Profile',
+          link: '/user/profile',
+          icon: 'mdi:account',
+        } as const)
+      : ({ name: 'Login', link: '/auth', icon: 'mdi:login' } as const)
 
   const routes = [
     { name: 'Discover', link: '/discover', icon: 'mdi:compass' },
     { name: 'Search', link: '/search', icon: 'mdi:magnify' },
-    { name: 'Activity', link: '/user/activity', icon: 'mdi:history' },
+    { name: 'Activity', link: '/activity', icon: 'mdi:history' },
     userRoute,
   ] as const
 

@@ -25,7 +25,9 @@ export const ErrorBoundary: React.FC<ErrorComponentProps> = (props) => {
       <h1 className={headings({ level: 'h2', className: 'italic' })}>
         An unexpected error has occurred in this page
       </h1>
-      <p className='bg-fireBrick/40 p-4 text-white'>{error.message}</p>
+      <p className='bg-fireBrick/40 p-4 text-white'>
+        {error.message || 'Unknown error'}
+      </p>
       <div className='flex gap-4'>
         <Link
           replace

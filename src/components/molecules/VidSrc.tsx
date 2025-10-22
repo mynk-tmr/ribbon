@@ -11,7 +11,7 @@ export function VidSrc(props: Props) {
 
   useEffect(() => {
     window.scrollBy(0, 1999)
-  }, [props])
+  }, [])
 
   return (
     <div className='mx-auto max-w-5xl px-4 pt-8'>

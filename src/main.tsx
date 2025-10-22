@@ -2,7 +2,6 @@ import '@/styles/entry.css'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
-import { AuthProvider } from './lib/firebase/AuthProvider'
 import { routeTree } from './routeTree.gen'
 
 // Create a new router instance
@@ -25,7 +24,7 @@ if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement)
   root.render(
     <StrictMode>
-      <RouterProvider InnerWrap={AuthProvider} router={router} />
+      <RouterProvider router={router} />
     </StrictMode>,
   )
 }

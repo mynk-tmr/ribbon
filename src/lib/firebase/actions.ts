@@ -4,14 +4,12 @@ import {
   sendPasswordResetEmail,
   sendSignInLinkToEmail,
   signInWithEmailLink,
-  updateEmail,
-  updateProfile,
 } from 'firebase/auth'
 import { auth } from './init'
 
 export async function sendSignInLink(email: string) {
   await sendSignInLinkToEmail(auth, email, {
-    url: window.location.origin,
+    url: `${window.location.origin}/magic/signIn`,
     handleCodeInApp: true,
   })
   window.localStorage.setItem('emailForSignIn', email)
@@ -40,33 +38,4 @@ export async function sendEmailVerificationLink() {
     url: `${window.location.origin}/magic/verifyEmail`,
     handleCodeInApp: true,
   })
-}
-
-export async function updateUserInfo(updates: {
-  email?: string
-  displayName?: string
-  photoURL?: string
-}) {
-  const user = auth.currentUser
-  if (!user) throw new Error('No user signed in')
-  const tasks: Promise<void>[] = []
-
-  // Profile fields
-  if (updates.displayName || updates.photoURL) {
-    tasks.push(
-      updateProfile(user, {
-        displayName: updates.displayName ?? user.displayName,
-        photoURL: updates.photoURL ?? user.photoURL,
-      }),
-    )
-  }
-
-  // Email change (this will require re-auth if sensitive)
-  if (updates.email && updates.email !== user.email) {
-    tasks.push(updateEmail(user, updates.email))
-  }
-
-  await Promise.all(tasks)
-  await user.reload()
-  return user
 }

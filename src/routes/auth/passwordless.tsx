@@ -1,6 +1,6 @@
 import { InputField } from '@/components/atoms/InputField'
+import { useFireBaseAction } from '@/hooks/useFireBaseAction'
 import { sendResetPassword, sendSignInLink } from '@/lib/firebase/actions'
-import { useFireBaseAction } from '@/lib/firebase/hooks'
 import button from '@/styles/button'
 import { card } from '@/styles/media'
 import { headings, text } from '@/styles/typography'
@@ -57,11 +57,11 @@ function LinkSent({ email }: { email: string }) {
       />
 
       <p>
-        Link sent to <b className='text-steelBlue'>{email}</b>.
+        Link sent to <b className='text-steelBlue'>{email}</b>
         <br />
         <br />
         Check your inbox — the sender name is{' '}
-        <span className='text-darkOrange font-semibold'>learn-auth-flow</span>.
+        <span className='text-darkOrange font-semibold'>learn-auth-flow</span>
         <br />
       </p>
 

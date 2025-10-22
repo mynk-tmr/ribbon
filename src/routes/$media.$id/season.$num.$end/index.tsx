@@ -23,7 +23,7 @@ function RouteComponent() {
         <GoBack />
         <SeasonDetails />
       </div>
-      <section className='grid grid-cols-[repeat(auto-fill,minmax(225px,1fr))] gap-8'>
+      <section className='grid grid-cols-[repeat(auto-fill,minmax(275px,1fr))] gap-8'>
         {season.episodes.map((episode) => (
           <Episode key={episode.id} index={episode.episode_number - 1} />
         ))}

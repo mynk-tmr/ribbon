@@ -14,7 +14,8 @@ import { useState, useTransition } from 'react'
 export const Route = createFileRoute('/auth/')({
   component: RouteComponent,
   validateSearch(search) {
-    return { isLogin: search.isLogin ? true : false }
+    const exists = search.isLogin !== undefined
+    return { isLogin: exists ? Boolean(search.isLogin) : true }
   },
 })
 
@@ -75,7 +76,7 @@ function RouteComponent() {
         type='submit'
         className={button({ intent: 'success' })}
       >
-        {isLogin ? 'Login' : 'Create Account'}
+        {isPending ? 'Wait..' : isLogin ? 'Login' : 'Create Account'}
       </button>
       <BottomLinks />
     </form>

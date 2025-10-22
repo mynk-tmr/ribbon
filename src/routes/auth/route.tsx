@@ -1,4 +1,4 @@
-import { AuthGuard } from '@/lib/firebase/AuthGuard'
+import { AuthGuard } from '@/components/helpers/AuthGuard'
 import { createFileRoute, Navigate, Outlet } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/auth')({ component: RouteComponent })

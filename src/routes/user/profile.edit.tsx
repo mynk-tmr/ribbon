@@ -1,85 +1,76 @@
 import { InputField } from '@/components/atoms/InputField'
-import { updateUserInfo } from '@/lib/firebase/actions'
-import { useAuth } from '@/lib/firebase/hooks'
-import { prettifyFireAuthErrors } from '@/lib/firebase/utils'
+import { useFireBaseAction } from '@/hooks/useFireBaseAction'
+import { useMergedState } from '@/hooks/useMergedState'
+import { useFireAuth } from '@/lib/firebase/store'
 import button from '@/styles/button'
-import { card } from '@/styles/media'
-import { headings } from '@/styles/typography'
 import { createFileRoute, Link, Navigate } from '@tanstack/react-router'
-import { useActionState } from 'react'
+import { updateProfile } from 'firebase/auth'
 
 export const Route = createFileRoute('/user/profile/edit')({
   component: EditProfile,
 })
 
 function EditProfile() {
-  const { user } = useAuth()
-  const [state, formAction, isPending] = useActionState(
-    async (_: unknown, formData: FormData) => {
-      const displayName = formData.get('displayName') as string
-      const photoURL = formData.get('photoURL') as string
-      const email = formData.get('email') as string
+  const { USER, refresh } = useFireAuth()
+  const [values, update] = useMergedState({
+    displayName: USER.displayName ?? '',
+    photoURL: USER.photoURL ?? '',
+    email: USER.email ?? '',
+  })
 
-      try {
-        await updateUserInfo({ displayName, photoURL, email })
-      } catch (e) {
-        return e instanceof Error
-          ? prettifyFireAuthErrors(e.message)
-          : String(e)
-      }
+  const [state, formAction, isPending] = useFireBaseAction(async () => {
+    const { displayName, photoURL } = values
+    if (displayName !== USER.displayName || photoURL !== USER.photoURL) {
+      await updateProfile(USER, { displayName, photoURL })
+      refresh()
+    }
+  })
 
-      return 'success'
-    },
-    null,
-  )
-
-  if (!user) return null
+  if (state.success) return <Navigate replace to='/user/profile' />
 
   return (
-    <form action={formAction} className={card({})}>
-      <h2 className={headings({ level: 'h4' })}>Edit Profile</h2>
-
-      <div className='grid gap-y-6 md:min-w-sm'>
+    <form action={formAction}>
+      {state.error && <p className='bg-fireBrick mb-2 px-2'>{state.error}</p>}
+      <fieldset disabled={isPending} className='grid w-full gap-y-6'>
         <InputField
           icon='mdi:robot-happy'
           name='displayName'
           label='Display Name'
-          defaultValue={user.displayName ?? ''}
+          value={values.displayName}
+          onValueChange={(value) => update({ displayName: value })}
         />
         <InputField
           icon='mdi:image'
           name='photoURL'
           label='Photo URL [https://]'
-          defaultValue={user.photoURL ?? ''}
+          value={values.photoURL}
+          onValueChange={(value) => update({ photoURL: value })}
           type='url'
         />
         <InputField
           icon='mdi:email'
           name='email'
           label='Email'
-          defaultValue={user.email ?? ''}
+          value={values.email}
+          onValueChange={(value) => update({ email: value })}
           type='email'
           helper='Your old email will recieve a link to revert this, if needed.'
         />
-      </div>
-
-      <div className='flex w-full justify-between gap-3 border-t pt-2'>
-        <button disabled={isPending} className={button({ intent: 'primary' })}>
-          {isPending ? 'Saving…' : 'Save Changes'}
-        </button>
-        <Link
-          to='..'
-          disabled={isPending}
-          className={button({ intent: 'secondary' })}
-        >
-          Cancel
-        </Link>
-      </div>
-
-      {state === 'success' && <Navigate replace to='/user/profile' />}
-      {state && state !== 'success' && (
-        <p className='text-fireBrick'>{state}</p>
-      )}
+        <div className='space-x-4 text-end'>
+          <button
+            type='submit'
+            className={button({ intent: 'success', size: 'sm' })}
+          >
+            {isPending ? 'Wait' : 'Save'}
+          </button>
+          <Link
+            to='/user/profile'
+            className={button({ intent: 'secondary', size: 'sm' })}
+          >
+            Cancel
+          </Link>
+        </div>
+      </fieldset>
     </form>
   )
 }
