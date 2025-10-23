@@ -1,39 +1,30 @@
 import { onAuthStateChanged } from 'firebase/auth'
-import { useSyncExternalStore } from 'react'
+import { Store, useStore } from '../externs/sync-store'
 import { auth } from './init'
 
-let tick = 1
-let loading = true
-const subs = new Set<() => void>()
-
-function getTick() {
-  return tick
+class FireAuthStore extends Store<number> {
+  loading = true
+  async refresh() {
+    this.loading = false
+    this.state *= -1 //triggers re-render
+    await auth.currentUser?.reload()
+    this.emit()
+  }
+  get USER() {
+    if (!auth.currentUser)
+      throw new Error('USER getter must be used when signed in')
+    return auth.currentUser
+  }
+  get user() {
+    return auth.currentUser
+  }
 }
 
-function subscribe(cb: () => void) {
-  subs.add(cb)
-  return () => subs.delete(cb)
-}
+const fireauthstore = new FireAuthStore(-1)
 
-async function refresh() {
-  tick *= -1
-  loading = false
-  await auth.currentUser?.reload()
-  subs.forEach((cb) => cb())
-}
-
-onAuthStateChanged(auth, refresh)
+onAuthStateChanged(auth, () => fireauthstore.refresh())
 
 export function useFireAuth() {
-  const _tick = useSyncExternalStore(subscribe, getTick)
-  return {
-    refresh,
-    loading,
-    get USER() {
-      if (!auth.currentUser)
-        throw new Error('USER getter must be used when signed in')
-      return auth.currentUser
-    },
-    user: auth.currentUser,
-  }
+  useStore(fireauthstore, (t) => t)
+  return fireauthstore
 }

@@ -8,7 +8,7 @@ import { Poster } from '../atoms/Poster'
 import { RatingBadge } from '../atoms/RatingBadge'
 import { StreamButton } from '../molecules/StreamButton'
 
-export function MediaDetails({
+export function Overview({
   details,
 }: {
   details: TMDB.MovieDetail | TMDB.TVDetail

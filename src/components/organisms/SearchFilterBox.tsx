@@ -1,3 +1,4 @@
+import { RibbonDBActions } from '@/lib/indexdb/stores'
 import button from '@/styles/button'
 import { getRouteApi } from '@tanstack/react-router'
 import { useState } from 'react'
@@ -14,8 +15,9 @@ export function SearchFilterBox() {
 
   return (
     <form
-      onSubmit={(e) => {
+      onSubmit={async (e) => {
         e.preventDefault()
+        await RibbonDBActions.addSearch(query, media)
         goto({ search: { ...search, query, media } })
       }}
       className='flex flex-wrap justify-center gap-4'
