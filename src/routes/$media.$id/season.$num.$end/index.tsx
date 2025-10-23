@@ -2,15 +2,17 @@ import { Poster } from '@/components/atoms/Poster'
 import { RatingBadge } from '@/components/atoms/RatingBadge'
 import { Episode } from '@/components/molecules/Episode'
 import { Pagination } from '@/components/organisms/Pagination'
+import { $medias } from '@/lib/indexdb/stores'
 import { headings, text } from '@/styles/typography'
 import { Icon } from '@iconify/react'
 import { createFileRoute, Link } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/$media/$id/season/$num/$end/')({
   component: RouteComponent,
-  async loader({ parentMatchPromise }) {
+  async loader({ parentMatchPromise, params: { id, num } }) {
     const out = (await parentMatchPromise).loaderData
     if (!out) throw new Error('No Data Provided from Parent Route')
+    await $medias.updateTV({ id, season: Number(num), episode: 1 })
     return out
   },
 })

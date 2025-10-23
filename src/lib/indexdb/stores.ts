@@ -1,90 +1,91 @@
 import { Store } from '../externs/sync-store'
-import { indexdb, type IMedia, type ISearch, type RibbonDB } from './setup'
+import { indexdb, type IMedia, type ISearch } from './setup'
 
-export const $searches = new Store<ISearch[]>([])
-export const $medias = new Store<IMedia[]>([])
-
-type StoreName = 'search' | 'media'
-
-export const IDBStores = { search: $searches, media: $medias }
-
-async function reload(storeName: StoreName) {
-  IDBStores[storeName].state = await indexdb.getAll(storeName)
-  IDBStores[storeName].emit()
+class SearchStore extends Store<ISearch[]> {
+  async refresh() {
+    const docs = await indexdb.getAll('search')
+    this.state = docs.sort((a, b) => b.addedAt.getTime() - a.addedAt.getTime())
+    this.emit()
+  }
+  async add(props: { query: string; media: 'movie' | 'tv' }) {
+    await indexdb.put('search', {
+      title: `${props.query} / ${props.media}`,
+      addedAt: new Date(),
+    })
+    await this.refresh()
+  }
+  async remove(title: string) {
+    await indexdb.delete('search', title)
+    await this.refresh()
+  }
+  async clear() {
+    await indexdb.clear('search')
+    await this.refresh()
+  }
 }
 
-async function reloadAll() {
-  await reload('search')
-  await reload('media')
+class MediaStore extends Store<IMedia[]> {
+  movies: IMedia[] = []
+  tvs: IMedia[] = []
+  async refresh() {
+    this.state = (await indexdb.getAll('media')).sort(
+      (a, b) => b.addedAt.getTime() - a.addedAt.getTime(),
+    )
+    this.movies = this.state.filter((m) => m.media === 'movie')
+    this.tvs = this.state.filter((m) => m.media === 'tv')
+    this.emit()
+  }
+  async addMedia(
+    props: Pick<IMedia, 'id' | 'title' | 'poster_path' | 'media'>,
+    tvProps?: Pick<IMedia, 'season' | 'end' | 'episode'>,
+  ) {
+    const exists = await indexdb.get('media', props.id)
+    if (exists) return
+    const now = new Date()
+    await indexdb.put('media', {
+      ...props,
+      ...tvProps,
+      media: props.media,
+      progress: 0,
+      addedAt: now,
+      updatedAt: now,
+      favourite: false,
+    })
+    await this.refresh()
+  }
+  private async clear(type: 'movie' | 'tv') {
+    const tx = indexdb.transaction('media', 'readwrite')
+    const store = tx.objectStore('media')
+    const all = await store.getAll()
+    for (const item of all) {
+      if (item.media === type) store.delete(item.id)
+    }
+    await tx.done
+    await this.refresh()
+  }
+  async clearMovies() {
+    await this.clear('movie')
+  }
+  async clearTvs() {
+    await this.clear('tv')
+  }
+  private async update(doc: Partial<IMedia>, id: number) {
+    const now = new Date()
+    const prev = await indexdb.get('media', id)
+    if (!prev) throw new Error('Movie not found')
+    await indexdb.put('media', { ...prev, ...doc, updatedAt: now })
+    await this.refresh()
+  }
+  async updateTV(doc: Pick<Required<IMedia>, 'id' | 'season' | 'episode'>) {
+    await this.update(doc, doc.id)
+  }
+  async updateProgress(doc: Pick<Required<IMedia>, 'id' | 'progress'>) {
+    await this.update(doc, doc.id)
+  }
 }
 
-async function getAll(storeName: StoreName) {
-  return await indexdb.getAll(storeName)
-}
+export const $medias = new MediaStore([])
+export const $searches = new SearchStore([])
 
-async function clear(storeName: StoreName) {
-  await indexdb.clear(storeName)
-  await reload(storeName)
-}
-
-async function remove<s extends StoreName>(
-  storeName: s,
-  key: RibbonDB[s]['key'],
-) {
-  await indexdb.delete(storeName, key)
-  await reload(storeName)
-}
-
-async function addSearch(query: string, media: 'movie' | 'tv') {
-  await indexdb.put('search', {
-    title: `${query} / ${media}`,
-    addedAt: new Date(),
-  })
-  await reload('search')
-}
-
-async function getByKey<s extends StoreName>(
-  storeName: s,
-  key: RibbonDB[s]['key'],
-) {
-  return await indexdb.get(storeName, key)
-}
-
-async function updateMedia(media: Partial<IMedia> & Pick<IMedia, 'id'>) {
-  const prev = await getByKey('media', media.id)
-  if (!prev) throw new Error('Media not found')
-  const now = new Date()
-  return await indexdb.put(
-    'media',
-    { ...prev, ...media, updatedAt: now },
-    media.id,
-  )
-}
-
-async function addMedia(
-  item: Pick<IMedia, 'id' | 'title' | 'poster_path'>,
-  forTv: Pick<IMedia, 'season' | 'end' | 'episode'> = {},
-) {
-  const now = new Date()
-  return await indexdb.put('media', {
-    ...item,
-    media: forTv.season ? 'tv' : 'movie',
-    ...forTv,
-    progress: 0,
-    favourite: false,
-    addedAt: now,
-    updatedAt: now,
-  })
-}
-
-export const RibbonDBActions = {
-  clear,
-  remove,
-  addSearch,
-  getAll,
-  reload,
-  reloadAll,
-  getByKey,
-  updateMedia,
-  addMedia,
-}
+await $searches.refresh()
+await $medias.refresh()

@@ -1,12 +1,11 @@
 import { onAuthStateChanged } from 'firebase/auth'
 import { openDB, type DBSchema, type IDBPDatabase } from 'idb'
 import { auth } from '../firebase/init'
-import { RibbonDBActions } from './stores'
 
 export interface IMedia {
   id: number
   title: string
-  poster_path: string
+  poster_path: string | null
   progress: number
   favourite: boolean
   addedAt: Date
@@ -17,12 +16,15 @@ export interface IMedia {
   episode?: number
 }
 
-export interface RibbonDB extends DBSchema {
-  media: { key: number; value: IMedia }
-  search: { key: string; value: { title: string; addedAt: Date } }
+export interface ISearch {
+  title: string
+  addedAt: Date
 }
 
-export type ISearch = RibbonDB['search']['value']
+export interface RibbonDB extends DBSchema {
+  media: { key: number; value: IMedia }
+  search: { key: string; value: ISearch }
+}
 
 function getDB(uid: string) {
   return openDB<RibbonDB>(`RibbonDB-${uid}`, 1, {
@@ -35,9 +37,15 @@ function getDB(uid: string) {
 
 export let indexdb: IDBPDatabase<RibbonDB>
 
-onAuthStateChanged(auth, async (user) => {
-  const dbname = `${user?.uid || 'guest'}`
-  indexdb = await getDB(dbname)
-  console.log('Database ready', indexdb.name)
-  await RibbonDBActions.reloadAll()
+await new Promise((done, err) => {
+  try {
+    onAuthStateChanged(auth, async (user) => {
+      const dbname = `${user?.uid || 'guest'}`
+      indexdb = await getDB(dbname)
+      console.log('Database ready', indexdb.name)
+      done(null)
+    })
+  } catch (e) {
+    err(e)
+  }
 })

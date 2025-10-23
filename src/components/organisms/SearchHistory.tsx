@@ -1,5 +1,5 @@
 import { useStore } from '@/lib/externs/sync-store'
-import { $searches, RibbonDBActions } from '@/lib/indexdb/stores'
+import { $searches } from '@/lib/indexdb/stores'
 import badge from '@/styles/badge'
 import { Icon } from '@iconify/react'
 import { Link } from '@tanstack/react-router'
@@ -34,7 +34,7 @@ function PillElement(props: { title: string; disabled?: boolean }) {
         className='ml-1'
         icon='mdi:close-circle-outline'
         onClick={() => {
-          RibbonDBActions.remove('search', props.title)
+          $searches.remove(props.title)
         }}
       />
     </Link>

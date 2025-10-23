@@ -1,6 +1,7 @@
 import { SearchFilterBox } from '@/components/organisms/SearchFilterBox'
 import { SearchHistory } from '@/components/organisms/SearchHistory'
 import { SearchResults } from '@/components/organisms/SearchResults'
+import { $searches } from '@/lib/indexdb/stores'
 import { tmdb } from '@/lib/tmdb/api'
 import { headings } from '@/styles/typography'
 import { createFileRoute } from '@tanstack/react-router'
@@ -18,6 +19,7 @@ export const Route = createFileRoute('/search')({
   loaderDeps: ({ search }) => search,
   loader: async ({ deps: { query, media, page } }) => {
     if (query === '') return { data: null }
+    await $searches.add({ query, media })
     const data = await tmdb[media].search({ query, page })
     return { data }
   },

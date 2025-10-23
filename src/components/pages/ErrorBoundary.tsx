@@ -1,8 +1,10 @@
+import { tmdb } from '@/lib/tmdb/api'
 import button from '@/styles/button'
 import { headings } from '@/styles/typography'
 import { Icon } from '@iconify/react'
 import {
   Link,
+  Navigate,
   useRouter,
   type ErrorComponentProps,
 } from '@tanstack/react-router'
@@ -14,6 +16,12 @@ export const ErrorBoundary: React.FC<ErrorComponentProps> = (props) => {
     await router.invalidate({ sync: true })
     reset()
   }
+
+  if (tmdb.isError(error)) {
+    // @ts-expect-error error is TMDB.Error
+    return <Navigate replace to='/404' />
+  }
+
   return (
     <main className='grid place-items-center space-y-9'>
       <Icon

@@ -46,7 +46,7 @@ export function Episode(props: { index: number }) {
   const params = routeApi.useParams()
   const episode = season.episodes[props.index]
   return (
-    <article className='space-y-4 rounded-md bg-[#212529]'>
+    <article className='space-y-4 rounded-md bg-white/10'>
       <div className='group relative h-42'>
         <Poster
           className='rounded-t-md'

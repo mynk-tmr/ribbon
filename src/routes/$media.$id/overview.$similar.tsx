@@ -1,7 +1,7 @@
 import { PreviewCard } from '@/components/molecules/PreviewCard'
 import { Overview } from '@/components/organisms/Overview'
 import { Pagination } from '@/components/organisms/Pagination'
-import { RibbonDBActions } from '@/lib/indexdb/stores'
+import { $medias } from '@/lib/indexdb/stores'
 import { tmdb } from '@/lib/tmdb/api'
 import { headings } from '@/styles/typography'
 import { createFileRoute, Link } from '@tanstack/react-router'
@@ -20,18 +20,17 @@ export const Route = createFileRoute('/$media/$id/overview/$similar')({
       tmdb[media].recommendations(id, similar),
     ])
 
-    const exists = await RibbonDBActions.getByKey('media', details.id)
-    if (!exists)
-      await RibbonDBActions.addMedia(
-        {
-          title: tmdb.isMovie(details) ? details.title : details.name,
-          poster_path: details.poster_path || '',
-          id: details.id,
-        },
-        tmdb.isMovie(details)
-          ? {}
-          : { season: 1, end: details.seasons.length, episode: 1 },
-      )
+    await $medias.addMedia(
+      {
+        title: tmdb.isMovie(details) ? details.title : details.name,
+        poster_path: details.poster_path,
+        id: details.id,
+        media,
+      },
+      tmdb.isMovie(details)
+        ? undefined
+        : { season: 1, end: details.seasons.length, episode: 1 },
+    )
 
     return [details, recs] as const
   },
