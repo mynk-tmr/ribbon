@@ -1,7 +1,43 @@
+@layer theme, base, mantine, components, utilities;
+
+@import url('https://fonts.bunny.net/css2?family=Outfit:wght@300;400;500;700;900&display=swap');
+
 @import 'tailwindcss';
+@import '@mantine/core/styles.layer.css';
+
+@theme {
+  --animate-pulse-glow: pulse-glow 6s ease-in-out infinite alternate;
+  --animate-progress: progress 1.2s ease-in-out infinite;
+}
 
 @layer base {
-  :root, body {
-    @apply scheme-dark min-h-screen;
+  body {
+    @apply min-h-screen bg-[#141313] px-4 pb-20 sm:pb-6
+  }
+  body::before {
+      @apply fixed inset-0 -z-10 blur-2xl pointer-events-none animate-pulse-glow;
+      content: '';
+      background: radial-gradient(circle at 50% 30%, #242da84d, #141313 70%);
+  }
+}
+
+@keyframes pulse-glow {
+  from {
+    opacity: 0.8;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes progress {
+  0% {
+    width: 0%;
+  }
+  50% {
+    width: 70%;
+  }
+  100% {
+    width: 100%;
   }
 }
