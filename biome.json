@@ -21,7 +21,9 @@
   "javascript": {
     "formatter": {
       "quoteStyle": "single",
-      "semicolons": "asNeeded"
+      "semicolons": "asNeeded",
+      "expand": "never",
+      "lineWidth": 100
     }
   },
   "assist": {
