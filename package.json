@@ -20,6 +20,7 @@
     "@tanstack/react-router-devtools": "^1.133.27",
     "arktype": "^2.1.23",
     "hono": "^4.10.2",
+    "mongodb": "^6.20.0",
     "ofetch": "^1.4.1",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",

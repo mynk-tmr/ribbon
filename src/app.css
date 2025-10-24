@@ -1,9 +1,9 @@
 @layer theme, base, mantine, components, utilities;
 
-@import url('https://fonts.bunny.net/css2?family=Outfit:wght@300;400;500;700;900&display=swap');
+@import url("https://fonts.bunny.net/css2?family=Outfit:wght@300;400;500;700;900&display=swap");
 
-@import 'tailwindcss';
-@import '@mantine/core/styles.layer.css';
+@import "tailwindcss";
+@import "@mantine/core/styles.layer.css";
 
 @theme {
   --animate-pulse-glow: pulse-glow 6s ease-in-out infinite alternate;
@@ -12,13 +12,17 @@
 
 @layer base {
   body {
-    @apply min-h-screen bg-[#141313] pb-20 sm:pb-6
+    @apply min-h-screen bg-[#141313] pb-20 sm:pb-6;
   }
   body::before {
-      @apply fixed inset-0 -z-10 blur-2xl pointer-events-none animate-pulse-glow;
-      content: '';
-      background: radial-gradient(circle at 50% 30%, #242da84d, #141313 70%);
+    @apply fixed inset-0 -z-10 blur-2xl pointer-events-none animate-pulse-glow;
+    content: "";
+    background: radial-gradient(circle at 50% 30%, #242da84d, #141313 70%);
   }
+}
+
+@utility page {
+  @apply grid place-content-center mt-4 px-4 sm:px-6 min-h-[70vh];
 }
 
 @keyframes pulse-glow {

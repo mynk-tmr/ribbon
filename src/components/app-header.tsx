@@ -18,7 +18,8 @@ const Links: React.FC = () => {
       { name: 'Activity', link: '/activity', icon: 'mdi:history' },
     ]
     if (loading) routes.push({ name: 'Wait ..', link: '/', icon: 'mdi:dots-grid' })
-    else if (user) routes.push({ name: 'Profile', link: '/user/profile', icon: 'mdi:account' })
+    else if (user)
+      routes.push({ name: 'Profile', link: '/user/profile', icon: 'mdi:account' })
     else routes.push({ name: 'Login', link: '/auth', icon: 'mdi:login' })
 
     return routes
@@ -30,7 +31,7 @@ const Links: React.FC = () => {
           <Button
             component={Link}
             to={route.link}
-            color={location.pathname === route.link ? 'blue.4' : 'gray'}
+            color={location.pathname.includes(route.link) ? 'blue.4' : 'gray'}
             variant="subtle"
           >
             <Icon icon={route.icon} className="text-xl mr-2" />
@@ -48,13 +49,13 @@ export const AppHeader: React.FC = () => {
   return (
     <header className="p-4 sm:px-6 bg-black/20">
       <div className="flex flex-wrap items-center">
-        <h1 className="text-2xl font-bold">Ribbon</h1>
+        <h1 className="text-2xl font-bold grow text-center sm:text-start">Ribbon</h1>
         {isMobile ? (
           <nav className="fixed bottom-0 left-0 right-0 pb-1 z-50 flex justify-around">
             <Links />
           </nav>
         ) : (
-          <nav className="ml-auto flex items-center gap-4">
+          <nav className="flex items-center gap-4">
             <Links />
           </nav>
         )}

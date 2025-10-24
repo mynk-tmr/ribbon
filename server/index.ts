@@ -1,7 +1,7 @@
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { logger } from 'hono/logger'
-import { tmdbApp } from './modules/tmdb.routes'
+import { tmdbApp } from './modules/tmdb.route'
 import { ENV } from './utils/dotenv'
 
 const app = new Hono().basePath('/api')
