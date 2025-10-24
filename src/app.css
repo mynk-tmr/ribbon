@@ -1,0 +1,7 @@
+@import 'tailwindcss';
+
+@layer base {
+  :root, body {
+    @apply scheme-dark min-h-screen;
+  }
+}
