@@ -3,7 +3,7 @@ import { createFileRoute, Navigate, Outlet } from '@tanstack/react-router'
 import { AuthGuard } from '@/components/auth-guard'
 import cn from '@/helpers/cn'
 import { dicebear } from '@/helpers/freebies'
-import { useFireAuthSlice } from '@/hooks/useFireAuth'
+import { useFireAuthSlice, useFireAuthStore } from '@/hooks/useFireAuth'
 
 export const Route = createFileRoute('/user')({
   component: () => (
@@ -16,23 +16,26 @@ export const Route = createFileRoute('/user')({
 
 function RouteComponent() {
   return (
-    <main className="w-fit mx-auto mt-4 px-8 py-4 rounded-md bg-black/20 border border-neutral-500/20">
-      <Header />
-      <div className="my-4 border-t border-neutral-500/20" />
-      <Outlet />
+    <main className="page">
+      <section className="sm:min-w-sm p-6 sm:px-10 rounded-lg bg-black/20 border border-neutral-500/20">
+        <Header />
+        <div className="my-4 border-t border-neutral-500/20" />
+        <Outlet />
+      </section>
+      <UserID />
     </main>
   )
 }
 
 function Header() {
-  const user = useFireAuthSlice((state) => state.user)
+  const { user } = useFireAuthStore()
   if (!user) return
   return (
-    <header className="flex flex-wrap items-center gap-6">
+    <header className="flex flex-wrap items-center gap-x-6">
       <img
         src={user.photoURL || dicebear(user.uid)}
         alt="User Avatar"
-        className="size-28 rounded-full ring ring-neutral-100"
+        className="size-28 rounded-full ring p-1"
       />
       <div>
         <h1 className="text-2xl font-bold">{user.displayName || 'Anonymous'}</h1>
@@ -49,5 +52,16 @@ function Header() {
         </span>
       </div>
     </header>
+  )
+}
+
+function UserID() {
+  const user = useFireAuthSlice((state) => state.user)
+  if (!user) return
+  return (
+    <div className="mt-4 grid gap-y-2 *:text-center opacity-30">
+      <small className="text-xs">User ID:</small>
+      <small className="text-xs italic">{user.uid}</small>
+    </div>
   )
 }

@@ -1,5 +1,7 @@
-function filter<T>(...classes: T[]): string {
-  return classes.filter(Boolean).join(' ')
+import { twMerge } from 'tailwind-merge'
+
+function filter(...classes: (string | undefined | false | null)[]): string {
+  return twMerge(classes.filter(Boolean))
 }
 
 function first<T>(...classes: T[]): T {

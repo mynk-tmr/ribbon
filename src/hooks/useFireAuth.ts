@@ -30,6 +30,10 @@ class AuthStore {
     this.subs.add(cb)
     return () => this.subs.delete(cb)
   }
+  async refresh() {
+    await this.state.user?.reload()
+    this.setState({ ...this.state })
+  }
 }
 
 export const authStore = new AuthStore()
@@ -46,4 +50,14 @@ export function useFireAuthSlice<R>(cb: (state: AuthState) => R) {
     (cb) => authStore.subscribe(cb),
     () => cb(authStore.state),
   )
+}
+
+export function withRefresh<A extends unknown[], R>(
+  fn: (...args: A) => Promise<R>,
+): typeof fn {
+  return async (...args) => {
+    const res = await fn(...args)
+    await authStore.refresh()
+    return res
+  }
 }

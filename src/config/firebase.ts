@@ -11,3 +11,8 @@ export const app = initializeApp({
 })
 
 export const auth = getAuth(app)
+
+export const actionCodeSettings = {
+  url: `${window.location.origin}/magic/done`,
+  handleCodeInApp: true,
+}

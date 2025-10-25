@@ -80,7 +80,7 @@ const Form: React.FC = () => {
 
 const OtherLinks: React.FC = () => (
   <div className="flex text-sm justify-between *:hover:underline underline-offset-2">
-    <Link to="/auth/passwordless" search={{ t: 'reset' }}>
+    <Link to="/auth/passwordless" search={{ t: 'login' }}>
       Use Magic Link ✨
     </Link>
     <Link to="/auth/passwordless" search={{ t: 'reset' }}>
