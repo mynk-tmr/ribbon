@@ -15,7 +15,7 @@ const Links: React.FC = () => {
   function getLinks(): RouteLink[] {
     const routes = [
       { name: 'Discover', link: '/discover', icon: 'mdi:compass' },
-      { name: 'Search', link: '/search', icon: 'mdi:magnify' },
+      { name: 'Search', link: '/search?query=&by=tv&page=1', icon: 'mdi:magnify' },
       { name: 'Activity', link: '/activity', icon: 'mdi:history' },
     ]
     if (loading) routes.push({ name: 'Wait ..', link: '/', icon: 'mdi:dots-grid' })
@@ -54,7 +54,7 @@ export const AppHeader: React.FC = () => {
         <nav
           className={cn.filter(
             isMobile &&
-              'fixed bottom-0 left-0 right-0 pb-1 z-50 flex justify-around',
+              'fixed bottom-0 left-0 right-0 pb-1 z-50 flex justify-around glowBg before:absolute',
             !isMobile && 'flex items-center gap-4',
           )}
         >

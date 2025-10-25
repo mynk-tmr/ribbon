@@ -12,9 +12,13 @@
 
 @layer base {
   body {
-    @apply min-h-screen bg-[#141313] pb-20 sm:pb-6 prettyscroll;
+    @apply min-h-screen bg-[#141313] pb-20 sm:pb-6 prettyscroll glowBg;
   }
-  body::before {
+}
+
+@utility glowBg {
+  @apply bg-[#141313];
+  &::before {
     @apply fixed inset-0 -z-10 blur-2xl pointer-events-none animate-pulse-glow;
     content: "";
     background: radial-gradient(circle at 50% 30%, #242da84d, #141313 70%);

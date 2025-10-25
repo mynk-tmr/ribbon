@@ -19,7 +19,7 @@ function RouteComponent() {
     <main className="page">
       <section className="sm:min-w-sm p-6 sm:px-10 rounded-lg bg-black/20 border border-neutral-500/20">
         <Header />
-        <div className="my-4 border-t border-neutral-500/20" />
+        <div className="my-4 border-t border-neutral-500/50" />
         <Outlet />
       </section>
       <UserID />
@@ -31,7 +31,7 @@ function Header() {
   const { user } = useFireAuthStore()
   if (!user) return
   return (
-    <header className="flex flex-wrap items-center gap-x-6">
+    <header className="flex flex-wrap items-center gap-6">
       <img
         src={user.photoURL || dicebear(user.uid)}
         alt="User Avatar"

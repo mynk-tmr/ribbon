@@ -7,7 +7,11 @@ import theme from './config/theme'
 import { routeTree } from './routeTree.gen'
 
 // Create a new router instance
-const router = createRouter({ routeTree })
+const router = createRouter({
+  routeTree,
+  defaultStaleTime: 25 * 60 * 1000,
+  scrollRestoration: true,
+})
 
 // Register the router instance for type safety
 declare module '@tanstack/react-router' {
