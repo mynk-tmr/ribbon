@@ -2,14 +2,15 @@ import { Icon } from '@iconify/react'
 import { Button } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import { Link, useRouterState } from '@tanstack/react-router'
+import cn from '@/helpers/cn'
+import { useFireAuthStore } from '@/hooks/useFireAuth'
 
 type RouteLink = { name: string; link: string; icon: string }
 
 const Links: React.FC = () => {
   const { location } = useRouterState()
   const isMobile = useMediaQuery('(max-width: 640px)')
-  const user = false
-  const loading = false
+  const { loading, user } = useFireAuthStore()
 
   function getLinks(): RouteLink[] {
     const routes = [
@@ -50,15 +51,15 @@ export const AppHeader: React.FC = () => {
     <header className="p-4 sm:px-6 bg-black/20">
       <div className="flex flex-wrap items-center">
         <h1 className="text-2xl font-bold grow text-center sm:text-start">Ribbon</h1>
-        {isMobile ? (
-          <nav className="fixed bottom-0 left-0 right-0 pb-1 z-50 flex justify-around">
-            <Links />
-          </nav>
-        ) : (
-          <nav className="flex items-center gap-4">
-            <Links />
-          </nav>
-        )}
+        <nav
+          className={cn.filter(
+            isMobile &&
+              'fixed bottom-0 left-0 right-0 pb-1 z-50 flex justify-around',
+            !isMobile && 'flex items-center gap-4',
+          )}
+        >
+          <Links />
+        </nav>
       </div>
     </header>
   )

@@ -1,6 +1,13 @@
 import { Button, PasswordInput, TextInput } from '@mantine/core'
 import { createFileRoute, Link } from '@tanstack/react-router'
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from 'firebase/auth'
 import type React from 'react'
+import { auth } from '@/config/firebase'
+import { firePrettify } from '@/helpers/pretty-firebase-error'
+import { useFormAction } from '@/hooks/useFormAction'
 import { useMergedState } from '@/hooks/useMergedState'
 
 export const Route = createFileRoute('/auth/')({
@@ -27,12 +34,23 @@ function RouteComponent() {
 
 const Form: React.FC = () => {
   const [state, set] = useMergedState({ email: '', password: '' })
+  const search = Route.useSearch()
+  const [status, action] = useFormAction(() =>
+    search.login
+      ? signInWithEmailAndPassword(auth, state.email, state.password)
+      : createUserWithEmailAndPassword(auth, state.email, state.password),
+  )
   return (
-    <form
-      className="space-y-4 sm:max-w-[340px]"
-      onSubmit={(e) => e.preventDefault()}
-    >
+    <form action={action} className="space-y-4 sm:max-w-[340px]">
+      <div>
+        {!status.pending && status.error && (
+          <p className="text-red-400 text-sm">
+            {firePrettify.auth(status.error.message)}
+          </p>
+        )}
+      </div>
       <TextInput
+        value={state.email}
         onChange={(e) => set({ email: e.target.value })}
         label="Email"
         required
@@ -40,6 +58,7 @@ const Form: React.FC = () => {
         placeholder="Email address"
       />
       <PasswordInput
+        value={state.password}
         onChange={(e) => set({ password: e.target.value })}
         label="Password"
         required
@@ -47,8 +66,13 @@ const Form: React.FC = () => {
         placeholder="••••••••••••••••"
       />
       <OtherLinks />
-      <Button className="w-full" type="submit">
-        Sign in
+      <Button
+        loading={status.pending}
+        disabled={status.pending}
+        className="w-full"
+        type="submit"
+      >
+        {search.login ? 'Sign in' : 'Create Account'}
       </Button>
     </form>
   )

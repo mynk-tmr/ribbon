@@ -7,9 +7,10 @@
     "dev:c": "vite --port 3001",
     "dev:s": "bun --hot ./server/index.ts",
     "dev": "bun concurrently dev:c dev:s",
-    "build": "tsc -b && vite build",
+    "build": "vite build",
     "lint": "biome check --write .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "tsgo": "tsc -b --noEmit"
   },
   "dependencies": {
     "@iconify/react": "^6.0.2",
@@ -19,6 +20,7 @@
     "@tanstack/react-router": "^1.133.27",
     "@tanstack/react-router-devtools": "^1.133.27",
     "arktype": "^2.1.23",
+    "firebase": "^12.4.0",
     "hono": "^4.10.2",
     "mongodb": "^6.20.0",
     "ofetch": "^1.4.1",
