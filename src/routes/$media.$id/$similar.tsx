@@ -4,16 +4,16 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { type } from 'arktype'
 import Overview from '@/components/overview'
 import { PreviewCard } from '@/components/preview-card'
-import { type TMDB, tmdb } from '@/config/tmdb'
+import { tmdb } from '@/config/tmdb'
 
 export const Route = createFileRoute('/$media/$id/$similar')({
   component: RouteComponent,
   params: { parse: (raw) => type({ similar: 'string.integer.parse' }).assert(raw) },
   async loader({ params: { media, id, similar } }) {
-    const [details, recommendations] = (await tmdb.parallel(
-      { type: 'details', payload: { media, id } },
-      { type: 'recommendations', payload: { media, id, page: similar } },
-    )) as [TMDB.MovieDetail | TMDB.TVDetail, TMDB.Paginated<unknown>]
+    const [details, recommendations] = await Promise.all([
+      tmdb.details[media](id),
+      tmdb.recommendations[media](id, similar),
+    ])
     return { details, recommendations }
   },
 })
@@ -37,7 +37,6 @@ function Recommendations() {
       params: { similar: page },
       hash: 'recommendations',
     })
-  const items = data.results as TMDB.Movie[] | TMDB.TV[]
   const isMatch = useMediaQuery('(min-width: 640px)')
   return (
     // biome-ignore lint/correctness/useUniqueElementIds: for hash
@@ -46,7 +45,7 @@ function Recommendations() {
         You may also like 😍
       </h1>
       <div className="flex flex-wrap gap-4 justify-center *:shrink-0">
-        {items.map((item) => {
+        {data.results.map((item) => {
           return (
             <Link
               key={item.id}

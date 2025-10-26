@@ -1,17 +1,17 @@
 import { Icon } from '@iconify/react'
 import { Button, TextInput } from '@mantine/core'
 import { createFileRoute, Link } from '@tanstack/react-router'
+import { type } from 'arktype'
 import { sendPasswordResetEmail, sendSignInLinkToEmail } from 'firebase/auth'
 import { useState } from 'react'
 import { actionCodeSettings, auth } from '@/config/firebase'
 import useFireBaseAction from '@/hooks/useFireBaseAction'
 
+const schema = type({ t: "'login' | 'reset'" })
+
 export const Route = createFileRoute('/auth/passwordless')({
   component: RouteComponent,
-  validateSearch: (s) => {
-    if (s.t === 'login' || s.t === 'reset') return { t: s.t } as const
-    return { t: 'login' } as const
-  },
+  validateSearch: schema,
 })
 
 function RouteComponent() {

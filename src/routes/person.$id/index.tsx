@@ -3,16 +3,16 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { MetaItem } from '@/components/meta-item'
 import Poster from '@/components/poster'
 import { PreviewCard } from '@/components/preview-card'
-import { type TMDB, tmdb } from '@/config/tmdb'
+import { tmdb } from '@/config/tmdb'
 
 export const Route = createFileRoute('/person/$id/')({
   component: RouteComponent,
   params: { parse: (raw) => ({ id: Number(raw.id) }) },
   async loader({ params }) {
-    const [person, credits] = (await tmdb.parallel(
-      { type: 'details', payload: { id: params.id, media: 'person' } },
-      { type: 'combined_credits', payload: { id: params.id } },
-    )) as [TMDB.PersonDetails, TMDB.CombinedCredits]
+    const [person, credits] = await Promise.all([
+      tmdb.details.person(params.id),
+      tmdb.person.credits(params.id),
+    ])
     return { person, credits }
   },
 })
@@ -46,9 +46,13 @@ function PersonDetails() {
     }),
   )
 
-  const AGE = birthday
-    ? new Date().getFullYear() - new Date(birthday).getFullYear()
-    : 'Unknown'
+  const getAge = () => {
+    if (!birthday) return null
+    const age = Date.now() - new Date(birthday).getTime()
+    const years = age / 1000 / 60 / 60 / 24 / 365
+    return Math.floor(years)
+  }
+  const AGE = getAge()
 
   const popularityString = Math.floor(popularity * 100)
 

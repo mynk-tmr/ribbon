@@ -18,12 +18,13 @@ export const Route = createFileRoute('/search/')({
   component: RouteComponent,
   validateSearch: schema,
   loaderDeps: ({ search }) => ({ search }),
-  async loader({ deps: { search } }) {
-    if (search.query === '') return { data: { results: [], page: 1, total_pages: 1 } }
-    const data = await tmdb.dispatch<TMDB.Paginated<unknown>>({
-      type: 'search',
-      payload: search,
-    })
+  async loader({
+    deps: {
+      search: { query, by, page },
+    },
+  }) {
+    if (query === '') return { data: { results: [], total_pages: 0 } }
+    const data = await tmdb.search(query, by, page)
     return { data }
   },
 })
@@ -112,7 +113,7 @@ function Results() {
           <Link
             key={item.id}
             to="/$media/$id/$similar"
-            params={{ id: item.id, media: by === 'movie' ? 'movie' : 'tv', similar: 1 }}
+            params={{ id: item.id, media: by, similar: 1 }}
           >
             <PreviewCard item={item} />
           </Link>

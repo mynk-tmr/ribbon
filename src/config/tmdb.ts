@@ -7,66 +7,45 @@ const api = ofetch.create({
   ignoreResponseError: false,
 })
 
-const isError = (e: unknown): e is TMDB.Error =>
-  typeof e === 'object' && e !== null && 'status_code' in e
-
 const isMovie = (e: TMDB.Media): e is TMDB.Movie => 'release_date' in e
 
-export const tmdb = { api, isError, isMovie, dispatch, parallel }
+type Entity = 'movie' | 'tv' | 'person'
+type Criteria = 'popular' | 'top_rated' | 'upcoming' | 'now_playing'
+type PagedMovie = TMDB.Paginated<TMDB.Movie>
+type PagedTV = TMDB.Paginated<TMDB.TV>
+type PagedPerson = TMDB.Paginated<TMDB.Person>
+type ID = string | number
+
+export const tmdb = {
+  isMovie,
+  details: {
+    movie: (id: ID) => api<TMDB.MovieDetail>(`/movie/${id}`),
+    tv: (id: ID) => api<TMDB.TVDetail>(`/tv/${id}`),
+    person: (id: ID) => api<TMDB.PersonDetails>(`/person/${id}`),
+  },
+  discover: {
+    movie: (criteria: Criteria, page: number) =>
+      api<PagedMovie>(`/movie/${criteria}?page=${page}`),
+    tv: (criteria: Criteria, page: number) =>
+      api<PagedTV>(`/tv/${criteria}?page=${page}`),
+    person: (page: number) => api<PagedPerson>(`/person/popular?page=${page}`),
+  },
+  search: (query: string, type: Entity, page: number) =>
+    api<PagedMovie | PagedTV | PagedPerson>(
+      `/search/${type}?query=${query}&page=${page}`,
+    ),
+  person: {
+    credits: (id: ID) => api<TMDB.CombinedCredits>(`/person/${id}/combined_credits`),
+  },
+  recommendations: {
+    movie: (id: ID, page: number) =>
+      api<PagedMovie>(`/movie/${id}/recommendations?page=${page}`),
+    tv: (id: ID, page: number) => api<PagedTV>(`/tv/${id}/recommendations?page=${page}`),
+  },
+  tv: {
+    season: (id: ID, season: number) =>
+      api<TMDB.SeasonDetail>(`/tv/${id}/season/${season}`),
+  },
+}
 
 export type { TMDB }
-
-type Actions =
-  | {
-      type: 'details'
-      payload: { media: 'movie' | 'tv' | 'person'; id: number | string }
-    }
-  | {
-      type: 'recommendations'
-      payload: { media: 'movie' | 'tv'; id: number | string; page: number }
-    }
-  | {
-      type: 'search'
-      payload: { query: string; by: 'movie' | 'tv' | 'person'; page: number }
-    }
-  | { type: 'season'; payload: { id: number | string; season: number | string } }
-  | { type: 'combined_credits'; payload: { id: number } }
-
-function dispatch<T>(action: Actions) {
-  let url: string
-
-  switch (action.type) {
-    case 'details':
-      url = `/${action.payload.media}/${action.payload.id}`
-      break
-
-    case 'recommendations':
-      url = `/${action.payload.media}/${action.payload.id}/recommendations?page=${action.payload.page}`
-      break
-
-    case 'search':
-      url = `/search/${action.payload.by}?query=${encodeURIComponent(
-        action.payload.query,
-      )}&page=${action.payload.page}`
-      break
-
-    case 'season':
-      url = `/tv/${action.payload.id}/season/${action.payload.season}`
-      break
-
-    case 'combined_credits':
-      url = `/person/${action.payload.id}/combined_credits`
-      break
-
-    default:
-      //@ts-expect-error
-      throw new Error(`Unhandled action ${action.type}`)
-  }
-
-  return api<T>(url)
-}
-
-function parallel(...actions: Actions[]) {
-  const promises = actions.map((action) => dispatch(action))
-  return Promise.all(promises)
-}

@@ -4,15 +4,12 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Episode } from '@/components/episode'
 import Poster from '@/components/poster'
 import { RatingCircle } from '@/components/rating-circle'
-import { type TMDB, tmdb } from '@/config/tmdb'
+import { tmdb } from '@/config/tmdb'
 
 export const Route = createFileRoute('/$media/$id/season/$num/$end')({
   component: RouteComponent,
-  async loader({ params }) {
-    const data = await tmdb.dispatch<TMDB.SeasonDetail>({
-      type: 'season',
-      payload: { id: params.id, season: params.num },
-    })
+  async loader({ params: { id, num } }) {
+    const data = await tmdb.tv.season(id, Number(num))
     return { data }
   },
 })
@@ -37,8 +34,10 @@ function SeasonDetails() {
   const gto = Route.useNavigate()
   const goback = () => gto({ to: '/$media/$id/$similar', params: { similar: 1 } })
   return (
-    <section className="grid min-h-[400px] gap-6 md:grid-cols-[300px_1fr]">
-      <Poster className="object-contain" size="w500" path={season.poster_path} />
+    <section className="grid gap-6 md:grid-cols-[300px_1fr]">
+      <div className="h-[500px]">
+        <Poster className="object-contain" size="w500" path={season.poster_path} />
+      </div>
       <article className="space-y-9">
         <header className="flex items-center gap-6">
           <h2 className="text-4xl">{season.name}</h2>

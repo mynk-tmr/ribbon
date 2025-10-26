@@ -20,7 +20,7 @@ const Links: React.FC = () => {
     ]
     if (loading) routes.push({ name: 'Wait ..', link: '/', icon: 'mdi:dots-grid' })
     else if (user)
-      routes.push({ name: 'Profile', link: '/user/profile', icon: 'mdi:account' })
+      routes.push({ name: 'Profile', link: '/user/profile', icon: 'mdi:account-box' })
     else routes.push({ name: 'Login', link: '/auth', icon: 'mdi:login' })
 
     return routes
