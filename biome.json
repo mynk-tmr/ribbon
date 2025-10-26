@@ -29,7 +29,7 @@
       "quoteStyle": "single",
       "semicolons": "asNeeded",
       "expand": "never",
-      "lineWidth": 85
+      "lineWidth": 90
     }
   },
   "assist": {

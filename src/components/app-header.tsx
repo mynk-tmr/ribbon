@@ -33,9 +33,7 @@ const Links: React.FC = () => {
             component={Link}
             to={route.link}
             color={
-              location.pathname.startsWith(route.link.split('?')[0])
-                ? 'blue.4'
-                : 'gray'
+              location.pathname.startsWith(route.link.split('?')[0]) ? 'blue.4' : 'gray'
             }
             variant="subtle"
           >

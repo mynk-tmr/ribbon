@@ -10,5 +10,4 @@ export const query = ofetch.create({
   baseURL: ENV.TMDB_BASE,
   headers: { Authorization: `Bearer ${ENV.TMDB_TOKEN}` },
   onRequest: (vars) => echo(`🚀 ${vars.request}`),
-  ignoreResponseError: true,
 })

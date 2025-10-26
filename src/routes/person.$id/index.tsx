@@ -74,9 +74,7 @@ function PersonDetails() {
             />
           )}
           {deathday && <MetaItem icon="mdi:cross" label={`Died ${DEATH}`} />}
-          {place_of_birth && (
-            <MetaItem icon="mdi:map-marker" label={place_of_birth} />
-          )}
+          {place_of_birth && <MetaItem icon="mdi:map-marker" label={place_of_birth} />}
         </ul>
         <Spoiler hideLabel="Show less" showLabel="Show more">
           {biography || 'No biography available.'}

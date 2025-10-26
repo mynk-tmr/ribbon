@@ -59,12 +59,7 @@ export default function Overview() {
         {/* Tagline */}
         {details.tagline && (
           <div className="flex items-center gap-1">
-            <Icon
-              icon="tabler:quote"
-              width={24}
-              height={24}
-              className="text-gray-400"
-            />
+            <Icon icon="tabler:quote" width={24} height={24} className="text-gray-400" />
             <em className="text-sm italic">{details.tagline}</em>
           </div>
         )}
@@ -99,8 +94,7 @@ export default function Overview() {
           <span>🌍 {details.origin_country.join(', ') || 'Unknown'}</span>
           <span>
             🗣️{' '}
-            {details.spoken_languages.map((l) => l.english_name).join(', ') ||
-              'Unknown'}
+            {details.spoken_languages.map((l) => l.english_name).join(', ') || 'Unknown'}
           </span>
         </div>
 

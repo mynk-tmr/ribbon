@@ -16,8 +16,7 @@ export const Route = createFileRoute('/auth/passwordless')({
 
 function RouteComponent() {
   const search = Route.useSearch()
-  const action =
-    search.t === 'login' ? sendSignInLinkToEmail : sendPasswordResetEmail
+  const action = search.t === 'login' ? sendSignInLinkToEmail : sendPasswordResetEmail
   const [email, setEmail] = useState('')
   const [status, start] = useFireBaseAction(async () => {
     if (search.t === 'login') window.localStorage.setItem('emailForSignIn', email)
@@ -30,9 +29,7 @@ function RouteComponent() {
     <main className="page">
       <form action={start} className="space-y-4 min-w-xs">
         <h2 className="text-2xl font-bold capitalize">Send {search.t} Link</h2>
-        {status.error && (
-          <p className="text-red-400 text-sm">{status.error.message}</p>
-        )}
+        {status.error && <p className="text-red-400 text-sm">{status.error.message}</p>}
         <TextInput
           required
           label="Email"

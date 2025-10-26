@@ -1,6 +1,7 @@
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { logger } from 'hono/logger'
+import { errorhandler } from './modules/error.handler'
 import { tmdbApp } from './modules/tmdb.route'
 import { ENV } from './utils/dotenv'
 
@@ -11,7 +12,7 @@ if (!ENV.VERCEL) {
   app.use(logger())
   console.log('Loaded dev middlewares')
 }
-
+app.onError(errorhandler)
 app.route('/tmdb', tmdbApp)
 
 export default app

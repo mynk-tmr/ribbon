@@ -6,9 +6,7 @@ import { useFireAuthStore } from '@/hooks/useFireAuth'
 import useFireBaseAction from '@/hooks/useFireBaseAction'
 import { useMergedState } from '@/hooks/useMergedState'
 
-export const Route = createFileRoute('/user/profile/edit')({
-  component: RouteComponent,
-})
+export const Route = createFileRoute('/user/profile/edit')({ component: RouteComponent })
 
 function RouteComponent() {
   const { user } = useFireAuthStore()
@@ -17,10 +15,7 @@ function RouteComponent() {
     photoURL: user?.photoURL || '',
   })
   const [status, action] = useFireBaseAction(() =>
-    updateProfile(user!, {
-      displayName: state.displayName,
-      photoURL: state.photoURL,
-    }),
+    updateProfile(user!, { displayName: state.displayName, photoURL: state.photoURL }),
   )
   if (!user) return
 
@@ -30,9 +25,7 @@ function RouteComponent() {
     <section>
       <form action={action} className="space-y-4">
         <h2 className="text-2xl font-bold">Update Profile</h2>
-        {status.error && (
-          <p className="text-red-400 text-sm">{status.error.message}</p>
-        )}
+        {status.error && <p className="text-red-400 text-sm">{status.error.message}</p>}
         <TextInput
           label="Display Name"
           value={state.displayName}

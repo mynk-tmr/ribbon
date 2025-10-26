@@ -1,9 +1,6 @@
 import { Button, PasswordInput, TextInput } from '@mantine/core'
 import { createFileRoute, Link } from '@tanstack/react-router'
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-} from 'firebase/auth'
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth'
 import type React from 'react'
 import { auth } from '@/config/firebase'
 import { firePrettify } from '@/helpers/pretty-firebase-error'

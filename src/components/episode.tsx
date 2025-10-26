@@ -23,19 +23,10 @@ export function Episode({ index }: { index: number }) {
         >
           Stream now
         </a>
-        <Poster
-          className="rounded-t-md h-full"
-          path={episode.still_path}
-          size="w500"
-        />
+        <Poster className="rounded-t-md h-full" path={episode.still_path} size="w500" />
         <RatingCircle rating={episode.vote_average} />
         {episode.episode_type === 'finale' && (
-          <Badge
-            variant="filled"
-            size="xs"
-            color="red"
-            className="absolute top-2 left-2"
-          >
+          <Badge variant="filled" size="xs" color="red" className="absolute top-2 left-2">
             Finale
           </Badge>
         )}
@@ -46,10 +37,7 @@ export function Episode({ index }: { index: number }) {
         </h3>
         <div className="text-lightGray flex justify-between text-xs font-bold">
           <MetaItem icon="mdi:calendar" label={episode.air_date} />
-          <MetaItem
-            icon="mdi:timer-outline"
-            label={`${episode.runtime ?? '?'} min`}
-          />
+          <MetaItem icon="mdi:timer-outline" label={`${episode.runtime ?? '?'} min`} />
         </div>
         <Spoiler
           maxHeight={64}
