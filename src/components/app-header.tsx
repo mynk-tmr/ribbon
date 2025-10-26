@@ -32,7 +32,11 @@ const Links: React.FC = () => {
           <Button
             component={Link}
             to={route.link}
-            color={location.pathname.includes(route.link) ? 'blue.4' : 'gray'}
+            color={
+              location.pathname.startsWith(route.link.split('?')[0])
+                ? 'blue.4'
+                : 'gray'
+            }
             variant="subtle"
           >
             <Icon icon={route.icon} className="text-xl mr-2" />

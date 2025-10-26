@@ -2,34 +2,28 @@ import { Pagination } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { type } from 'arktype'
+import Overview from '@/components/overview'
 import { PreviewCard } from '@/components/preview-card'
 import { type TMDB, tmdb } from '@/config/tmdb'
 
-const schema = type({
-  media: "'movie' | 'tv'",
-  id: 'string.integer.parse',
-  similar: 'string.integer.parse',
-})
-
-export const Route = createFileRoute('/overview/$media/$id/$similar')({
+export const Route = createFileRoute('/$media/$id/$similar')({
   component: RouteComponent,
-  params: { parse: (raw) => schema.assert(raw) },
+  params: { parse: (raw) => type({ similar: 'string.integer.parse' }).assert(raw) },
   async loader({ params: { media, id, similar } }) {
-    const base = `/${media}/${id}`
-    const p1 = tmdb.api(base)
-    const p2 = tmdb.api(`${base}/recommendations?page=${similar}`)
+    const p1 = tmdb.dispatch({ type: 'details', payload: { media, id } })
+    const p2 = tmdb.dispatch<TMDB.Paginated<unknown>>({
+      type: 'recommendations',
+      payload: { media, id, page: similar },
+    })
     const [details, recommendations] = await Promise.all([p1, p2])
     return { details, recommendations }
   },
 })
 
 function RouteComponent() {
-  const { details } = Route.useLoaderData()
   return (
-    <main>
-      <pre className="p-4 bg-black/20 text-sm whitespace-pre-wrap">
-        {JSON.stringify({ details }, null, 2)}
-      </pre>
+    <main className="page pt-4">
+      <Overview />
       <Recommendations />
     </main>
   )
@@ -40,12 +34,17 @@ function Recommendations() {
   const { media } = Route.useParams()
   const goto = Route.useNavigate()
   const changePage = (page: number) =>
-    goto({ to: '/overview/$media/$id/$similar', params: { similar: page } })
+    goto({
+      to: '/$media/$id/$similar',
+      params: { similar: page },
+      hash: 'recommendations',
+    })
   const items = data.results as TMDB.Movie[] | TMDB.TV[]
   const isMatch = useMediaQuery('(min-width: 640px)')
   return (
-    <section>
-      <h1 className="text-2xl sm:text-3xl font-bold my-10 text-center">
+    // biome-ignore lint/correctness/useUniqueElementIds: for hash
+    <section id="recommendations" className="mt-16">
+      <h1 className="text-2xl sm:text-3xl font-bold mb-10 text-center">
         You may also like 😍
       </h1>
       <div className="flex flex-wrap gap-4 justify-center *:shrink-0">
@@ -53,7 +52,7 @@ function Recommendations() {
           return (
             <Link
               key={item.id}
-              to="/overview/$media/$id/$similar"
+              to="/$media/$id/$similar"
               params={{ id: item.id, media, similar: 1 }}
             >
               <PreviewCard item={item} />

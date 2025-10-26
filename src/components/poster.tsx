@@ -18,7 +18,7 @@ export default function Poster({ size, path, className, ...props }: Props) {
       }
       alt="poster"
       radius="md"
-      className={cn.filter('object-cover', className)}
+      className={cn.filter('object-cover hover:scale-105 transition-all', className)}
       fallbackSrc="https://placehold.co/342x513?text=Failed+to+Load"
       {...props}
     />
