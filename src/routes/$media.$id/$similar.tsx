@@ -10,12 +10,10 @@ export const Route = createFileRoute('/$media/$id/$similar')({
   component: RouteComponent,
   params: { parse: (raw) => type({ similar: 'string.integer.parse' }).assert(raw) },
   async loader({ params: { media, id, similar } }) {
-    const p1 = tmdb.dispatch({ type: 'details', payload: { media, id } })
-    const p2 = tmdb.dispatch<TMDB.Paginated<unknown>>({
-      type: 'recommendations',
-      payload: { media, id, page: similar },
-    })
-    const [details, recommendations] = await Promise.all([p1, p2])
+    const [details, recommendations] = (await tmdb.parallel(
+      { type: 'details', payload: { media, id } },
+      { type: 'recommendations', payload: { media, id, page: similar } },
+    )) as [TMDB.MovieDetail | TMDB.TVDetail, TMDB.Paginated<unknown>]
     return { details, recommendations }
   },
 })

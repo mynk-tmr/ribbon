@@ -22,7 +22,7 @@ export function PreviewCard({ item }: Props) {
       <Poster path={poster_path} size="w342" h={242} />
       <RatingCircle rating={vote_average} />
       <p className="mt-2 truncate px-1 text-sm font-semibold">{title}</p>
-      <footer className="text-lightGray mt-1 flex items-center justify-between text-sm">
+      <footer className="text-gray-400 mt-1 flex items-center justify-between text-sm">
         <MetaItem icon="mdi:calendar" label={year} />
         <MetaItem icon="mdi:translate" label={original_language} />
       </footer>

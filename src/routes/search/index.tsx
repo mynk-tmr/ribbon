@@ -3,6 +3,7 @@ import { Button, Pagination, Select, TextInput } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { type } from 'arktype'
+import PersonCard from '@/components/person-card'
 import { PreviewCard } from '@/components/preview-card'
 import { type TMDB, tmdb } from '@/config/tmdb'
 import { useMergedState } from '@/hooks/useMergedState'
@@ -101,58 +102,60 @@ function SearchBox() {
 function Results() {
   const { data } = Route.useLoaderData()
   const { query, by, page } = Route.useSearch()
-  const NAME = (
-    <b className="text-yellow-400">
-      {query} {by}
-    </b>
-  )
-  const PAGE = (
-    <small className="text-base">
-      ({page} / {data.total_pages})
-    </small>
-  )
+  const items =
+    by === 'person'
+      ? (data.results as TMDB.Person[]).map((person) => (
+          <Link key={person.id} to="/person/$id" params={{ id: person.id }}>
+            <PersonCard person={person} />
+          </Link>
+        ))
+      : (data.results as TMDB.Movie[] | TMDB.TV[]).map((item) => (
+          <Link
+            key={item.id}
+            to="/$media/$id/$similar"
+            params={{
+              id: item.id,
+              media: by === 'movie' ? 'movie' : 'tv',
+              similar: 1,
+            }}
+          >
+            <PreviewCard item={item} />
+          </Link>
+        ))
+
   return (
     <section>
       <h1 className="text-3xl font-bold my-10 text-center">
-        Results for {NAME} {PAGE}
+        Results for{' '}
+        <b className="text-yellow-400">
+          {query} {by}
+        </b>{' '}
+        <small className="text-base">
+          ({page} / {data.total_pages})
+        </small>
       </h1>
-      {by !== 'person' && <ShowMedia />}
+      <div className="flex flex-wrap gap-4 justify-center *:shrink-0">{items}</div>
+      <ChangePange />
     </section>
   )
 }
 
-function ShowMedia() {
-  const { data } = Route.useLoaderData()
+function ChangePange() {
   const search = Route.useSearch()
+  const {
+    data: { total_pages },
+  } = Route.useLoaderData()
   const goto = Route.useNavigate()
   const changePage = (page: number) => goto({ to: '.', search: { ...search, page } })
-  const items = data.results as TMDB.Movie[] | TMDB.TV[]
-  const isMatch = useMediaQuery('(min-width: 640px)')
+  const isMobile = useMediaQuery('(max-width: 640px)')
   return (
-    <>
-      <div className="flex flex-wrap gap-4 justify-center *:shrink-0">
-        {items.map((item) => {
-          if (search.by === 'person')
-            throw new Error('Found by as person inside ShowMedia')
-          return (
-            <Link
-              key={item.id}
-              to="/$media/$id/$similar"
-              params={{ id: item.id, media: search.by, similar: 1 }}
-            >
-              <PreviewCard item={item} />
-            </Link>
-          )
-        })}
-      </div>
-      <section className="mt-8 flex justify-center">
-        <Pagination
-          size={isMatch ? 'md' : 'xs'}
-          value={data.page}
-          total={data.total_pages}
-          onChange={changePage}
-        />
-      </section>
-    </>
+    <section className="mt-8 flex justify-center">
+      <Pagination
+        size={isMobile ? 'xs' : 'md'}
+        value={search.page}
+        total={total_pages}
+        onChange={changePage}
+      />
+    </section>
   )
 }

@@ -28,7 +28,7 @@ export function Episode({ index }: { index: number }) {
           path={episode.still_path}
           size="w500"
         />
-        <RatingCircle isAbsolute rating={episode.vote_average} />
+        <RatingCircle rating={episode.vote_average} />
         {episode.episode_type === 'finale' && (
           <Badge
             variant="filled"

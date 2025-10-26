@@ -17,15 +17,6 @@ export interface Genre {
   name: string
 }
 
-export interface Creator {
-  id: number
-  credit_id: string
-  name: string
-  original_name: string
-  gender: number
-  profile_path: string | null
-}
-
 export interface Episode {
   id: number
   name: string
@@ -93,6 +84,11 @@ export interface Person {
   popularity: number
   gender: number
   adult: boolean
+}
+
+export interface Creator extends Person {
+  credit_id: string
+  original_name: string
 }
 
 export interface Cast extends Person {
@@ -182,10 +178,22 @@ export interface TVDetail extends DetailBase {
   type: string
 }
 
-export interface Credit {
+export interface PersonDetails extends Person {
+  also_known_as: string[]
+  biography: string
+  birthday: string | null
+  deathday: string | null
+  homepage: string | null
+  imdb_id: string | null
+  place_of_birth: string | null
+}
+
+type Inner = (Movie & { media_type: 'movie' }) | (TV & { media_type: 'tv' })
+
+export interface CombinedCredits {
   id: number
-  cast: Cast[]
-  crew: Crew[]
+  cast: Inner[]
+  crew: Inner[]
 }
 
 export interface ImgCollection {
@@ -195,7 +203,7 @@ export interface ImgCollection {
   posters: Image[]
 }
 
-interface EpisodeDetail extends Episode {
+export interface EpisodeDetail extends Episode {
   crew: Crew[]
   guest_stars: Cast[]
   episode_type?: string
