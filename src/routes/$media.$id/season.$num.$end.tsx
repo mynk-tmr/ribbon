@@ -32,7 +32,7 @@ function SeasonDetails() {
   const { data: season } = Route.useLoaderData()
   const { num, end } = Route.useParams()
   const gto = Route.useNavigate()
-  const goback = () => gto({ to: '/$media/$id/$similar', params: { similar: 1 } })
+  const goback = () => gto({ to: '/$media/$id/{-$similar}', params: { similar: 1 } })
   return (
     <section className="grid gap-6 md:grid-cols-[300px_1fr]">
       <div className="h-[500px]">
@@ -40,13 +40,12 @@ function SeasonDetails() {
       </div>
       <article className="space-y-9">
         <header className="flex items-center gap-6">
-          <h2 className="text-4xl">{season.name}</h2>
+          <h2 className="text-4xl font-bold">{season.name}</h2>
           <RatingCircle
             size={52}
             strokeWidth={7}
             textSize="text-lg"
             rating={season.vote_average}
-            isAbsolute={false}
           />
         </header>
         <h3 className="text-xl">( {season.episodes.length} Episodes )</h3>

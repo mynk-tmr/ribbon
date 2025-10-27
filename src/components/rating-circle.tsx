@@ -1,11 +1,8 @@
-import { twJoin } from 'tailwind-merge'
-
 interface RatingBadgeProps {
   rating: number
   size?: number // outer circle diameter including stroke
   strokeWidth?: number
   textSize?: string // Tailwind text size
-  isAbsolute?: boolean
 }
 
 export const RatingCircle = ({
@@ -13,7 +10,6 @@ export const RatingCircle = ({
   size = 34,
   strokeWidth = 4,
   textSize = 'text-xs',
-  isAbsolute = true,
 }: RatingBadgeProps) => {
   const rating = Math.floor(__rating * 10)
   const radius = (size - strokeWidth) / 2
@@ -23,12 +19,7 @@ export const RatingCircle = ({
     rating >= 70 ? 'hsl(131, 63%, 34%)' : rating >= 40 ? 'orange' : 'red'
 
   return (
-    <div
-      className={twJoin(
-        'rounded-full bg-black/80',
-        isAbsolute && 'absolute top-2 right-2',
-      )}
-    >
+    <div className={'rounded-full bg-black/80'}>
       <div style={{ width: size, height: size }} className="relative">
         <svg
           className="h-full w-full -rotate-90 transform"

@@ -1,11 +1,10 @@
 import { Icon } from '@iconify/react'
 import { ActionIcon, ScrollArea } from '@mantine/core'
-import { Link } from '@tanstack/react-router'
 import type React from 'react'
 import { useRef } from 'react'
 import type { TMDB } from '@/config/tmdb'
 import PersonCard from './person-card'
-import { PreviewCard } from './preview-card'
+import PreviewCard from './preview-card'
 
 type Props = {
   media?: (TMDB.Movie | TMDB.TV)[]
@@ -49,27 +48,10 @@ export default function OverflowGrid(props: Props) {
         <Icon icon="mdi:arrow-right" />
       </ActionIcon>
       <ScrollArea viewportRef={ref} type="never">
-        <div className="flex gap-4">
+        <div className="flex gap-4 *:shrink-0 *:w-44">
           {entity === 'person'
-            ? people.map((person) => (
-                <Link
-                  key={person.id}
-                  to="/person/$id"
-                  resetScroll
-                  params={{ id: person.id }}
-                >
-                  <PersonCard person={person} />
-                </Link>
-              ))
-            : media.map((item) => (
-                <Link
-                  key={item.id}
-                  to="/$media/$id/$similar"
-                  params={{ id: item.id, media: entity, similar: 1 }}
-                >
-                  <PreviewCard item={item} />
-                </Link>
-              ))}
+            ? people.map((person) => <PersonCard key={person.id} person={person} />)
+            : media.map((item) => <PreviewCard key={item.id} item={item} />)}
         </div>
       </ScrollArea>
     </section>

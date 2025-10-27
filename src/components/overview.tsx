@@ -6,7 +6,7 @@ import Poster from './poster'
 import { RatingCircle } from './rating-circle'
 
 function useDetails() {
-  const route = getRouteApi('/$media/$id/$similar')
+  const route = getRouteApi('/$media/$id/{-$similar}')
   const { details } = route.useLoaderData()
   const is_movie = tmdb.isMovie(details)
   const release_date = is_movie ? details.release_date : details.first_air_date
@@ -40,14 +40,13 @@ export default function Overview() {
 
       {/* Main info */}
       <article className="grid gap-y-7">
-        <header className="flex flex-wrap-reverse items-center space-x-3">
+        <header className="flex items-center gap-3">
           <h2 className="text-4xl font-bold">{title}</h2>
           <RatingCircle
             rating={details.vote_average}
             size={50}
             textSize="text-lg"
             strokeWidth={6}
-            isAbsolute={false}
           />
         </header>
 

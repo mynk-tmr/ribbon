@@ -1,11 +1,9 @@
 import { Icon } from '@iconify/react'
-import { Button, Pagination, Select, TextInput } from '@mantine/core'
-import { useMediaQuery } from '@mantine/hooks'
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { Button, Select, TextInput } from '@mantine/core'
+import { createFileRoute } from '@tanstack/react-router'
 import { type } from 'arktype'
-import PersonCard from '@/components/person-card'
-import { PreviewCard } from '@/components/preview-card'
-import { type TMDB, tmdb } from '@/config/tmdb'
+import EntityGrid from '@/components/entity-grid'
+import { tmdb } from '@/config/tmdb'
 import { useMergedState } from '@/hooks/useMergedState'
 
 const schema = type({
@@ -23,7 +21,7 @@ export const Route = createFileRoute('/search/')({
       search: { query, by, page },
     },
   }) {
-    if (query === '') return { data: { results: [], total_pages: 0 } }
+    if (query === '') return { data: 'NEVER' } as const
     const data = await tmdb.search(query, by, page)
     return { data }
   },
@@ -31,29 +29,65 @@ export const Route = createFileRoute('/search/')({
 
 function RouteComponent() {
   const { data } = Route.useLoaderData()
+  const { query, by } = Route.useSearch()
+  const tw_heading = 'text-3xl text-zinc-600 font-bold mb-6'
+
+  const search = Route.useSearch()
+  const goto = Route.useNavigate()
+  const changePage = (page: number) => goto({ to: '.', search: { ...search, page } })
+
+  function render() {
+    if (data === 'NEVER') return <h1 className={tw_heading}>Results will appear here</h1>
+    else if (data.results.length === 0)
+      return (
+        <div className="space-y-4">
+          <h1 className={tw_heading}>No results found</h1>
+          <NoResults />
+        </div>
+      )
+    else
+      return (
+        <EntityGrid
+          items={data.results}
+          head={(i) => (
+            <header>
+              <h1 className={tw_heading}>
+                {i.length} results found for{' '}
+                <b className="text-yellow-400">
+                  {query} {by}
+                </b>{' '}
+              </h1>
+            </header>
+          )}
+        />
+      )
+  }
+
   return (
-    <main className="mt-8 px-4 sm:px-8">
+    <main className="mt-8 px-4 sm:px-8 space-y-8">
       <SearchBox />
-      {data.results.length > 0 ? <Results /> : <NoResults />}
+      <section className="mt-8 grid justify-center">{render()}</section>
+      {data !== 'NEVER' && data.total_pages > 1 && (
+        <EntityGrid.ChangePange
+          value={data.page}
+          total={data.total_pages}
+          onChange={changePage}
+        />
+      )}
     </main>
   )
 }
 
 function NoResults() {
   const { query, by } = Route.useSearch()
-  const heading = query === '' ? 'Results will appear here' : 'No results found'
+  if (query === '') return null
   return (
-    <section className="mt-8 grid justify-center">
-      <h1 className="text-3xl text-zinc-600 font-bold mb-6">{heading}</h1>
-      {query !== '' && (
-        <p className="text-lg">
-          Query:{' '}
-          <b className="text-yellow-400">
-            {query} {by}
-          </b>
-        </p>
-      )}
-    </section>
+    <p className="text-lg">
+      Query:{' '}
+      <b className="text-yellow-400">
+        {query} {by}
+      </b>
+    </p>
   )
 }
 
@@ -96,62 +130,5 @@ function SearchBox() {
         Search
       </Button>
     </form>
-  )
-}
-
-function Results() {
-  const { data } = Route.useLoaderData()
-  const { query, by, page } = Route.useSearch()
-  const items =
-    by === 'person'
-      ? (data.results as TMDB.Person[]).map((person) => (
-          <Link key={person.id} to="/person/$id" params={{ id: person.id }}>
-            <PersonCard person={person} />
-          </Link>
-        ))
-      : (data.results as TMDB.Movie[] | TMDB.TV[]).map((item) => (
-          <Link
-            key={item.id}
-            to="/$media/$id/$similar"
-            params={{ id: item.id, media: by, similar: 1 }}
-          >
-            <PreviewCard item={item} />
-          </Link>
-        ))
-
-  return (
-    <section>
-      <h1 className="text-3xl font-bold my-10 text-center">
-        Results for{' '}
-        <b className="text-yellow-400">
-          {query} {by}
-        </b>{' '}
-        <small className="text-base">
-          ({page} / {data.total_pages})
-        </small>
-      </h1>
-      <div className="flex flex-wrap gap-4 justify-center *:shrink-0">{items}</div>
-      <ChangePange />
-    </section>
-  )
-}
-
-function ChangePange() {
-  const search = Route.useSearch()
-  const {
-    data: { total_pages },
-  } = Route.useLoaderData()
-  const goto = Route.useNavigate()
-  const changePage = (page: number) => goto({ to: '.', search: { ...search, page } })
-  const isMobile = useMediaQuery('(max-width: 640px)')
-  return (
-    <section className="mt-8 flex justify-center">
-      <Pagination
-        size={isMobile ? 'xs' : 'md'}
-        value={search.page}
-        total={total_pages}
-        onChange={changePage}
-      />
-    </section>
   )
 }
