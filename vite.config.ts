@@ -2,6 +2,7 @@ import tailwind from '@tailwindcss/vite'
 import { tanstackRouter } from '@tanstack/router-plugin/vite'
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
+import vercel from 'vite-plugin-vercel'
 import tsconfigPaths from 'vite-tsconfig-paths'
 
 // https://vite.dev/config/
@@ -11,5 +12,6 @@ export default defineConfig({
     tanstackRouter({ target: 'react', autoCodeSplitting: true }),
     react({ babel: { plugins: [['babel-plugin-react-compiler']] } }),
     tailwind(),
+    vercel(),
   ],
 })
