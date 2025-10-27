@@ -32,7 +32,7 @@ function SeasonDetails() {
   const { data: season } = Route.useLoaderData()
   const { num, end } = Route.useParams()
   const gto = Route.useNavigate()
-  const goback = () => gto({ to: '/$media/$id/{-$similar}', params: { similar: 1 } })
+  const goback = () => gto({ to: '/$media/$id/$similar', params: { similar: 1 } })
   return (
     <section className="grid gap-6 md:grid-cols-[300px_1fr]">
       <div className="h-[500px]">

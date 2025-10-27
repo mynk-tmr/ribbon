@@ -48,6 +48,7 @@ function RouteComponent() {
     else
       return (
         <EntityGrid
+          isPerson={by === 'person'}
           items={data.results}
           head={(i) => (
             <header>

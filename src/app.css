@@ -8,6 +8,7 @@
 @theme {
   --animate-pulse-glow: pulse-glow 6s ease-in-out infinite alternate;
   --animate-progress: progress 1.2s ease-in-out infinite;
+  --color-theme: #242da8;
 }
 
 @layer base {

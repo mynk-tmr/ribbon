@@ -75,11 +75,13 @@ export interface SpokenLanguage {
   name: string
 }
 
+export type KnownFor = { media_type: 'movie' | 'tv'; character?: string } & (Movie | TV)
+
 export interface Person {
   id: number
   name: string
   profile_path: string | null
-  known_for: { title?: string; name?: string; character?: string }[]
+  known_for: KnownFor[]
   known_for_department: string
   popularity: number
   gender: number
@@ -188,12 +190,10 @@ export interface PersonDetails extends Person {
   place_of_birth: string | null
 }
 
-type Inner = (Movie & { media_type: 'movie' }) | (TV & { media_type: 'tv' })
-
 export interface CombinedCredits {
   id: number
-  cast: Inner[]
-  crew: Inner[]
+  cast: KnownFor[]
+  crew: KnownFor[]
 }
 
 export interface ImgCollection {

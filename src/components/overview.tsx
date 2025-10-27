@@ -6,7 +6,7 @@ import Poster from './poster'
 import { RatingCircle } from './rating-circle'
 
 function useDetails() {
-  const route = getRouteApi('/$media/$id/{-$similar}')
+  const route = getRouteApi('/$media/$id/$similar')
   const { details } = route.useLoaderData()
   const is_movie = tmdb.isMovie(details)
   const release_date = is_movie ? details.release_date : details.first_air_date

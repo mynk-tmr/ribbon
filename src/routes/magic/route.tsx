@@ -12,6 +12,6 @@ export const Route = createFileRoute('/magic')({
     } else {
       await authStore.refresh()
     }
-    throw redirect({ to: '/', replace: true })
+    throw redirect({ to: '/user/profile', replace: true })
   },
 })

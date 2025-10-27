@@ -21,8 +21,8 @@ export default function PreviewCard({ item }: Props) {
     <BaseEntityCard
       title={title}
       posterPath={poster_path}
-      to="/$media/$id/{-$similar}"
-      params={{ id: item.id, media }}
+      to="/$media/$id/$similar"
+      params={{ id: item.id, media, similar: 1 }}
       topRight={<RatingCircle rating={vote_average} />}
       footer={
         <>

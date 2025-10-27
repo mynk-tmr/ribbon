@@ -10,6 +10,7 @@ interface Props {
   head: (t: T[]) => React.ReactNode
   items: T[]
   isPerson?: boolean
+  controls?: React.ReactNode
 }
 
 export default function EntityGrid(props: Props) {
@@ -22,8 +23,11 @@ export default function EntityGrid(props: Props) {
         <p className="text-sm mt-2 text-gray-400 text-center">
           This list is sorted by popularity.
         </p>
+        {props.controls && (
+          <div className="flex mt-3 justify-center">{props.controls}</div>
+        )}
       </header>
-      <div className="flex flex-wrap gap-4 justify-center *:w-36 *:md:w-44">
+      <div className="flex *:shrink-0 flex-wrap gap-4 justify-center *:w-36 *:md:w-44">
         {items.map((item) =>
           isPerson ? (
             <PersonCard key={item.id} person={item as TMDB.Person} />

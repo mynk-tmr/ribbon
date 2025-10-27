@@ -3,7 +3,7 @@ import EntityGrid from '@/components/entity-grid'
 import Overview from '@/components/overview'
 import { tmdb } from '@/config/tmdb'
 
-export const Route = createFileRoute('/$media/$id/{-$similar}')({
+export const Route = createFileRoute('/$media/$id/$similar')({
   component: RouteComponent,
   params: { parse: ({ similar }) => ({ similar: Number(similar) || 1 }) },
   async loader({ params: { media, id, similar } }) {

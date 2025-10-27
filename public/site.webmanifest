@@ -1,0 +1,50 @@
+{
+  "name": "Ribbon",
+  "short_name": "Ribbon",
+  "description": "Watch and Track your favorite movies and TV shows. No subscription required. Personalisation included.",
+  "start_url": "/",
+  "id": "/",
+  "icons": [
+    {
+      "src": "/web-app-manifest-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/web-app-manifest-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/web-app-manifest-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "theme_color": "#242da84d",
+  "background_color": "#242da84d",
+  "display_override": ["standalone", "minimal-ui"],
+  "display": "standalone",
+  "screenshots": [
+    {
+      "src": "/screenshots/discover-wide.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Discover page on desktop view"
+    },
+    {
+      "src": "/screenshots/discover-narrow.png",
+      "sizes": "390x866",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Discover page on mobile view"
+    }
+  ],
+  "protocol_handlers": [
+    { "protocol": "web+ribbon", "url": "/protocol-not-supported?url=%s" }
+  ]
+}

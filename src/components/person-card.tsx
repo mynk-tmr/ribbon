@@ -1,4 +1,4 @@
-import { Badge } from '@mantine/core'
+import { Pill } from '@mantine/core'
 import type { TMDB } from '@/config/tmdb'
 import BaseEntityCard from './base-entity-card'
 import { MetaItem } from './meta-item'
@@ -8,8 +8,9 @@ interface Props {
 }
 
 export default function PersonCard({ person }: Props) {
-  const { name, profile_path, known_for_department, popularity, known_for } = person
-  const notable = known_for?.[0].title || known_for?.[0].name || 'Multiple'
+  const { name, profile_path, popularity, known_for, known_for_department } = person
+  //@ts-expect-error this is fine
+  const notable = known_for?.[0]?.title || known_for?.[0]?.name || 'Multiple'
   const notableTitle = notable.slice(0, 12) + (notable.slice(12).length > 0 ? '...' : '')
 
   return (
@@ -18,11 +19,7 @@ export default function PersonCard({ person }: Props) {
       params={{ id: person.id }}
       title={name}
       posterPath={profile_path}
-      topRight={
-        <Badge color="dark" variant="filled" size="xs" radius="xl">
-          {known_for_department}
-        </Badge>
-      }
+      topRight={<Pill size="xs">{known_for_department}</Pill>}
       footer={
         <>
           <MetaItem icon="mdi:movie-open" label={notableTitle} />

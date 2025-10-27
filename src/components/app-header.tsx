@@ -4,6 +4,7 @@ import { useMediaQuery } from '@mantine/hooks'
 import { Link, useRouterState } from '@tanstack/react-router'
 import cn from '@/helpers/cn'
 import { useFireAuthStore } from '@/hooks/useFireAuth'
+import Logo from './logo'
 
 type RouteLink = { name: string; link: string; icon: string }
 
@@ -50,9 +51,11 @@ const Links: React.FC = () => {
 export const AppHeader: React.FC = () => {
   const isMobile = useMediaQuery('(max-width: 640px)')
   return (
-    <header className="p-4 sm:px-6 bg-black/20">
+    <header className="p-4 sm:px-6 -mb-8 sm:mb-0">
       <div className="flex flex-wrap items-center">
-        <h1 className="text-2xl font-bold grow text-center sm:text-start">Ribbon</h1>
+        <div className="grow flex justify-center md:justify-start">
+          <Logo />
+        </div>
         <nav
           className={cn.filter(
             isMobile &&

@@ -28,7 +28,7 @@ export default function BaseEntityCard({
     >
       <Poster path={posterPath} size="w342" h={242} />
 
-      {topRight && <div className="absolute top-1 right-1">{topRight}</div>}
+      {topRight && <div className="absolute top-0 right-1">{topRight}</div>}
 
       <p className="mt-2 truncate px-1 text-sm font-semibold">{title}</p>
 

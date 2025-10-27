@@ -29,7 +29,7 @@ export default function OverflowGrid(props: Props) {
     <section className="relative">
       <ActionIcon
         onClick={() => scroll('left')}
-        className="absolute -left-4 top-1/2 -translate-y-1/2 z-10"
+        className="absolute -left-4 top-1/2 -translate-y-1/2 z-10 hidden sm:block"
         radius={'xl'}
         size="xl"
         color="blue.8"

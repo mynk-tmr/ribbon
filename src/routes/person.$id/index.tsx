@@ -1,5 +1,6 @@
-import { Spoiler } from '@mantine/core'
+import { Chip, Spoiler } from '@mantine/core'
 import { createFileRoute } from '@tanstack/react-router'
+import { useReducer } from 'react'
 import EntityGrid from '@/components/entity-grid'
 import { MetaItem } from '@/components/meta-item'
 import Poster from '@/components/poster'
@@ -9,20 +10,21 @@ export const Route = createFileRoute('/person/$id/')({
   component: RouteComponent,
   params: { parse: (raw) => ({ id: Number(raw.id) }) },
   async loader({ params }) {
-    const [person, credits] = await Promise.all([
+    const [person, { cast }] = await Promise.all([
       tmdb.details.person(params.id),
       tmdb.person.credits(params.id),
     ])
-    return { person, credits }
+
+    const itemMap = new Map(cast.map((i) => [i.id, i]))
+    return { person, items: Array.from(itemMap.values()) }
   },
 })
 
 function RouteComponent() {
-  const cast = Route.useLoaderData().credits.cast
   return (
     <main className="page space-y-10">
       <PersonDetails />
-      <EntityGrid head={(i) => `Featured in ${i.length} piece of work`} items={cast} />
+      <WorkExperience />
     </main>
   )
 }
@@ -85,6 +87,28 @@ function PersonDetails() {
           {biography || 'No biography available.'}
         </Spoiler>
       </div>
+    </section>
+  )
+}
+
+function WorkExperience() {
+  const { items } = Route.useLoaderData()
+  const [mode, toggle] = useReducer((s) => (s === 'movie' ? 'tv' : 'movie'), 'movie')
+  const labelSuffix = mode === 'movie' ? `Movies` : `Series`
+  return (
+    <section className="space-y-16">
+      <EntityGrid
+        head={(i) => `Featured in ${i.length} ${labelSuffix}`}
+        controls={
+          <Chip.Group multiple={false} value={mode} onChange={toggle}>
+            <Chip mr="sm" value="movie">
+              Movies
+            </Chip>
+            <Chip value="tv">Series</Chip>
+          </Chip.Group>
+        }
+        items={items.filter((i) => i.media_type === mode)}
+      />
     </section>
   )
 }
