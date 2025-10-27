@@ -76,7 +76,7 @@ export default function Overview() {
         </div>
 
         {/* Overview */}
-        <p>{details.overview}</p>
+        <p>{details.overview || 'No overview available'}</p>
 
         {/* Genres */}
         <div className="space-x-2">

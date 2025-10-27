@@ -10,7 +10,8 @@ const api = ofetch.create({
 const isMovie = (e: TMDB.Media): e is TMDB.Movie => 'release_date' in e
 
 type Entity = 'movie' | 'tv' | 'person'
-type Criteria = 'popular' | 'top_rated' | 'upcoming' | 'now_playing'
+type MovieDisc = 'popular' | 'top_rated' | 'upcoming' | 'now_playing'
+type TVDisc = 'airing_today' | 'on_the_air' | 'popular' | 'top_rated'
 type PagedMovie = TMDB.Paginated<TMDB.Movie>
 type PagedTV = TMDB.Paginated<TMDB.TV>
 type PagedPerson = TMDB.Paginated<TMDB.Person>
@@ -24,10 +25,9 @@ export const tmdb = {
     person: (id: ID) => api<TMDB.PersonDetails>(`/person/${id}`),
   },
   discover: {
-    movie: (criteria: Criteria, page: number) =>
+    movie: (criteria: MovieDisc, page: number) =>
       api<PagedMovie>(`/movie/${criteria}?page=${page}`),
-    tv: (criteria: Criteria, page: number) =>
-      api<PagedTV>(`/tv/${criteria}?page=${page}`),
+    tv: (criteria: TVDisc, page: number) => api<PagedTV>(`/tv/${criteria}?page=${page}`),
     person: (page: number) => api<PagedPerson>(`/person/popular?page=${page}`),
   },
   search: (query: string, type: Entity, page: number) =>

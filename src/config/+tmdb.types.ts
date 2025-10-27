@@ -79,7 +79,7 @@ export interface Person {
   id: number
   name: string
   profile_path: string | null
-  known_for: Media[]
+  known_for: { title?: string; name?: string; character?: string }[]
   known_for_department: string
   popularity: number
   gender: number

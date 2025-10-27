@@ -10,7 +10,6 @@ import { PreviewCard } from './preview-card'
 type Props = {
   media?: (TMDB.Movie | TMDB.TV)[]
   entity: 'movie' | 'tv' | 'person'
-  heading: React.ReactNode
   people?: TMDB.Person[]
 }
 
@@ -53,7 +52,12 @@ export default function OverflowGrid(props: Props) {
         <div className="flex gap-4">
           {entity === 'person'
             ? people.map((person) => (
-                <Link key={person.id} to="/person/$id" params={{ id: person.id }}>
+                <Link
+                  key={person.id}
+                  to="/person/$id"
+                  resetScroll
+                  params={{ id: person.id }}
+                >
                   <PersonCard person={person} />
                 </Link>
               ))
@@ -95,7 +99,7 @@ function Skeleton() {
 type HeadingProps = { title: React.ReactNode }
 
 export function Heading({ title }: HeadingProps) {
-  return <h2 className="mb-5 text-2xl md:text-3xl font-bold capitalize">{title}</h2>
+  return <h3 className="mb-5 text-2xl md:text-3xl font-bold capitalize">{title}</h3>
 }
 
 OverflowGrid.Skeleton = Skeleton
