@@ -29,7 +29,6 @@ export const Route = createFileRoute('/discover/')({
 function DivHeader(props: { icon: string; title: string }) {
   return (
     <Divider
-      className="mt-10"
       labelPosition="center"
       label={
         <h2 className="text-3xl md:text-4xl font-bold justify-center flex gap-2 items-center">

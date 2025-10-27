@@ -2,6 +2,7 @@ import { Icon } from '@iconify/react'
 import { Button } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import { Link, useRouterState } from '@tanstack/react-router'
+import cn from '@/helpers/cn'
 import { useFireAuthStore } from '@/hooks/useFireAuth'
 import Logo from './logo'
 
@@ -49,32 +50,19 @@ const Links: React.FC = () => {
 
 export const AppHeader: React.FC = () => {
   const isMobile = useMediaQuery('(max-width: 640px)')
-  if (isMobile) {
-    return (
-      <>
-        <div className="py-2 flex justify-center">
-          <Logo
-            imgProps={{ className: 'size-6' }}
-            labelProps={{ className: 'font-medium' }}
-          />
-        </div>
-        <nav className="flex justify-around fixed bottom-0 left-0 right-0 pb-1 z-50 glowBg before:absolute">
-          <Links />
-        </nav>
-      </>
-    )
-  }
-
   return (
     <header className="p-4 sm:px-6">
       <div className="flex flex-wrap items-center">
         <div className="grow flex justify-center md:justify-start">
-          <Logo
-            imgProps={{ className: 'size-10' }}
-            labelProps={{ className: 'font-bold text-2xl' }}
-          />
+          <Logo className="sm:[&+span]:text-2xl md:[&+span]:text-3xl" />
         </div>
-        <nav className={'flex items-center gap-4'}>
+        <nav
+          className={cn.filter(
+            isMobile &&
+              'fixed bottom-0 left-0 right-0 pb-1 z-50 flex justify-around glowBg before:absolute',
+            !isMobile && 'flex items-center gap-4',
+          )}
+        >
           <Links />
         </nav>
       </div>
