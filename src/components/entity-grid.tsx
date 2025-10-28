@@ -27,7 +27,7 @@ export default function EntityGrid(props: Props) {
           <div className="flex mt-3 justify-center">{props.controls}</div>
         )}
       </header>
-      <div className="flex *:shrink-0 flex-wrap gap-4 justify-center *:w-36 *:md:w-44">
+      <div className="flex *:shrink-0 flex-wrap gap-4 justify-center *:w-38 *:md:w-44">
         {items.map((item) =>
           isPerson ? (
             <PersonCard key={item.id} person={item as TMDB.Person} />
@@ -45,7 +45,7 @@ function ChangePange(props: PaginationProps) {
   if (props.total)
     return (
       <section className="mt-8 flex justify-center">
-        <Pagination size={isMobile ? 'xs' : 'md'} {...props} />
+        <Pagination itemProp="" size={isMobile ? 'sm' : 'md'} {...props} />
       </section>
     )
 }

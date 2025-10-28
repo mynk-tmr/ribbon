@@ -2,6 +2,7 @@ import { Icon } from '@iconify/react'
 import { Badge, Button } from '@mantine/core'
 import { getRouteApi, Link } from '@tanstack/react-router'
 import { type TMDB, tmdb } from '@/config/tmdb'
+import { FmtHour, FmtPlural, FmtYear } from '@/helpers/formatters'
 import Poster from './poster'
 import { RatingCircle } from './rating-circle'
 
@@ -10,22 +11,15 @@ function useDetails() {
   const { details } = route.useLoaderData()
   const is_movie = tmdb.isMovie(details)
   const release_date = is_movie ? details.release_date : details.first_air_date
-  const plural = (i: number, prefix: string) =>
-    i > 1 ? `${i} ${prefix}s` : `${i} ${prefix}`
-  const toHour = (i: number | null) => {
-    if (i === null) return 'Unknown'
-    const h = Math.floor(i / 60)
-    const m = i % 60
-    return h > 0 ? `${h} h ${m} min` : `${m} min`
-  }
+
   return {
     details,
     type: is_movie ? 'movie' : 'tv',
     title: is_movie ? details.title : details.name,
     runtime: is_movie
-      ? toHour(details.runtime)
-      : plural(details.number_of_seasons, 'season'),
-    year: release_date ? new Date(release_date).getFullYear() : 'Unknown',
+      ? FmtHour(details.runtime)
+      : FmtPlural(details.number_of_seasons, 'season'),
+    year: FmtYear(release_date),
   }
 }
 
@@ -35,7 +29,7 @@ export default function Overview() {
     <section className="mx-auto flex max-w-5xl flex-col gap-6 md:flex-row">
       {/* Poster */}
       <div className="min-w-64 md:min-w-80">
-        <Poster h={480} key={title} size="w500" path={details.poster_path} />
+        <Poster h={480} key={title} size="w780" path={details.poster_path} />
       </div>
 
       {/* Main info */}
@@ -88,10 +82,9 @@ export default function Overview() {
 
         {/* Origin and Spoken Languages */}
         <div className="text-lightGray flex flex-wrap gap-4">
-          <span>🌍 {details.origin_country.join(', ') || 'Unknown'}</span>
+          <span>🌍 {details.origin_country.join(', ') || 'N/A'}</span>
           <span>
-            🗣️{' '}
-            {details.spoken_languages.map((l) => l.english_name).join(', ') || 'Unknown'}
+            🗣️ {details.spoken_languages.map((l) => l.english_name).join(', ') || 'N/A'}
           </span>
         </div>
 

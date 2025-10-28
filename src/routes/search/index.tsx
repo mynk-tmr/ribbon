@@ -36,38 +36,38 @@ function RouteComponent() {
   const goto = Route.useNavigate()
   const changePage = (page: number) => goto({ to: '.', search: { ...search, page } })
 
-  function render() {
-    if (data === 'NEVER') return <h1 className={tw_heading}>Results will appear here</h1>
-    else if (data.results.length === 0)
-      return (
-        <div className="space-y-4">
-          <h1 className={tw_heading}>No results found</h1>
-          <NoResults />
-        </div>
-      )
-    else
-      return (
-        <EntityGrid
-          isPerson={by === 'person'}
-          items={data.results}
-          head={(i) => (
-            <header>
-              <h1 className={tw_heading}>
-                {i.length} results found for{' '}
-                <b className="text-yellow-400">
-                  {query} {by}
-                </b>{' '}
-              </h1>
-            </header>
-          )}
-        />
-      )
-  }
+  let BODY = null
+
+  if (data === 'NEVER') BODY = <h1 className={tw_heading}>Results will appear here</h1>
+  else if (data.results.length === 0)
+    BODY = (
+      <div className="space-y-4">
+        <h1 className={tw_heading}>No results found</h1>
+        <NoResults />
+      </div>
+    )
+  else
+    BODY = (
+      <EntityGrid
+        isPerson={by === 'person'}
+        items={data.results}
+        head={(i) => (
+          <header>
+            <h1 className={tw_heading}>
+              {i.length} results found for{' '}
+              <b className="text-yellow-400">
+                {query} {by}
+              </b>{' '}
+            </h1>
+          </header>
+        )}
+      />
+    )
 
   return (
     <main className="mt-8 px-4 sm:px-8 space-y-8">
       <SearchBox />
-      <section className="mt-8 grid justify-center">{render()}</section>
+      <section className="mt-8 grid justify-center">{BODY}</section>
       {data !== 'NEVER' && data.total_pages > 1 && (
         <EntityGrid.ChangePange
           value={data.page}

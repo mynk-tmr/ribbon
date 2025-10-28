@@ -5,6 +5,7 @@ import EntityGrid from '@/components/entity-grid'
 import { MetaItem } from '@/components/meta-item'
 import Poster from '@/components/poster'
 import { tmdb } from '@/config/tmdb'
+import { FmtAge, FmtDate, FmtPopularity } from '@/helpers/formatters'
 
 export const Route = createFileRoute('/person/$id/')({
   component: RouteComponent,
@@ -41,24 +42,6 @@ function PersonDetails() {
     popularity,
   } = Route.useLoaderData().person
 
-  const [BIRTH, DEATH] = [birthday, deathday].map((birthday) =>
-    new Date(birthday || '').toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    }),
-  )
-
-  const getAge = () => {
-    if (!birthday) return null
-    const age = Date.now() - new Date(birthday).getTime()
-    const years = age / 1000 / 60 / 60 / 24 / 365
-    return Math.floor(years)
-  }
-  const AGE = getAge()
-
-  const popularityString = Math.floor(popularity * 100)
-
   return (
     <section className="mt-8 px-4 mx-auto max-w-6xl flex flex-col md:flex-row gap-8">
       <div className="md:w-64 shrink-0">
@@ -68,19 +51,19 @@ function PersonDetails() {
       <div className="flex-1">
         <h1 className="text-3xl md:text-5xl font-bold mb-2">{name}</h1>
         <p className=" text-gray-400 mb-4">
-          {known_for_department} | ⭐ Popularity {popularityString}
+          {known_for_department} | ⭐ Popularity {FmtPopularity(popularity)}
         </p>
 
         <ul className="flex flex-wrap gap-4 text-sm text-lightGray mb-4">
-          {birthday && <MetaItem icon="mdi:cake-variant" label={BIRTH} />}
-          {AGE && (
+          {birthday && <MetaItem label={FmtDate(birthday)} icon="mdi:cake-variant" />}
+          {birthday && (
             <MetaItem
               className="text-green-400"
               icon="mdi:robot-happy"
-              label={`Age ${AGE}`}
+              label={`Age ${FmtAge(birthday)}`}
             />
           )}
-          {deathday && <MetaItem icon="mdi:cross" label={`Died ${DEATH}`} />}
+          {deathday && <MetaItem icon="mdi:cross" label={`Died ${FmtDate(deathday)}`} />}
           {place_of_birth && <MetaItem icon="mdi:map-marker" label={place_of_birth} />}
         </ul>
         <Spoiler hideLabel="Show less" showLabel="Show more">

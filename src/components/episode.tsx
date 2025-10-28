@@ -13,18 +13,18 @@ export function Episode({ index }: { index: number }) {
   const vidLink = `https://www.vidsrc.to/embed/tv/${id}/${num}/${index + 1}`
 
   return (
-    <article className="space-y-4 rounded-md bg-white/10">
-      <div className="group relative h-42">
+    <article className="group space-y-4 rounded-md bg-white/10">
+      <div className="relative h-42">
         <a
+          className="group-hover:opacity-100 opacity-0 absolute inset-0 grid place-items-center bg-black/50 text-lg"
           href={vidLink}
           target="_blank"
           rel="noopener noreferrer"
-          className="absolute z-10 flex h-full w-full items-center justify-center bg-black/80 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
         >
           Stream now
         </a>
         <Poster className="rounded-t-md h-full" path={episode.still_path} size="w500" />
-        <RatingCircle rating={episode.vote_average} />
+        <RatingCircle className="absolute top-0 right-0" rating={episode.vote_average} />
         {episode.episode_type === 'finale' && (
           <Badge variant="filled" size="xs" color="red" className="absolute top-2 left-2">
             Finale

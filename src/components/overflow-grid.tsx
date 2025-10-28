@@ -1,5 +1,6 @@
 import { Icon } from '@iconify/react'
 import { ActionIcon, ScrollArea } from '@mantine/core'
+import { Link, type LinkProps } from '@tanstack/react-router'
 import type React from 'react'
 import { useRef } from 'react'
 import type { TMDB } from '@/config/tmdb'
@@ -78,10 +79,20 @@ function Skeleton() {
   )
 }
 
-type HeadingProps = { title: React.ReactNode }
+type HeadingProps = { title: React.ReactNode; linkProps: LinkProps }
 
-export function Heading({ title }: HeadingProps) {
-  return <h3 className="mb-5 text-2xl md:text-3xl font-bold capitalize">{title}</h3>
+export function Heading({ title, linkProps }: HeadingProps) {
+  return (
+    <header className="flex items-baseline gap-x-6">
+      <h3 className="mb-5 text-2xl md:text-3xl font-bold capitalize">{title}</h3>
+      <Link
+        {...linkProps}
+        className="text-sm font-bold hover:text-pink-600 text-pink-500"
+      >
+        See more
+      </Link>
+    </header>
+  )
 }
 
 OverflowGrid.Skeleton = Skeleton

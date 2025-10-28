@@ -5,34 +5,61 @@ import { Divider } from '@mantine/core'
 import { Await, createFileRoute } from '@tanstack/react-router'
 import { Suspense } from 'react'
 import OverflowGrid from '@/components/overflow-grid'
-import { tmdb } from '@/config/tmdb'
+import { type TMDB, tmdb } from '@/config/tmdb'
 
 export const Route = createFileRoute('/discover/')({
   component: RouteComponent,
+
   async loader() {
-    return {
-      tv: [
-        tmdb.discover.tv('airing_today', 1),
-        tmdb.discover.tv('top_rated', 1),
-        tmdb.discover.tv('popular', 1),
-      ],
-      people: tmdb.discover.person(1),
-      movie: [
-        tmdb.discover.movie('now_playing', 1),
-        tmdb.discover.movie('top_rated', 1),
-        tmdb.discover.movie('upcoming', 1),
-      ],
-    }
+    const config = [
+      {
+        type: 'movie',
+        icon: 'mdi:movie',
+        title: 'Movies',
+        sections: [
+          { label: 'Now Playing', domain: 'now_playing' },
+          { label: 'Top Rated', domain: 'top_rated' },
+          { label: 'Newly Released', domain: 'upcoming' },
+        ],
+      },
+      {
+        type: 'tv',
+        icon: 'mdi:television-box',
+        title: 'TV Shows',
+        sections: [
+          { label: 'Airing Today', domain: 'now_playing' },
+          { label: 'Top Rated', domain: 'top_rated' },
+          { label: 'Popular', domain: 'popular' },
+        ],
+      },
+      {
+        type: 'person',
+        icon: 'mdi:robot-happy',
+        title: 'People',
+        sections: [{ label: 'Popular', domain: 'popular' }],
+      },
+    ] as const
+
+    // return promises in same structure
+    const result = config.map((group) => ({
+      ...group,
+      sections: group.sections.map((s) => ({
+        ...s,
+        data: tmdb.discover(group.type)(s.domain, 1),
+      })),
+    }))
+
+    return { groups: result }
   },
 })
 
-function DivHeader(props: { icon: string; title: string }) {
+function DivHeader({ icon, title }: { icon: string; title: string }) {
   return (
     <Divider
       labelPosition="center"
       label={
-        <h2 className="text-3xl md:text-4xl font-bold justify-center flex gap-2 items-center">
-          {props.title} <Icon icon={props.icon} />
+        <h2 className="text-3xl md:text-4xl font-bold mb-4">
+          {title} <Icon icon={icon} className="inline" />
         </h2>
       }
     />
@@ -40,39 +67,44 @@ function DivHeader(props: { icon: string; title: string }) {
 }
 
 function RouteComponent() {
-  const { movie, people, tv } = Route.useLoaderData()
-  const mvPrefix = ['Now Playing', 'Top Rated', 'Upcoming']
-  const tvPrefix = ['Airing Today', 'Top Rated', 'Popular']
+  const { groups } = Route.useLoaderData()
+
   return (
     <main className="pl-4 max-w-7xl mx-auto space-y-10">
-      <DivHeader icon="mdi:movie" title="Movies" />
-      {movie.map((m, i) => (
-        <section key={i}>
-          <OverflowGrid.Heading title={mvPrefix[i]} />
-          <Suspense fallback={<OverflowGrid.Skeleton />}>
-            <Await promise={m}>
-              {(m) => <OverflowGrid media={m.results} entity="movie" />}
-            </Await>
-          </Suspense>
-        </section>
+      {groups.map((group, gi) => (
+        <div key={gi}>
+          <DivHeader icon={group.icon} title={group.title} />
+
+          {group.sections.map((sec) => (
+            <section key={sec.label} className="mb-8">
+              <OverflowGrid.Heading
+                title={sec.label}
+                linkProps={{
+                  to: '/discover/$domain/$by/$page',
+                  params: { domain: sec.domain, by: group.type, page: 1 },
+                }}
+              />
+              <Suspense fallback={<OverflowGrid.Skeleton />}>
+                <Await promise={sec.data}>
+                  {(data) =>
+                    group.type === 'person' ? (
+                      <OverflowGrid
+                        entity="person"
+                        people={data.results as TMDB.Person[]}
+                      />
+                    ) : (
+                      <OverflowGrid
+                        entity={group.type}
+                        media={data.results as TMDB.Movie[]}
+                      />
+                    )
+                  }
+                </Await>
+              </Suspense>
+            </section>
+          ))}
+        </div>
       ))}
-      <DivHeader icon="mdi:television-box" title="TV Shows" />
-      {tv.map((m, i) => (
-        <section key={i}>
-          <OverflowGrid.Heading title={tvPrefix[i]} />
-          <Suspense fallback={<OverflowGrid.Skeleton />}>
-            <Await promise={m}>
-              {(m) => <OverflowGrid media={m.results} entity="tv" />}
-            </Await>
-          </Suspense>
-        </section>
-      ))}
-      <DivHeader icon="mdi:robot-happy" title="People" />
-      <Suspense fallback={<OverflowGrid.Skeleton />}>
-        <Await promise={people}>
-          {(people) => <OverflowGrid entity="person" people={people.results} />}
-        </Await>
-      </Suspense>
     </main>
   )
 }

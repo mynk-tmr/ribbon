@@ -24,7 +24,7 @@ export const ShowError: ErrorRouteComponent = (props) => {
     <main className="page space-y-9">
       <header className="flex items-center justify-center text-red-400">
         <Icon icon="mdi:bug" className="text-5xl inline mr-4" />
-        <h1 className="font-bold text-3xl">{isAPIError ? 'API Error' : 'Oops'}</h1>
+        <h1 className="font-bold text-3xl">{isAPIError ? 'Server Error' : 'Oops'}</h1>
       </header>
       <p className="max-w-lg text-center">
         Something went wrong. You can recover by picking one of the following. If Refresh

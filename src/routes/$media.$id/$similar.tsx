@@ -9,7 +9,7 @@ export const Route = createFileRoute('/$media/$id/$similar')({
   async loader({ params: { media, id, similar } }) {
     const [details, recommendations] = await Promise.all([
       tmdb.details[media](id),
-      tmdb.recommendations[media](id, similar),
+      tmdb.recommendations(media)(id, similar),
     ])
     return { details, recommendations }
   },
