@@ -3,7 +3,7 @@ import { Button, Select, TextInput } from '@mantine/core'
 import { createFileRoute } from '@tanstack/react-router'
 import { type } from 'arktype'
 import EntityGrid from '@/components/entity-grid'
-import { tmdb } from '@/config/tmdb'
+import { type TMDB, tmdb } from '@/config/tmdb'
 import { useMergedState } from '@/hooks/useMergedState'
 
 const schema = type({
@@ -22,7 +22,7 @@ export const Route = createFileRoute('/search/')({
     },
   }) {
     if (query === '') return { data: 'NEVER' } as const
-    const data = await tmdb.search(query, by, page)
+    const data = await tmdb.search<TMDB.Media | TMDB.Person>(by, query, page)
     return { data }
   },
 })
@@ -54,7 +54,6 @@ function RouteComponent() {
   else
     BODY = (
       <EntityGrid
-        isPerson={by === 'person'}
         items={data.results}
         head={(i) => (
           <header>

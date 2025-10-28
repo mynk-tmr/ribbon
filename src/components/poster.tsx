@@ -4,9 +4,10 @@ import cn from '@/helpers/cn'
 interface Props extends ImageProps {
   size: 'w342' | 'w500' | 'w780' | 'original'
   path: string | null
+  transition?: boolean
 }
 
-export default function Poster({ size, path, className, ...props }: Props) {
+export default function Poster({ size, path, className, transition, ...props }: Props) {
   return (
     <Image
       loading="lazy"
@@ -17,7 +18,11 @@ export default function Poster({ size, path, className, ...props }: Props) {
       }
       alt="poster"
       radius="md"
-      className={cn.filter('object-cover hover:scale-105 transition-all', className)}
+      className={cn.filter(
+        'object-cover',
+        transition && 'hover:scale-105 transition-all',
+        className,
+      )}
       fallbackSrc="https://placehold.co/342x513?text=Failed+to+Load"
       {...props}
     />

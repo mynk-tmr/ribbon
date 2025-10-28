@@ -45,7 +45,7 @@ export const Route = createFileRoute('/discover/')({
       ...group,
       sections: group.sections.map((s) => ({
         ...s,
-        data: tmdb.discover(group.type)(s.domain, 1),
+        data: tmdb.discover<TMDB.Media | TMDB.Person>(group.type, s.domain, 1),
       })),
     }))
 
@@ -86,19 +86,7 @@ function RouteComponent() {
               />
               <Suspense fallback={<OverflowGrid.Skeleton />}>
                 <Await promise={sec.data}>
-                  {(data) =>
-                    group.type === 'person' ? (
-                      <OverflowGrid
-                        entity="person"
-                        people={data.results as TMDB.Person[]}
-                      />
-                    ) : (
-                      <OverflowGrid
-                        entity={group.type}
-                        media={data.results as TMDB.Movie[]}
-                      />
-                    )
-                  }
+                  {(data) => <OverflowGrid items={data.results} />}
                 </Await>
               </Suspense>
             </section>

@@ -2,7 +2,7 @@ import { Chip } from '@mantine/core'
 import { createFileRoute } from '@tanstack/react-router'
 import { type } from 'arktype'
 import EntityGrid from '@/components/entity-grid'
-import { tmdb } from '@/config/tmdb'
+import { type TMDB, tmdb } from '@/config/tmdb'
 import { FmtTitle } from '@/helpers/formatters'
 
 const schema = type({
@@ -15,7 +15,7 @@ export const Route = createFileRoute('/discover/$domain/$by/$page')({
   component: RouteComponent,
   params: { parse: schema.assert },
   async loader({ params: { domain, by, page } }) {
-    const data = await tmdb.discover(by)(domain, page)
+    const data = await tmdb.discover<TMDB.Media | TMDB.Person>(by, domain, page)
     return { data }
   },
 })
@@ -31,7 +31,6 @@ function RouteComponent() {
         {FmtTitle(domain)} {by}
       </h1>
       <EntityGrid
-        isPerson={by === 'person'}
         controls={<Controls />}
         items={data.results}
         head={() => `Page ${page}`}

@@ -9,7 +9,7 @@ import { tmdb } from '@/config/tmdb'
 export const Route = createFileRoute('/details/$media/$id/season/$num/$end')({
   component: RouteComponent,
   async loader({ params: { id, num } }) {
-    const data = await tmdb.tv.season(id, Number(num))
+    const data = await tmdb.season(id, Number(num))
     return { data }
   },
 })

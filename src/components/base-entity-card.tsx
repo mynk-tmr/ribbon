@@ -26,7 +26,7 @@ export default function BaseEntityCard({
     <article
       className={`group relative overflow-hidden rounded-md bg-white/10 p-1 shadow-sm`}
     >
-      <Poster path={posterPath} size="w342" h={242} />
+      <Poster transition path={posterPath} size="w342" h={242} />
 
       {topRight && <div className="absolute top-0 right-1">{topRight}</div>}
 

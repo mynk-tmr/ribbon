@@ -4,7 +4,7 @@ import { useReducer } from 'react'
 import EntityGrid from '@/components/entity-grid'
 import { MetaItem } from '@/components/meta-item'
 import Poster from '@/components/poster'
-import { tmdb } from '@/config/tmdb'
+import { type TMDB, tmdb } from '@/config/tmdb'
 import { FmtAge, FmtDate, FmtPopularity } from '@/helpers/formatters'
 
 export const Route = createFileRoute('/person/$id/')({
@@ -12,11 +12,10 @@ export const Route = createFileRoute('/person/$id/')({
   params: { parse: (raw) => ({ id: Number(raw.id) }) },
   async loader({ params }) {
     const [person, { cast }] = await Promise.all([
-      tmdb.details.person(params.id),
+      tmdb.details<TMDB.PersonDetails>('person', params.id),
       tmdb.person.credits(params.id),
     ])
-
-    const itemMap = new Map(cast.map((i) => [i.id, i]))
+    const itemMap = new Map(cast.map((i) => [i.id, i])) //to remove duplicates
     return { person, items: Array.from(itemMap.values()) }
   },
 })

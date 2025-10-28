@@ -1,20 +1,18 @@
 import { Pagination, type PaginationProps } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import type { TMDB } from '@/config/tmdb'
-import PersonCard from './person-card'
 import PreviewCard from './preview-card'
 
-type T = TMDB.Movie | TMDB.TV | TMDB.Person
+type T = TMDB.Media | TMDB.Person
 
 interface Props {
   head: (t: T[]) => React.ReactNode
   items: T[]
-  isPerson?: boolean
   controls?: React.ReactNode
 }
 
 export default function EntityGrid(props: Props) {
-  const { items, isPerson = false } = props
+  const items = [...props.items]
   items.sort((a, b) => b.popularity - a.popularity)
   return (
     <section className="space-y-12">
@@ -28,13 +26,11 @@ export default function EntityGrid(props: Props) {
         )}
       </header>
       <div className="flex *:shrink-0 flex-wrap gap-4 justify-center *:w-38 *:md:w-44">
-        {items.map((item) =>
-          isPerson ? (
-            <PersonCard key={item.id} person={item as TMDB.Person} />
-          ) : (
-            <PreviewCard key={item.id} item={item as TMDB.Movie | TMDB.TV} />
-          ),
+        {items.length === 0 && (
+          <p className="text-center text-gray-400">No results found.</p>
         )}
+        {items.length > 0 &&
+          items.map((item) => <PreviewCard key={item.id} item={item} />)}
       </div>
     </section>
   )

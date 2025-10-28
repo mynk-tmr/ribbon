@@ -1,31 +1,65 @@
+import { Pill } from '@mantine/core'
 import { type TMDB, tmdb } from '@/config/tmdb'
-import { FmtYear } from '@/helpers/formatters'
+import { FmtPopularity, FmtTrunc, FmtYear } from '@/helpers/formatters'
 import BaseEntityCard from './base-entity-card'
 import { MetaItem } from './meta-item'
 import { RatingCircle } from './rating-circle'
 
 interface Props {
-  item: TMDB.Movie | TMDB.TV
+  item: TMDB.Media | TMDB.Person
 }
 
 export default function PreviewCard({ item }: Props) {
-  const { vote_average, poster_path, original_language } = item
-  const { title, release_date } = tmdb.isMovie(item)
-    ? { title: item.title, release_date: item.release_date }
-    : { title: item.name, release_date: item.first_air_date }
+  return item.media_type === 'person' ? <PersonCard {...item} /> : <MediaCard {...item} />
+}
 
-  const media = tmdb.isMovie(item) ? 'movie' : 'tv'
+function MediaCard(props: TMDB.Media) {
+  const {
+    vote_average,
+    poster_path,
+    original_language,
+    title,
+    release_date,
+    media_type,
+    id,
+  } = props
   return (
     <BaseEntityCard
       title={title}
       posterPath={poster_path}
       to="/details/$media/$id/$similar"
-      params={{ id: item.id, media, similar: 1 }}
+      params={{ id, media: media_type, similar: 1 }}
       topRight={<RatingCircle rating={vote_average} />}
       footer={
         <>
           <MetaItem icon="mdi:calendar" label={FmtYear(release_date)} />
           <MetaItem icon="mdi:translate" label={original_language} />
+        </>
+      }
+    />
+  )
+}
+
+function PersonCard(props: TMDB.Person) {
+  const { name, profile_path, popularity, known_for, known_for_department, id } = props
+  const notable = known_for[0] === undefined ? 'N/A' : tmdb.normalise(known_for[0]).title
+  const notableTitle = FmtTrunc(notable, 12)
+
+  return (
+    <BaseEntityCard
+      to="/person/$id"
+      params={{ id }}
+      title={name}
+      posterPath={profile_path}
+      topRight={<Pill size="xs">{notableTitle}</Pill>}
+      footer={
+        <>
+          <MetaItem icon="mdi:movie-open" label={known_for_department} />
+          <MetaItem
+            className="text-yellow-200"
+            icon="mdi:star"
+            label={FmtPopularity(popularity, true)}
+          />
         </>
       }
     />

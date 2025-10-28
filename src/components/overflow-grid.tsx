@@ -4,18 +4,11 @@ import { Link, type LinkProps } from '@tanstack/react-router'
 import type React from 'react'
 import { useRef } from 'react'
 import type { TMDB } from '@/config/tmdb'
-import PersonCard from './person-card'
 import PreviewCard from './preview-card'
 
-type Props = {
-  media?: (TMDB.Movie | TMDB.TV)[]
-  entity: 'movie' | 'tv' | 'person'
-  people?: TMDB.Person[]
-}
+type Props = { items: Array<TMDB.Media | TMDB.Person> }
 
 export default function OverflowGrid(props: Props) {
-  const { media = [], people = [], entity } = props
-
   const ref = useRef<HTMLDivElement>(null)
 
   const scroll = (dir: 'left' | 'right') => {
@@ -46,9 +39,9 @@ export default function OverflowGrid(props: Props) {
       </ActionIcon>
       <ScrollArea viewportRef={ref} type="never">
         <div className="flex gap-4 *:shrink-0 *:w-44">
-          {entity === 'person'
-            ? people.map((person) => <PersonCard key={person.id} person={person} />)
-            : media.map((item) => <PreviewCard key={item.id} item={item} />)}
+          {props.items.map((item) => (
+            <PreviewCard key={item.id} item={item} />
+          ))}
         </div>
       </ScrollArea>
     </section>

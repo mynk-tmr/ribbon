@@ -1,7 +1,7 @@
 import { Icon } from '@iconify/react'
 import { Badge, Button } from '@mantine/core'
 import { getRouteApi, Link } from '@tanstack/react-router'
-import { type TMDB, tmdb } from '@/config/tmdb'
+import { tmdb } from '@/config/tmdb'
 import { FmtHour, FmtPlural, FmtYear } from '@/helpers/formatters'
 import Poster from './poster'
 import { RatingCircle } from './rating-circle'
@@ -9,33 +9,29 @@ import { RatingCircle } from './rating-circle'
 function useDetails() {
   const route = getRouteApi('/details/$media/$id/$similar')
   const { details } = route.useLoaderData()
-  const is_movie = tmdb.isMovie(details)
-  const release_date = is_movie ? details.release_date : details.first_air_date
-
   return {
     details,
-    type: is_movie ? 'movie' : 'tv',
-    title: is_movie ? details.title : details.name,
-    runtime: is_movie
+    runtime: tmdb.isMovie(details)
       ? FmtHour(details.runtime)
       : FmtPlural(details.number_of_seasons, 'season'),
-    year: FmtYear(release_date),
+    year: FmtYear(details.release_date),
   }
 }
 
 export default function Overview() {
-  const { title, details, runtime, year } = useDetails()
+  const { details, runtime, year } = useDetails()
+
   return (
     <section className="mx-auto flex max-w-5xl flex-col gap-6 md:flex-row">
       {/* Poster */}
       <div className="min-w-64 md:min-w-80">
-        <Poster h={480} key={title} size="w780" path={details.poster_path} />
+        <Poster h={480} size="w780" path={details.poster_path} />
       </div>
 
       {/* Main info */}
       <article className="grid gap-y-7">
         <header className="flex items-center gap-3">
-          <h2 className="text-4xl font-bold">{title}</h2>
+          <h2 className="text-4xl font-bold">{details.title}</h2>
           <RatingCircle
             rating={details.vote_average}
             size={50}
@@ -110,8 +106,8 @@ export default function Overview() {
 }
 
 function StreamButton() {
-  const { type, details } = useDetails()
-  if (type === 'movie')
+  const { details } = useDetails()
+  if (tmdb.isMovie(details))
     return (
       <Button
         component={'a'}
@@ -122,7 +118,7 @@ function StreamButton() {
         Watch now
       </Button>
     )
-  const { id, number_of_seasons: end } = details as TMDB.TVDetail
+  const { id, number_of_seasons: end } = details
   return (
     <Button component={Link} to={`/details/tv/${id}/season/1/${end}`}>
       View Episodes

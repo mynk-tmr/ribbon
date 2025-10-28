@@ -45,16 +45,20 @@ export interface Season {
 }
 
 export interface Media {
+  media_type: 'movie' | 'tv'
+  title: string
+  release_date: string
   adult: boolean
-  backdrop_path: string | null
   genre_ids: number[]
   id: number
-  overview: string
+  overview?: string
   popularity: number
   poster_path: string | null
+  backdrop_path: string | null
   vote_average: number
   vote_count: number
   original_language: string
+  character?: string
 }
 
 export interface Company {
@@ -75,73 +79,39 @@ export interface SpokenLanguage {
   name: string
 }
 
-export type KnownFor = { media_type: 'movie' | 'tv'; character?: string } & (Movie | TV)
-
 export interface Person {
+  media_type: 'person'
   id: number
   name: string
   profile_path: string | null
-  known_for: KnownFor[]
+  known_for: Media[]
   known_for_department: string
   popularity: number
   gender: number
   adult: boolean
-}
-
-export interface Creator extends Person {
-  credit_id: string
-  original_name: string
-}
-
-export interface Cast extends Person {
-  character: string
-}
-
-export interface Crew extends Person {
-  job: string
-  department: string
+  character?: string
+  job?: string
+  department?: string
 }
 
 export interface Image {
   aspect_ratio: number
   height: number
-  iso_3166_1: string | null
-  iso_639_1: string | null
   file_path: string
-  vote_average: number
-  vote_count: number
   width: number
 }
 
 export interface DetailBase extends Media {
   homepage: string
   genres: Genre[]
-  id: number
   production_companies: Company[]
   production_countries: Country[]
   spoken_languages: SpokenLanguage[]
-  popularity: number
-  poster_path: string | null
   status: string
   tagline: string
-  vote_average: number
-  vote_count: number
 }
 
 /* ---------- RETURNDED BY API ---------- */
-export interface Movie extends Media {
-  original_title: string
-  release_date: string
-  title: string
-  video: boolean
-}
-
-export interface TV extends Media {
-  origin_country: string[]
-  original_name: string
-  first_air_date: string
-  name: string
-}
 
 export interface MovieDetail extends DetailBase {
   belongs_to_collection: null | {
@@ -152,32 +122,24 @@ export interface MovieDetail extends DetailBase {
   }
   budget: number
   imdb_id: string | null
-  original_title: string
-  release_date: string
   revenue: number
   runtime: number | null
-  title: string
-  video: boolean
   origin_country: string[]
 }
 
 export interface TVDetail extends DetailBase {
-  created_by: Creator[]
+  created_by: Person[]
   episode_run_time: number[]
-  first_air_date: string
   in_production: boolean
   languages: string[]
   last_air_date: string
   last_episode_to_air: Episode | null
-  name: string
   next_episode_to_air: Episode | null
   networks: Company[]
   number_of_episodes: number
   number_of_seasons: number
   origin_country: string[]
-  original_name: string
   seasons: Season[]
-  type: string
 }
 
 export interface PersonDetails extends Person {
@@ -192,8 +154,8 @@ export interface PersonDetails extends Person {
 
 export interface CombinedCredits {
   id: number
-  cast: KnownFor[]
-  crew: KnownFor[]
+  cast: Media[]
+  crew: Media[]
 }
 
 export interface ImgCollection {
@@ -204,8 +166,8 @@ export interface ImgCollection {
 }
 
 export interface EpisodeDetail extends Episode {
-  crew: Crew[]
-  guest_stars: Cast[]
+  crew: Person[]
+  guest_stars: Person[]
   episode_type?: string
   production_code?: string
 }

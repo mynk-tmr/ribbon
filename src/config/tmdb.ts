@@ -1,60 +1,91 @@
 import { ofetch } from 'ofetch'
 import type * as TMDB from './+tmdb.types'
 
+type Entity = 'movie' | 'tv' | 'person'
+type Criteria = 'popular' | 'top_rated' | 'upcoming' | 'now_playing'
+type FullCriteria = Criteria | 'airing_today' | 'on_the_air'
+type ID = string | number
+
 const api = ofetch.create({
   baseURL: import.meta.env.DEV ? 'http://localhost:3000/api/tmdb' : '/api/tmdb',
   credentials: 'include',
   ignoreResponseError: false,
 })
 
-const isMovie = (e: TMDB.Media): e is TMDB.Movie => 'release_date' in e
+export type { TMDB }
 
-type Entity = 'movie' | 'tv' | 'person'
-type Criteria = 'popular' | 'top_rated' | 'upcoming' | 'now_playing'
+// biome-ignore lint/suspicious/noExplicitAny: h
+function normalise(e: any): any {
+  if (typeof e !== 'object') return e
+  if (Array.isArray(e)) return e.map((e) => normalise(e))
+  if ('release_date' in e) return { ...e, media_type: 'movie' }
+  if ('first_air_date' in e)
+    return { ...e, media_type: 'tv', title: e.name, release_date: e.first_air_date }
+  return { ...e, media_type: 'person' }
+}
 
-type FullCriteria = Criteria | 'airing_today' | 'on_the_air'
-type PagedResult = TMDB.Paginated<TMDB.Movie | TMDB.TV | TMDB.Person>
-type ID = string | number
+function normalisePaginated<T>(res: TMDB.Paginated<T>) {
+  if (res.results.length > 0) res.results = normalise(res.results)
+  return res
+}
+
+async function details<T>(entity: Entity, id: ID) {
+  const res = await api(`/${entity}/${id}`)
+  const e = normalise(res)
+  return e as T
+}
+
+async function similar(entity: Entity, id: ID, page: number) {
+  const res = await api<TMDB.Paginated<TMDB.Media>>(`/${entity}/${id}/recommendations`, {
+    params: { page },
+  })
+  return normalisePaginated(res)
+}
+
+async function search<T>(entity: Entity, query: string, page: number) {
+  const res = await api<TMDB.Paginated<T>>(`/search/${entity}`, {
+    params: { query, page },
+  })
+  return normalisePaginated(res)
+}
+
+function season(id: ID, season: number) {
+  return api<TMDB.SeasonDetail>(`/tv/${id}/season/${season}`)
+}
+
+function credits(id: ID) {
+  return api<TMDB.CombinedCredits>(`/person/${id}/combined_credits`)
+}
 
 function getCriteria(criteria: Criteria, entity: Entity): FullCriteria {
   if (entity === 'movie') return criteria
-  if (entity === 'tv')
-    return criteria === 'now_playing'
-      ? 'airing_today'
-      : criteria === 'upcoming'
-        ? 'on_the_air'
-        : criteria
+  if (entity === 'tv') {
+    if (criteria === 'now_playing') return 'airing_today'
+    if (criteria === 'upcoming') return 'on_the_air'
+    return criteria
+  }
   return 'popular'
 }
 
-function getDiscover<R>(entity: Entity) {
-  return (criteria: Criteria, page: number) =>
-    api<R>(`/${entity}/${getCriteria(criteria, entity)}?page=${page}`)
+async function discover<T>(entity: Entity, criteria: Criteria, page: number) {
+  const res = await api<TMDB.Paginated<T>>(
+    `/${entity}/${getCriteria(criteria, entity)}`,
+    { params: { page } },
+  )
+  return normalisePaginated(res)
 }
 
-function getRecommendations<R>(entity: Entity) {
-  return (id: ID, page: number) =>
-    api<TMDB.Paginated<R>>(`/${entity}/${id}/recommendations?page=${page}`)
+function isMovie(media: TMDB.Media): media is TMDB.MovieDetail {
+  return media.media_type === 'movie'
 }
 
 export const tmdb = {
+  details,
+  similar,
+  search,
+  season,
+  person: { credits },
+  discover,
   isMovie,
-  details: {
-    movie: (id: ID) => api<TMDB.MovieDetail>(`/movie/${id}`),
-    tv: (id: ID) => api<TMDB.TVDetail>(`/tv/${id}`),
-    person: (id: ID) => api<TMDB.PersonDetails>(`/person/${id}`),
-  },
-  discover: (entity: Entity) => getDiscover<PagedResult>(entity),
-  search: (query: string, type: Entity, page: number) =>
-    api<PagedResult>(`/search/${type}?query=${query}&page=${page}`),
-  person: {
-    credits: (id: ID) => api<TMDB.CombinedCredits>(`/person/${id}/combined_credits`),
-  },
-  recommendations: (entity: Entity) => getRecommendations<TMDB.Movie | TMDB.TV>(entity),
-  tv: {
-    season: (id: ID, season: number) =>
-      api<TMDB.SeasonDetail>(`/tv/${id}/season/${season}`),
-  },
+  normalise,
 }
-
-export type { TMDB }
