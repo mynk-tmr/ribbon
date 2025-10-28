@@ -4,7 +4,7 @@ import { MetaItem } from './meta-item'
 import Poster from './poster'
 import { RatingCircle } from './rating-circle'
 
-const routeApi = getRouteApi('/$media/$id/season/$num/$end')
+const routeApi = getRouteApi('/details/$media/$id/season/$num/$end')
 
 export function Episode({ index }: { index: number }) {
   const { data: season } = routeApi.useLoaderData()

@@ -7,7 +7,7 @@ import Poster from './poster'
 import { RatingCircle } from './rating-circle'
 
 function useDetails() {
-  const route = getRouteApi('/$media/$id/$similar')
+  const route = getRouteApi('/details/$media/$id/$similar')
   const { details } = route.useLoaderData()
   const is_movie = tmdb.isMovie(details)
   const release_date = is_movie ? details.release_date : details.first_air_date
@@ -124,7 +124,7 @@ function StreamButton() {
     )
   const { id, number_of_seasons: end } = details as TMDB.TVDetail
   return (
-    <Button component={Link} to={`/tv/${id}/season/1/${end}`}>
+    <Button component={Link} to={`/details/tv/${id}/season/1/${end}`}>
       View Episodes
     </Button>
   )

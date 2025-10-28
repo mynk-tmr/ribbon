@@ -6,7 +6,7 @@ import Poster from '@/components/poster'
 import { RatingCircle } from '@/components/rating-circle'
 import { tmdb } from '@/config/tmdb'
 
-export const Route = createFileRoute('/$media/$id/season/$num/$end')({
+export const Route = createFileRoute('/details/$media/$id/season/$num/$end')({
   component: RouteComponent,
   async loader({ params: { id, num } }) {
     const data = await tmdb.tv.season(id, Number(num))
@@ -32,10 +32,10 @@ function SeasonDetails() {
   const { data: season } = Route.useLoaderData()
   const { num, end } = Route.useParams()
   const gto = Route.useNavigate()
-  const goback = () => gto({ to: '/$media/$id/$similar', params: { similar: 1 } })
+  const goback = () => gto({ to: '/details/$media/$id/$similar', params: { similar: 1 } })
   return (
     <section className="grid gap-6 md:grid-cols-[300px_1fr]">
-      <Poster className="object-contain" size="w780" path={season.poster_path} />
+      <Poster className="object-contain" size="w500" path={season.poster_path} />
       <article className="space-y-9">
         <header className="flex items-center gap-6">
           <h2 className="text-4xl font-bold">{season.name}</h2>
