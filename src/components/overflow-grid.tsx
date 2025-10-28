@@ -27,24 +27,20 @@ export default function OverflowGrid(props: Props) {
   }
 
   return (
-    <section className="relative">
+    <section className="relative overflow-x-hidden">
       <ActionIcon
         onClick={() => scroll('left')}
-        className="absolute -left-4 top-1/2 -translate-y-1/2 z-10 hidden sm:block"
-        radius={'xl'}
+        className="absolute -left-4 top-1/2 -translate-y-1/2 z-10 rounded-full opacity-75"
         size="xl"
         color="blue.8"
-        opacity={0.65}
       >
         <Icon icon="mdi:arrow-left" />
       </ActionIcon>
       <ActionIcon
         onClick={() => scroll('right')}
-        className="absolute -right-4 top-1/2 -translate-y-1/2 z-10"
-        radius={'xl'}
+        className="absolute -right-4 top-1/2 -translate-y-1/2 z-10 rounded-full opacity-75"
         size="xl"
         color="blue.8"
-        opacity={0.65}
       >
         <Icon icon="mdi:arrow-right" />
       </ActionIcon>
