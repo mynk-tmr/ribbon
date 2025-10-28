@@ -1,7 +1,7 @@
 import { Icon } from '@iconify/react'
 import { Button } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
-import { Link, useRouterState } from '@tanstack/react-router'
+import { Link } from '@tanstack/react-router'
 import cn from '@/helpers/cn'
 import { useFireAuthStore } from '@/hooks/useFireAuth'
 import Logo from './logo'
@@ -9,14 +9,13 @@ import Logo from './logo'
 type RouteLink = { name: string; link: string; icon: string }
 
 const Links: React.FC = () => {
-  const { location } = useRouterState()
   const isMobile = useMediaQuery('(max-width: 640px)')
   const { loading, user } = useFireAuthStore()
 
   function getLinks(): RouteLink[] {
     const routes = [
       { name: 'Discover', link: '/discover', icon: 'mdi:compass' },
-      { name: 'Search', link: '/search?query=&by=tv&page=1', icon: 'mdi:magnify' },
+      { name: 'Search', link: '/search', icon: 'mdi:magnify' },
       { name: 'Activity', link: '/activity', icon: 'mdi:history' },
     ]
     if (loading) routes.push({ name: 'Wait ..', link: '/', icon: 'mdi:dots-grid' })
@@ -33,9 +32,8 @@ const Links: React.FC = () => {
           <Button
             component={Link}
             to={route.link}
-            color={
-              location.pathname.startsWith(route.link.split('?')[0]) ? 'blue.4' : 'gray'
-            }
+            color="gray"
+            activeProps={{ className: 'text-blue-400' }}
             variant="subtle"
           >
             <Icon icon={route.icon} className="text-xl mr-2" />

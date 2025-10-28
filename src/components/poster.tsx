@@ -9,7 +9,6 @@ interface Props extends ImageProps {
 export default function Poster({ size, path, className, ...props }: Props) {
   return (
     <Image
-      key={path}
       loading="lazy"
       src={
         path

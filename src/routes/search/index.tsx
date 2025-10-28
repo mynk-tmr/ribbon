@@ -7,14 +7,14 @@ import { tmdb } from '@/config/tmdb'
 import { useMergedState } from '@/hooks/useMergedState'
 
 const schema = type({
-  query: 'string',
-  by: "'movie' | 'tv' | 'person'",
-  page: 'number.integer > 0',
+  query: "string = ''",
+  by: "'movie' | 'tv' | 'person' = 'tv'",
+  page: 'number.integer > 0 = 1',
 })
 
 export const Route = createFileRoute('/search/')({
   component: RouteComponent,
-  validateSearch: schema,
+  validateSearch: (s) => schema.assert(s),
   loaderDeps: ({ search }) => ({ search }),
   async loader({
     deps: {
@@ -43,7 +43,12 @@ function RouteComponent() {
     BODY = (
       <div className="space-y-4">
         <h1 className={tw_heading}>No results found</h1>
-        <NoResults />
+        <p className="text-lg">
+          Query:{' '}
+          <b className="text-yellow-400">
+            {query} {by}
+          </b>
+        </p>
       </div>
     )
   else
@@ -57,7 +62,7 @@ function RouteComponent() {
               {i.length} results found for{' '}
               <b className="text-yellow-400">
                 {query} {by}
-              </b>{' '}
+              </b>
             </h1>
           </header>
         )}
@@ -76,19 +81,6 @@ function RouteComponent() {
         />
       )}
     </main>
-  )
-}
-
-function NoResults() {
-  const { query, by } = Route.useSearch()
-  if (query === '') return null
-  return (
-    <p className="text-lg">
-      Query:{' '}
-      <b className="text-yellow-400">
-        {query} {by}
-      </b>
-    </p>
   )
 }
 

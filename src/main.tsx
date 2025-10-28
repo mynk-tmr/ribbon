@@ -11,6 +11,7 @@ const router = createRouter({
   routeTree,
   defaultStaleTime: 25 * 60 * 1000,
   scrollRestoration: true,
+  defaultViewTransition: true,
 })
 
 // Register the router instance for type safety
