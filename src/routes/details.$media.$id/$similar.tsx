@@ -1,16 +1,17 @@
 import { createFileRoute } from '@tanstack/react-router'
 import EntityGrid from '@/components/entity-grid'
 import Overview from '@/components/overview'
-import { type TMDB, tmdb } from '@/config/tmdb'
+import { tmdb } from '@/config/tmdb'
 
 export const Route = createFileRoute('/details/$media/$id/$similar')({
   component: RouteComponent,
   params: { parse: ({ similar }) => ({ similar: Number(similar) || 1 }) },
-  async loader({ params: { media, id, similar } }) {
+  async loader({ params: { media, id, similar }, parentMatchPromise }) {
     const [details, recommendations] = await Promise.all([
-      tmdb.details<TMDB.MovieDetail | TMDB.TVDetail>(media, id),
+      (await parentMatchPromise).loaderData,
       tmdb.similar(media, id, similar),
     ])
+    if (details === undefined) throw new Error('parentMatchPromise failed')
     return { details, recommendations }
   },
 })

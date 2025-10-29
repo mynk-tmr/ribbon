@@ -3,11 +3,12 @@ import { Badge, Button } from '@mantine/core'
 import { getRouteApi, Link } from '@tanstack/react-router'
 import { tmdb } from '@/config/tmdb'
 import { FmtHour, FmtPlural, FmtYear } from '@/helpers/formatters'
+import PlanFavorite from './plan-favorite'
 import Poster from './poster'
 import { RatingCircle } from './rating-circle'
 
 function useDetails() {
-  const route = getRouteApi('/details/$media/$id/$similar')
+  const route = getRouteApi('/details/$media/$id')
   const { details } = route.useLoaderData()
   return {
     details,
@@ -20,7 +21,6 @@ function useDetails() {
 
 export default function Overview() {
   const { details, runtime, year } = useDetails()
-
   return (
     <section className="mx-auto flex max-w-5xl flex-col gap-6 md:flex-row">
       {/* Poster */}
@@ -40,8 +40,18 @@ export default function Overview() {
           />
         </header>
 
-        {/* User Action Buttons */}
-        <div className="hidden items-center gap-2">{/* to do */}</div>
+        {/* User Action */}
+        <PlanFavorite
+          id={details.id}
+          title={details.title}
+          media_type={details.media_type}
+          poster_path={details.poster_path}
+          link={
+            tmdb.isMovie(details)
+              ? `https://www.vidsrc.to/embed/movie/${details.id}`
+              : `details/tv/${details.id}/season/1/${details.number_of_seasons}`
+          }
+        />
 
         {/* Tagline */}
         {details.tagline && (

@@ -5,12 +5,13 @@ import { authStore } from '@/hooks/useFireAuth'
 import { auth } from './firebase'
 
 export type MediaItem = {
-  id: string
-  parentId: string
+  id: number
+  parentLink?: string
+  parentTitle?: string
   title: string
   poster_path: string | null
   favourite: boolean
-  status: 'watched' | 'watching' | 'planned'
+  status: 'completed' | 'watching' | 'planned'
   link: string
   addedAt: Date
   updatedAt: Date
@@ -25,7 +26,7 @@ export type SearchItem = {
 }
 
 interface MyDB extends DBSchema {
-  media: { key: string; value: MediaItem }
+  media: { key: number; value: MediaItem }
   search: { key: string; value: SearchItem }
 }
 
@@ -105,7 +106,7 @@ class MyMedias extends Store {
     await db.add('media', { ...item, addedAt: now, updatedAt: now })
     await this.refresh()
   }
-  async put(id: string, item: Partial<MediaItem>) {
+  async put(id: MediaItem['id'], item: Partial<MediaItem>) {
     const db = await getDB()
     const prev = await db.get('media', id)
     if (!prev) throw new Error('IDB::MyMedias -> Media not found')
@@ -113,7 +114,7 @@ class MyMedias extends Store {
     await db.put('media', neo)
     await this.refresh()
   }
-  async drop(id: string) {
+  async drop(id: MediaItem['id']) {
     const db = await getDB()
     await db.delete('media', id)
     await this.refresh()

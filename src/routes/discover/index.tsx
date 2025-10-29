@@ -1,9 +1,8 @@
 /** biome-ignore-all lint/suspicious/noArrayIndexKey: fine */
 
-import { Icon } from '@iconify/react'
-import { Divider } from '@mantine/core'
 import { Await, createFileRoute } from '@tanstack/react-router'
 import { Suspense } from 'react'
+import BigDivider from '@/components/big-divider'
 import OverflowGrid from '@/components/overflow-grid'
 import { type TMDB, tmdb } from '@/config/tmdb'
 
@@ -53,19 +52,6 @@ export const Route = createFileRoute('/discover/')({
   },
 })
 
-function DivHeader({ icon, title }: { icon: string; title: string }) {
-  return (
-    <Divider
-      labelPosition="center"
-      label={
-        <h2 className="text-3xl md:text-4xl font-bold mb-4">
-          {title} <Icon icon={icon} className="inline" />
-        </h2>
-      }
-    />
-  )
-}
-
 function RouteComponent() {
   const { groups } = Route.useLoaderData()
 
@@ -73,7 +59,7 @@ function RouteComponent() {
     <main className="pl-4 max-w-7xl mx-auto space-y-10">
       {groups.map((group, gi) => (
         <div key={gi}>
-          <DivHeader icon={group.icon} title={group.title} />
+          <BigDivider icon={group.icon} title={group.title} />
 
           {group.sections.map((sec) => (
             <section key={sec.label} className="mb-8">

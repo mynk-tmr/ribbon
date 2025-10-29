@@ -1,14 +1,17 @@
 import { Badge, Spoiler } from '@mantine/core'
 import { getRouteApi } from '@tanstack/react-router'
 import { MetaItem } from './meta-item'
+import PlanFavorite from './plan-favorite'
 import Poster from './poster'
 import { RatingCircle } from './rating-circle'
 
 const routeApi = getRouteApi('/details/$media/$id/season/$num/$end')
+const r2Api = getRouteApi('/details/$media/$id')
 
 export function Episode({ index }: { index: number }) {
   const { data: season } = routeApi.useLoaderData()
-  const { id, num } = routeApi.useParams()
+  const { details } = r2Api.useLoaderData()
+  const { id, num, end } = routeApi.useParams()
   const episode = season.episodes[index]
   const vidLink = `https://www.vidsrc.to/embed/tv/${id}/${num}/${index + 1}`
 
@@ -30,15 +33,25 @@ export function Episode({ index }: { index: number }) {
             Finale
           </Badge>
         )}
+        <MetaItem
+          className="absolute bottom-0 right-0 text-xs p-1 bg-black/80 rounded-lg"
+          icon="mdi:timer-outline"
+          label={`${episode.runtime ?? '?'} min`}
+        />
       </div>
       <div className="space-y-2 px-4 pb-4">
         <h3 className="text-lg font-bold">
           {episode.episode_number}. {episode.name}
         </h3>
-        <div className="text-lightGray flex justify-between text-xs font-bold">
-          <MetaItem icon="mdi:calendar" label={episode.air_date} />
-          <MetaItem icon="mdi:timer-outline" label={`${episode.runtime ?? '?'} min`} />
-        </div>
+        <PlanFavorite
+          id={episode.id}
+          title={episode.name}
+          media_type="episode"
+          parentLink={`/details/tv/${id}/season/${num}/${end}`}
+          parentTitle={details.title}
+          link={vidLink}
+          poster_path={episode.still_path}
+        />
         <Spoiler
           maxHeight={64}
           className="**:text-sm"
