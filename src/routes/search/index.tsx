@@ -1,8 +1,9 @@
 import { Icon } from '@iconify/react'
-import { Button, Select, TextInput } from '@mantine/core'
+import { Autocomplete, Button, Select } from '@mantine/core'
 import { createFileRoute } from '@tanstack/react-router'
 import { type } from 'arktype'
 import EntityGrid from '@/components/entity-grid'
+import { $searches, useIDBStore } from '@/config/idb-store'
 import { type TMDB, tmdb } from '@/config/tmdb'
 import { useMergedState } from '@/hooks/useMergedState'
 
@@ -86,25 +87,41 @@ function RouteComponent() {
 function SearchBox() {
   const { query, by } = Route.useSearch()
   const [state, update] = useMergedState({ query, by })
+  const searches = useIDBStore($searches, (s) => s)
   const goto = Route.useNavigate()
   const search = () => goto({ to: '/search', search: { ...state, page: 1 } })
+  const getFiltered = (entity: typeof by) =>
+    searches.filter((s) => s.entity === entity).map((s) => `${s.query} (${entity})`) //this pattern is used by regex in autocomplete
   return (
     <form
-      onSubmit={(e) => {
+      onSubmit={async (e) => {
         e.preventDefault()
+        await $searches.add({ query, entity: by })
         search()
       }}
       className="flex flex-wrap gap-6 justify-center"
     >
-      <TextInput
+      <Autocomplete
+        data={[
+          { group: 'Movies', items: getFiltered('movie') },
+          { group: 'TV Series', items: getFiltered('tv') },
+          { group: 'People', items: getFiltered('person') },
+        ]}
         value={state.query}
-        onChange={(e) => update({ query: e.target.value })}
+        onChange={(v) => {
+          const match = v.match(/^(.*) \((.*)\)$/)
+          if (match) {
+            update({ query: match[1], by: match[2] as typeof by })
+            return
+          }
+          update({ query: v })
+        }}
         leftSection={<Icon icon="mdi:magnify" />}
         miw={300}
         required
         placeholder="Search movies, tv series and people"
-        type="search"
         radius="xl"
+        clearable
       />
       <Select
         value={state.by}
