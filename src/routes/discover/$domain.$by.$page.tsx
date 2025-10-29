@@ -61,7 +61,7 @@ function Controls() {
           goto({ params: { domain: value as typeof domain, page: 1, by }, replace: true })
         }
       >
-        <div className="flex gap-2 mt-2">
+        <div className="flex gap-2 flex-wrap justify-center mt-2">
           <Chip value="upcoming">Upcoming</Chip>
           <Chip value="now_playing">Now Playing</Chip>
           <Chip value="top_rated">Top Rated</Chip>

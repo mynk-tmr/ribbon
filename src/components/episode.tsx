@@ -13,7 +13,7 @@ export function Episode({ index }: { index: number }) {
   const { details } = r2Api.useLoaderData()
   const { id, num, end } = routeApi.useParams()
   const episode = season.episodes[index]
-  const vidLink = `https://www.vidsrc.to/embed/tv/${id}/${num}/${index + 1}`
+  const vidLink = `https://vidsrc-embed.ru/embed/tv/${id}/${num}/${index + 1}`
 
   return (
     <article className="group space-y-4 rounded-md bg-white/10">

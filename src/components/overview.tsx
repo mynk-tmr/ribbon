@@ -48,7 +48,7 @@ export default function Overview() {
           poster_path={details.poster_path}
           link={
             tmdb.isMovie(details)
-              ? `https://www.vidsrc.to/embed/movie/${details.id}`
+              ? `https://vidsrc-embed.ru/embed/movie/${details.id}`
               : `details/tv/${details.id}/season/1/${details.number_of_seasons}`
           }
         />
@@ -121,7 +121,7 @@ function StreamButton() {
     return (
       <Button
         component={'a'}
-        href={`https://www.vidsrc.to/embed/movie/${details.id}`}
+        href={`https://vidsrc-embed.ru/embed/movie/${details.id}`}
         target="_blank"
         rel="noopener noreferrer"
       >
