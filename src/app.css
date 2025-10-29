@@ -9,20 +9,25 @@
   --animate-pulse-glow: pulse-glow 6s ease-in-out infinite alternate;
   --animate-progress: progress 1.2s ease-in-out infinite;
   --color-theme: #242da8;
+  --color-dark: #141313;
 }
 
 @layer base {
   body {
-    @apply overflow-x-hidden min-h-screen bg-[#141313] pb-20 sm:pb-6 prettyscroll glowBg;
+    @apply overflow-x-hidden min-h-screen pb-20 pt-6 sm:pb-6 sm:pt-20 prettyscroll glowBg;
   }
 }
 
 @utility glowBg {
-  @apply bg-[#141313];
+  @apply bg-black;
   &::before {
     @apply fixed inset-0 -z-10 blur-2xl pointer-events-none animate-pulse-glow;
     content: "";
     background: radial-gradient(circle at 50% 30%, #242da84d, #141313 70%);
+  }
+  &::after {
+    @apply fixed inset-0 bg-black/20 pointer-events-none;
+    content: "";
   }
 }
 

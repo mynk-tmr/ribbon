@@ -51,7 +51,11 @@ function PersonCard(props: TMDB.Person) {
       params={{ id }}
       title={name}
       posterPath={profile_path}
-      topRight={<Pill size="xs">{notableTitle}</Pill>}
+      topRight={
+        <Pill bg="dark.4" size="xs">
+          {notableTitle}
+        </Pill>
+      }
       footer={
         <>
           <MetaItem icon="mdi:movie-open" label={known_for_department} />

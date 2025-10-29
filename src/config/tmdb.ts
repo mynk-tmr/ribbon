@@ -15,11 +15,12 @@ const api = ofetch.create({
 export type { TMDB }
 
 // biome-ignore lint/suspicious/noExplicitAny: h
-function normalise(e: any): any {
+function normalise(e: unknown): any {
+  if (e === null) return null
   if (typeof e !== 'object') return e
   if (Array.isArray(e)) return e.map((e) => normalise(e))
   if ('release_date' in e) return { ...e, media_type: 'movie' }
-  if ('first_air_date' in e)
+  if ('first_air_date' in e && 'name' in e)
     return { ...e, media_type: 'tv', title: e.name, release_date: e.first_air_date }
   return { ...e, media_type: 'person' }
 }
@@ -53,8 +54,9 @@ function season(id: ID, season: number) {
   return api<TMDB.SeasonDetail>(`/tv/${id}/season/${season}`)
 }
 
-function credits(id: ID) {
-  return api<TMDB.CombinedCredits>(`/person/${id}/combined_credits`)
+async function credits(id: ID): Promise<TMDB.CombinedCredits> {
+  const res = await api<TMDB.CombinedCredits>(`/person/${id}/combined_credits`)
+  return { id: res.id, cast: normalise(res.cast), crew: normalise(res.crew) }
 }
 
 function getCriteria(criteria: Criteria, entity: Entity): FullCriteria {

@@ -1,16 +1,8 @@
-import type { JSX } from 'react'
-import cn from '@/helpers/cn'
-
-export default function Logo({ className, ...props }: JSX.IntrinsicElements['img']) {
+export default function Logo() {
   return (
-    <div className="flex items-center gap-3">
-      <img
-        src="/favicon.svg"
-        alt="Ribbon"
-        className={cn.filter('w-8 h-8 object-cover', className)}
-        {...props}
-      />
-      <span>Ribbon</span>
+    <div className="flex items-center gap-1.5">
+      <img src="/favicon.svg" alt="Ribbon" width={24} height={24} className="min-w-6" />
+      <span className="font-bold hidden sm:inline">Ribbon</span>
     </div>
   )
 }

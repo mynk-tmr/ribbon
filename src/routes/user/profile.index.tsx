@@ -59,11 +59,11 @@ function RouteComponent() {
           <ActionItem key={action.label} {...action} />
         ))}
       </div>
-      <Modal opened={opened} onClose={close} title="Sign Out" centered>
+      <Modal size={'xs'} opened={opened} onClose={close} title="Sign Out" centered>
         <p className="mb-4 text-neutral-400">
           Are you sure you want to sign out? This will end your current session.
         </p>
-        <Button color="red" onClick={() => auth.signOut()}>
+        <Button size="xs" color="red" onClick={() => auth.signOut()}>
           Sign Out
         </Button>
       </Modal>

@@ -39,16 +39,10 @@ function RouteComponent() {
           onChange={(e) => update({ photoURL: e.target.value })}
         />
         <div className="flex justify-end gap-x-4">
-          <Button
-            loading={status.pending}
-            disabled={status.pending}
-            size="xs"
-            color="green"
-            type="submit"
-          >
+          <Button loading={status.pending} size="xs" type="submit">
             Update
           </Button>
-          <Button size="xs" color="yellow" component={Link} to="/user/profile">
+          <Button size="xs" color="gray.2" c="dark" component={Link} to="/user/profile">
             Cancel
           </Button>
         </div>

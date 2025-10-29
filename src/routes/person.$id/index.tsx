@@ -42,7 +42,7 @@ function PersonDetails() {
   } = Route.useLoaderData().person
 
   return (
-    <section className="mt-8 px-4 mx-auto max-w-6xl flex flex-col md:flex-row gap-8">
+    <section className="mt-8 px-4 mx-auto max-w-6xl flex flex-col sm:flex-row gap-8">
       <div className="md:w-64 shrink-0">
         <Poster path={profile_path} size="w500" h={380} />
       </div>

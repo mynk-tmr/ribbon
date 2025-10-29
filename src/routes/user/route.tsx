@@ -17,7 +17,7 @@ export const Route = createFileRoute('/user')({
 function RouteComponent() {
   return (
     <main className="page">
-      <section className="sm:min-w-sm p-6 sm:px-10 rounded-lg bg-black/20 border border-neutral-500/20">
+      <section className="sm:min-w-sm p-6 sm:px-10">
         <Header />
         <div className="my-4 border-t border-neutral-500/50" />
         <Outlet />

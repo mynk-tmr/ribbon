@@ -24,11 +24,11 @@ export default function BaseEntityCard({
 }: Props) {
   const content = (
     <article
-      className={`group relative overflow-hidden rounded-md bg-white/10 p-1 shadow-sm`}
+      className={`group relative overflow-hidden rounded-md border border-[#333] bg-dark/40 backdrop-blur-md shadow-lg shadow-white/20 ring-1 ring-white/5 p-1`}
     >
       <Poster transition path={posterPath} size="w342" h={242} />
 
-      {topRight && <div className="absolute top-0 right-1">{topRight}</div>}
+      {topRight && <div className="absolute top-1 right-1">{topRight}</div>}
 
       <p className="mt-2 truncate px-1 text-sm font-semibold">{title}</p>
 
