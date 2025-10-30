@@ -41,7 +41,12 @@ function ChangePange(props: PaginationProps) {
   if (props.total)
     return (
       <section className="mt-8 flex justify-center">
-        <Pagination itemProp="" size={isMobile ? 'sm' : 'md'} {...props} />
+        <Pagination
+          radius={'xl'}
+          color="red.7"
+          size={isMobile ? 'sm' : 'md'}
+          {...props}
+        />
       </section>
     )
 }

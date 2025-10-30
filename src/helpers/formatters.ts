@@ -1,4 +1,4 @@
-export const FmtDate = (date: string) => {
+export const FmtDate = (date: string | Date) => {
   try {
     return new Intl.DateTimeFormat('en-US', {
       year: 'numeric',

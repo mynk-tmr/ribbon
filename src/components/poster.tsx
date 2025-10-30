@@ -2,7 +2,7 @@ import { Image, type ImageProps } from '@mantine/core'
 import cn from '@/helpers/cn'
 
 interface Props extends ImageProps {
-  size: 'w342' | 'w500' | 'w780' | 'original'
+  size: 'w185' | 'w342' | 'w500' | 'w780' | 'original'
   path: string | null
   transition?: boolean
 }
@@ -20,7 +20,7 @@ export default function Poster({ size, path, className, transition, ...props }: 
       radius="md"
       className={cn.filter(
         'object-cover',
-        transition && 'hover:scale-103 transition-all duration-150',
+        transition && 'hover:scale-103 -z-10 transition-all duration-150',
         className,
       )}
       fallbackSrc="https://placehold.co/342x513?text=Failed+to+Load"

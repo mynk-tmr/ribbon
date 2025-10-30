@@ -84,18 +84,21 @@ function RouteComponent() {
   )
 }
 
+type Entity = 'movie' | 'tv' | 'person'
+
 function SearchBox() {
-  const { query, by } = Route.useSearch()
-  const [state, update] = useMergedState({ query, by })
+  const sparam = Route.useSearch()
+  const [state, update] = useMergedState(sparam)
   const searches = useIDBStore($searches, (s) => s)
   const goto = Route.useNavigate()
   const search = () => goto({ to: '/search', search: { ...state, page: 1 } })
-  const getFiltered = (entity: typeof by) =>
+  const getFiltered = (entity: Entity) =>
     searches.filter((s) => s.entity === entity).map((s) => `${s.query} (${entity})`) //this pattern is used by regex in autocomplete
   return (
     <form
       onSubmit={async (e) => {
         e.preventDefault()
+        const { query, by } = state
         await $searches.add({ query, entity: by })
         search()
       }}
@@ -111,7 +114,7 @@ function SearchBox() {
         onChange={(v) => {
           const match = v.match(/^(.*) \((.*)\)$/)
           if (match) {
-            update({ query: match[1], by: match[2] as typeof by })
+            update({ query: match[1], by: match[2] as Entity })
             return
           }
           update({ query: v })
@@ -125,7 +128,7 @@ function SearchBox() {
       />
       <Select
         value={state.by}
-        onChange={(value) => update({ by: value as typeof by })}
+        onChange={(value) => update({ by: value as Entity })}
         placeholder="Type"
         required
         data={[

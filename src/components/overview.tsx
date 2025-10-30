@@ -3,7 +3,8 @@ import { Badge, Button } from '@mantine/core'
 import { getRouteApi, Link } from '@tanstack/react-router'
 import { tmdb } from '@/config/tmdb'
 import { FmtHour, FmtPlural, FmtYear } from '@/helpers/formatters'
-import PlanFavorite from './plan-favorite'
+import LikeButton from './like-button'
+import PickStatus from './pick-status'
 import Poster from './poster'
 import { RatingCircle } from './rating-circle'
 
@@ -21,6 +22,15 @@ function useDetails() {
 
 export default function Overview() {
   const { details, runtime, year } = useDetails()
+  const actionProps = {
+    id: details.id,
+    title: details.title,
+    media_type: details.media_type,
+    poster_path: details.poster_path,
+    link: tmdb.isMovie(details)
+      ? `https://vidsrc-embed.ru/embed/movie/${details.id}`
+      : `details/tv/${details.id}/season/1/${details.number_of_seasons}`,
+  }
   return (
     <section className="mx-auto flex max-w-5xl flex-col gap-6 md:flex-row">
       {/* Poster */}
@@ -41,17 +51,10 @@ export default function Overview() {
         </header>
 
         {/* User Action */}
-        <PlanFavorite
-          id={details.id}
-          title={details.title}
-          media_type={details.media_type}
-          poster_path={details.poster_path}
-          link={
-            tmdb.isMovie(details)
-              ? `https://vidsrc-embed.ru/embed/movie/${details.id}`
-              : `details/tv/${details.id}/season/1/${details.number_of_seasons}`
-          }
-        />
+        <div className="flex gap-2">
+          <PickStatus {...actionProps} />
+          <LikeButton {...actionProps} />
+        </div>
 
         {/* Tagline */}
         {details.tagline && (

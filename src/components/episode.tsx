@@ -1,7 +1,8 @@
 import { Badge, Spoiler } from '@mantine/core'
 import { getRouteApi } from '@tanstack/react-router'
+import LikeButton from './like-button'
 import { MetaItem } from './meta-item'
-import PlanFavorite from './plan-favorite'
+import PickStatus from './pick-status'
 import Poster from './poster'
 import { RatingCircle } from './rating-circle'
 
@@ -14,6 +15,16 @@ export function Episode({ index }: { index: number }) {
   const { id, num, end } = routeApi.useParams()
   const episode = season.episodes[index]
   const vidLink = `https://vidsrc-embed.ru/embed/tv/${id}/${num}/${index + 1}`
+
+  const actionProps = {
+    id: episode.id,
+    title: episode.name,
+    media_type: 'episode' as const,
+    poster_path: episode.still_path,
+    link: vidLink,
+    parentLink: `/details/tv/${id}/season/${num}/${end}`,
+    parentTitle: details.title,
+  }
 
   return (
     <article className="group space-y-4 rounded-md bg-white/10">
@@ -43,15 +54,11 @@ export function Episode({ index }: { index: number }) {
         <h3 className="text-lg font-bold">
           {episode.episode_number}. {episode.name}
         </h3>
-        <PlanFavorite
-          id={episode.id}
-          title={episode.name}
-          media_type="episode"
-          parentLink={`/details/tv/${id}/season/${num}/${end}`}
-          parentTitle={details.title}
-          link={vidLink}
-          poster_path={episode.still_path}
-        />
+        <div className="flex gap-2">
+          <PickStatus {...actionProps} />
+          <LikeButton {...actionProps} />
+        </div>
+
         <Spoiler
           maxHeight={64}
           className="**:text-sm"
