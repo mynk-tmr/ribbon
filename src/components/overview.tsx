@@ -3,34 +3,29 @@ import { Badge, Button } from '@mantine/core'
 import { getRouteApi, Link } from '@tanstack/react-router'
 import { tmdb } from '@/config/tmdb'
 import { FmtHour, FmtPlural, FmtYear } from '@/helpers/formatters'
-import LikeButton from './like-button'
-import PickStatus from './pick-status'
+import AddMedia from './add-media'
 import Poster from './poster'
 import { RatingCircle } from './rating-circle'
 
 function useDetails() {
   const route = getRouteApi('/details/$media/$id')
   const { details } = route.useLoaderData()
+  const is_movie = tmdb.isMovie(details)
   return {
-    details,
-    runtime: tmdb.isMovie(details)
+    ...details,
+    is_movie,
+    runtime: is_movie
       ? FmtHour(details.runtime)
       : FmtPlural(details.number_of_seasons, 'season'),
     year: FmtYear(details.release_date),
+    link: is_movie
+      ? tmdb.streamUrl(details.id)
+      : `/details/tv/${details.id}/season/1/${details.number_of_seasons}`,
   }
 }
 
 export default function Overview() {
-  const { details, runtime, year } = useDetails()
-  const actionProps = {
-    id: details.id,
-    title: details.title,
-    media_type: details.media_type,
-    poster_path: details.poster_path,
-    link: tmdb.isMovie(details)
-      ? `https://vidsrc-embed.ru/embed/movie/${details.id}`
-      : `details/tv/${details.id}/season/1/${details.number_of_seasons}`,
-  }
+  const details = useDetails()
   return (
     <section className="mx-auto flex max-w-5xl flex-col gap-6 md:flex-row">
       {/* Poster */}
@@ -51,9 +46,35 @@ export default function Overview() {
         </header>
 
         {/* User Action */}
-        <div className="flex gap-2">
-          <PickStatus {...actionProps} />
-          <LikeButton {...actionProps} />
+        <div className="flex flex-wrap gap-2">
+          <AddMedia {...details} season={1} episode={1} />
+          {details.is_movie ? (
+            <Button
+              size="xs"
+              component={'a'}
+              href={details.link}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Watch now
+            </Button>
+          ) : (
+            <Button size="xs" color="violet.7" component={Link} to={details.link}>
+              View Episodes
+            </Button>
+          )}
+          {details.homepage && (
+            <Button
+              size="xs"
+              color="gray"
+              component={'a'}
+              href={details.homepage}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Homepage
+            </Button>
+          )}
         </div>
 
         {/* Tagline */}
@@ -67,10 +88,10 @@ export default function Overview() {
         {/* Badges for runtime, release date, status */}
         <div className="space-x-2">
           <Badge color="green" leftSection={<Icon icon="mdi:clock" />}>
-            {runtime}
+            {details.runtime}
           </Badge>
-          <Badge color="blue" leftSection={<Icon icon="mdi:calendar" />}>
-            {year}
+          <Badge color="grape" leftSection={<Icon icon="mdi:calendar" />}>
+            {details.year}
           </Badge>
           <Badge color="brown" leftSection={<Icon icon="mdi:run" />}>
             {details.status ?? 'Finished'}
@@ -96,45 +117,7 @@ export default function Overview() {
             🗣️ {details.spoken_languages.map((l) => l.english_name).join(', ') || 'N/A'}
           </span>
         </div>
-
-        {/* Bottom Button Links */}
-        <footer className="space-x-4">
-          <StreamButton />
-          {details.homepage && (
-            <Button
-              variant="outline"
-              color="blue"
-              component={'a'}
-              href={details.homepage}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Homepage
-            </Button>
-          )}
-        </footer>
       </article>
     </section>
-  )
-}
-
-function StreamButton() {
-  const { details } = useDetails()
-  if (tmdb.isMovie(details))
-    return (
-      <Button
-        component={'a'}
-        href={`https://vidsrc-embed.ru/embed/movie/${details.id}`}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Watch now
-      </Button>
-    )
-  const { id, number_of_seasons: end } = details
-  return (
-    <Button component={Link} to={`/details/tv/${id}/season/1/${end}`}>
-      View Episodes
-    </Button>
   )
 }

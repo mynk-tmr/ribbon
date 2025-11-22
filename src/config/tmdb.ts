@@ -7,7 +7,7 @@ type FullCriteria = Criteria | 'airing_today' | 'on_the_air'
 type ID = string | number
 
 const api = ofetch.create({
-  baseURL: import.meta.env.DEV ? 'http://localhost:3000/api/tmdb' : '/api/tmdb',
+  baseURL: '/api/tmdb',
   credentials: 'include',
   ignoreResponseError: false,
 })
@@ -81,6 +81,14 @@ function isMovie(media: TMDB.Media): media is TMDB.MovieDetail {
   return media.media_type === 'movie'
 }
 
+function streamUrl(id: ID, season?: number, episode?: number) {
+  if (season === undefined || episode === undefined) {
+    return `https://player.videasy.net/movie/${id}?color=8e51ff`
+  } else {
+    return `https://player.videasy.net/tv/${id}/season/${season}/episode/${episode}?color=8e51ff`
+  }
+}
+
 export const tmdb = {
   details,
   similar,
@@ -90,4 +98,5 @@ export const tmdb = {
   discover,
   isMovie,
   normalise,
+  streamUrl,
 }

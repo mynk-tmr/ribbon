@@ -14,4 +14,5 @@ export default defineConfig({
     tailwind(),
     vercel(),
   ],
+  server: { proxy: { '/api': { target: 'http://localhost:3000' } } },
 })

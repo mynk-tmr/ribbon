@@ -11,7 +11,7 @@ function useRouteLinks() {
   const routes: RouteLink[] = [
     { name: 'Discover', link: '/discover', icon: 'mdi:compass' },
     { name: 'Search', link: '/search', icon: 'mdi:magnify' },
-    { name: 'Activity', link: '/activity', icon: 'mdi:history' },
+    { name: 'Activity', link: '/activity', icon: 'mdi:heart-pulse' },
     cn.first(
       loading && { name: 'Wait ..', link: '/', icon: 'mdi:dots-grid' },
       user && { name: 'Profile', link: '/user/profile', icon: 'mdi:account-box' },

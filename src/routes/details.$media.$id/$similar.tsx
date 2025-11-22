@@ -31,7 +31,6 @@ function Recommendations() {
   const changePage = (page: number) =>
     goto({ to: '.', params: { similar: page }, hash: 'recommendations' })
   return (
-    // biome-ignore lint/correctness/useUniqueElementIds: for hash
     <section id="recommendations" className="mt-16">
       <EntityGrid head={() => `You may also like 😍`} items={data.results} />
       <EntityGrid.ChangePange

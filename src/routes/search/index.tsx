@@ -1,9 +1,10 @@
 import { Icon } from '@iconify/react'
 import { Autocomplete, Button, Select } from '@mantine/core'
+import { useStore } from '@nanostores/react'
 import { createFileRoute } from '@tanstack/react-router'
 import { type } from 'arktype'
 import EntityGrid from '@/components/entity-grid'
-import { $searches, useIDBStore } from '@/config/idb-store'
+import { Search } from '@/config/idb-store'
 import { type TMDB, tmdb } from '@/config/tmdb'
 import { useMergedState } from '@/hooks/useMergedState'
 
@@ -89,7 +90,7 @@ type Entity = 'movie' | 'tv' | 'person'
 function SearchBox() {
   const sparam = Route.useSearch()
   const [state, update] = useMergedState(sparam)
-  const searches = useIDBStore($searches, (s) => s)
+  const searches = useStore(Search.store)
   const goto = Route.useNavigate()
   const search = () => goto({ to: '/search', search: { ...state, page: 1 } })
   const getFiltered = (entity: Entity) =>
@@ -99,7 +100,7 @@ function SearchBox() {
       onSubmit={async (e) => {
         e.preventDefault()
         const { query, by } = state
-        await $searches.add({ query, entity: by })
+        await Search.add({ query, entity: by })
         search()
       }}
       className="flex flex-wrap gap-6 justify-center"
@@ -113,11 +114,8 @@ function SearchBox() {
         value={state.query}
         onChange={(v) => {
           const match = v.match(/^(.*) \((.*)\)$/)
-          if (match) {
-            update({ query: match[1], by: match[2] as Entity })
-            return
-          }
-          update({ query: v })
+          if (match) update({ query: match[1], by: match[2] as Entity })
+          else update({ query: v })
         }}
         leftSection={<Icon icon="mdi:magnify" />}
         miw={300}

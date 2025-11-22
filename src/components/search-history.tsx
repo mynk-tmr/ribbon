@@ -1,0 +1,60 @@
+import { Icon } from '@iconify/react'
+import { useStore } from '@nanostores/react'
+import { Link } from '@tanstack/react-router'
+import { Search } from '@/config/idb-store'
+
+export default function SearchHistory() {
+  const searches = useStore(Search.store)
+  return (
+    <>
+      {searches.length < 1 ? (
+        <p className="text-sm text-gray-400">No search history found.</p>
+      ) : (
+        searches.map((term) => (
+          <div
+            key={term.id}
+            className="p-2 w-[calc(50%-0.75rem)] sm:w-28 bg-black/60 border rounded-md grid relative"
+          >
+            <Link
+              to="/search"
+              search={{ query: term.query, by: term.entity, page: 1 }}
+              className="font-medium flex items-center gap-2 truncate text-xs"
+            >
+              {term.query}{' '}
+              <Icon
+                icon={
+                  term.entity === 'movie'
+                    ? 'mdi:movie'
+                    : term.entity === 'tv'
+                      ? 'mdi:television-box'
+                      : 'mdi:account'
+                }
+              />
+            </Link>
+            <span className="text-[10px] text-gray-400">
+              {new Date(term.addedAt).toLocaleDateString()}
+            </span>
+            <button
+              type="button"
+              className="absolute -top-1 -right-2 cursor-pointer"
+              onClick={() => Search.remove(term.id)}
+            >
+              <Icon icon="clarity:remove-solid" className="text-red-500" />
+            </button>
+          </div>
+        ))
+      )}
+      <div className="w-full">
+        {searches.length > 0 && (
+          <button
+            type="button"
+            onClick={() => Search.clear()}
+            className="text-red-400 font-bold underline cursor-pointer"
+          >
+            Clear History
+          </button>
+        )}
+      </div>
+    </>
+  )
+}

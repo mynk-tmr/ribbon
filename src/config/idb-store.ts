@@ -1,21 +1,18 @@
-import { onAuthStateChanged } from 'firebase/auth'
 import { type DBSchema, type IDBPDatabase, openDB } from 'idb'
-import { useState, useSyncExternalStore } from 'react'
+import { atom } from 'nanostores'
 import { authStore } from '@/hooks/useFireAuth'
-import { auth } from './firebase'
 
 export type MediaItem = {
   id: number
-  parentLink?: string
-  parentTitle?: string
   title: string
+  media_type: 'movie' | 'tv'
+  progress: number // 0-100
+  timestamp: number // playback in seconds
+  duration: number // duration in seconds
+  season: number
+  episode: number
   poster_path: string | null
-  favourite: boolean
-  status: 'completed' | 'watching' | 'planned'
-  link: string
-  addedAt: Date
-  updatedAt: Date
-  media_type: 'movie' | 'tv' | 'episode'
+  status: 'completed' | 'watching'
 }
 
 export type SearchItem = {
@@ -32,9 +29,11 @@ interface MyDB extends DBSchema {
 
 let db: IDBPDatabase<MyDB> | undefined
 
-async function init() {
-  const uid = authStore.state.user?.uid || 'guest'
-  const dbName = `appdb-${uid}`
+authStore.listen(async (store) => {
+  if (db) db.close()
+
+  const uid = store.user?.uid || 'guest'
+  const dbName = `appdb-v0-${uid}`
   db = await openDB<MyDB>(dbName, 1, {
     upgrade(db) {
       db.createObjectStore('media', { keyPath: 'id' })
@@ -42,106 +41,75 @@ async function init() {
     },
   })
   console.log(`IDB opened: ${dbName}`)
-  await $myMedias.refresh()
-  await $searches.refresh()
-}
 
-async function getDB() {
-  if (!db) await init()
-  return db!
-}
+  //delete oldDB
+  window.indexedDB.deleteDatabase(`appdb-${uid}`)
 
-onAuthStateChanged(auth, () => {
-  db?.close()
-  init()
+  //refresh stores
+  Search.refresh()
+  MyMedias.refresh()
 })
 
-class Store {
-  subs = new Set<() => void>()
-  subscribe(cb: () => void) {
-    this.subs.add(cb)
-    return () => this.subs.delete(cb)
-  }
-  emit() {
-    for (const cb of this.subs) cb()
-  }
+function getDb() {
+  if (!db) throw new Error('IDB not initialized')
+  return db
 }
 
-class Searches extends Store {
-  state: SearchItem[] = []
+const $searches = atom<SearchItem[]>([])
+const $myMedias = atom<MediaItem[]>([])
+
+export const Search = {
+  store: $searches,
   async refresh() {
-    const db = await getDB()
-    this.state = await db.getAll('search')
-    this.emit()
-  }
+    const v = await getDb().getAll('search')
+    $searches.set(v)
+  },
   async add(item: Omit<SearchItem, 'addedAt' | 'id'>) {
-    const db = await getDB()
+    const db = getDb()
     const id = `${item.entity}-${item.query}`
     if (await db.get('search', id)) return
     await db.add('search', { ...item, id, addedAt: new Date() })
     await this.refresh()
-  }
-  async drop(id: string) {
-    const db = await getDB()
-    await db.delete('search', id)
+  },
+  async remove(id: string) {
+    await getDb().delete('search', id)
     await this.refresh()
-  }
+  },
   async clear() {
-    const db = await getDB()
-    await db.clear('search')
+    await getDb().clear('search')
     await this.refresh()
-  }
+  },
 }
 
-class MyMedias extends Store {
-  state: MediaItem[] = []
+export const MyMedias = {
+  store: $myMedias,
   async refresh() {
-    const db = await getDB()
-    this.state = await db.getAll('media')
-    this.emit()
-  }
-  async add(item: Omit<MediaItem, 'addedAt' | 'updatedAt'>) {
-    const db = await getDB()
-    const now = new Date()
-    await db.add('media', { ...item, addedAt: now, updatedAt: now })
+    const v = await getDb().getAll('media')
+    $myMedias.set(v)
+  },
+  async add(
+    item: Pick<
+      MediaItem,
+      'id' | 'title' | 'media_type' | 'poster_path' | 'season' | 'episode'
+    >,
+  ) {
+    await getDb().put('media', {
+      ...item,
+      duration: 0,
+      timestamp: 0,
+      progress: 0,
+      status: 'watching',
+    })
     await this.refresh()
-  }
-  async put(id: MediaItem['id'], item: Partial<MediaItem>) {
-    const db = await getDB()
-    const prev = await db.get('media', id)
-    if (!prev) throw new Error('IDB::MyMedias -> Media not found')
-    const neo = { ...prev, ...item, updatedAt: new Date(), id: prev.id }
-    await db.put('media', neo)
+  },
+  async remove(id: MediaItem['id']) {
+    await getDb().delete('media', id)
     await this.refresh()
-  }
-  async drop(id: MediaItem['id']) {
-    const db = await getDB()
-    await db.delete('media', id)
+  },
+  async changeStatus(id: MediaItem['id'], status: MediaItem['status']) {
+    const media = await getDb().get('media', id)
+    if (!media) return
+    await getDb().put('media', { ...media, status })
     await this.refresh()
-  }
-  async clear() {
-    const db = await getDB()
-    await db.clear('media')
-    await this.refresh()
-  }
-}
-
-export const $searches = new Searches()
-export const $myMedias = new MyMedias()
-
-export function useIDBStore<R, T extends MyMedias | Searches>(
-  store: T,
-  selector: (st: T['state']) => R,
-  eqFn: (old: R, neo: R) => boolean = (a, b) => Object.is(a, b),
-) {
-  const [snap, setSnap] = useState(() => selector(store.state))
-  return useSyncExternalStore(
-    (c) => store.subscribe(c),
-    () => {
-      const newSnap = selector(store.state)
-      if (eqFn?.(snap, newSnap)) return snap
-      setSnap(newSnap)
-      return newSnap
-    },
-  )
+  },
 }

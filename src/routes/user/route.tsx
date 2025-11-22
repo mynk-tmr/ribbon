@@ -3,7 +3,7 @@ import { createFileRoute, Navigate, Outlet } from '@tanstack/react-router'
 import { AuthGuard } from '@/components/auth-guard'
 import cn from '@/helpers/cn'
 import { dicebear } from '@/helpers/freebies'
-import { useFireAuthSlice, useFireAuthStore } from '@/hooks/useFireAuth'
+import { useFireAuthStore } from '@/hooks/useFireAuth'
 
 export const Route = createFileRoute('/user')({
   component: () => (
@@ -56,7 +56,7 @@ function Header() {
 }
 
 function UserID() {
-  const user = useFireAuthSlice((state) => state.user)
+  const { user } = useFireAuthStore()
   if (!user) return
   return (
     <div className="mt-4 grid gap-y-2 *:text-center opacity-30">

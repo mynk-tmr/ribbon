@@ -1,7 +1,7 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
 import { isSignInWithEmailLink, signInWithEmailLink } from 'firebase/auth'
 import { auth } from '@/config/firebase'
-import { authStore } from '@/hooks/useFireAuth'
+import { authStoreActions } from '@/hooks/useFireAuth'
 
 export const Route = createFileRoute('/magic')({
   beforeLoad: async () => {
@@ -10,7 +10,7 @@ export const Route = createFileRoute('/magic')({
       await signInWithEmailLink(auth, email!, window.location.href)
       window.localStorage.removeItem('emailForSignIn')
     } else {
-      await authStore.refresh()
+      authStoreActions.refresh()
     }
     throw redirect({ to: '/user/profile', replace: true })
   },

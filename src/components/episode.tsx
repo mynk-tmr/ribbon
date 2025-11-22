@@ -1,8 +1,9 @@
 import { Badge, Spoiler } from '@mantine/core'
 import { getRouteApi } from '@tanstack/react-router'
-import LikeButton from './like-button'
+import { MyMedias } from '@/config/idb-store'
+import { tmdb } from '@/config/tmdb'
+import type { AddMediaProp } from './add-media'
 import { MetaItem } from './meta-item'
-import PickStatus from './pick-status'
 import Poster from './poster'
 import { RatingCircle } from './rating-circle'
 
@@ -11,32 +12,20 @@ const r2Api = getRouteApi('/details/$media/$id')
 
 export function Episode({ index }: { index: number }) {
   const { data: season } = routeApi.useLoaderData()
-  const { details } = r2Api.useLoaderData()
-  const { id, num, end } = routeApi.useParams()
+  const {
+    details: { media_type, poster_path, title },
+  } = r2Api.useLoaderData()
+  const { id, num } = routeApi.useParams()
   const episode = season.episodes[index]
-  const vidLink = `https://vidsrc-embed.ru/embed/tv/${id}/${num}/${index + 1}`
-
-  const actionProps = {
-    id: episode.id,
-    title: episode.name,
-    media_type: 'episode' as const,
-    poster_path: episode.still_path,
-    link: vidLink,
-    parentLink: `/details/tv/${id}/season/${num}/${end}`,
-    parentTitle: details.title,
-  }
-
   return (
     <article className="group space-y-4 rounded-md bg-white/10">
       <div className="relative h-42">
-        <a
-          className="group-hover:opacity-100 opacity-0 absolute inset-0 grid place-items-center bg-black/50 text-lg"
-          href={vidLink}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Stream now
-        </a>
+        <Overview
+          id={id}
+          season={Number(num)}
+          episode={index + 1}
+          {...{ media_type, poster_path, title }}
+        />
         <Poster className="rounded-t-md h-full" path={episode.still_path} size="w500" />
         <RatingCircle className="absolute top-0 right-0" rating={episode.vote_average} />
         {episode.episode_type === 'finale' && (
@@ -54,11 +43,6 @@ export function Episode({ index }: { index: number }) {
         <h3 className="text-lg font-bold">
           {episode.episode_number}. {episode.name}
         </h3>
-        <div className="flex gap-2">
-          <PickStatus {...actionProps} />
-          <LikeButton {...actionProps} />
-        </div>
-
         <Spoiler
           maxHeight={64}
           className="**:text-sm"
@@ -70,5 +54,24 @@ export function Episode({ index }: { index: number }) {
         </Spoiler>
       </div>
     </article>
+  )
+}
+
+function Overview(prop: Omit<AddMediaProp, 'link'>) {
+  const link = tmdb.streamUrl(prop.id, prop.season, prop.episode)
+  return (
+    <a
+      className="group-hover:opacity-100 opacity-0 absolute inset-0 grid place-items-center bg-black/50 text-lg"
+      href={link}
+      target="_blank"
+      rel="noopener noreferrer"
+      onClick={(e) => {
+        e.preventDefault()
+        MyMedias.add(prop)
+        window.open(link, '_blank', 'noopener,noreferrer')
+      }}
+    >
+      Stream now
+    </a>
   )
 }

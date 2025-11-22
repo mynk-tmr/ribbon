@@ -6,13 +6,13 @@ import { sendEmailVerification, sendPasswordResetEmail } from 'firebase/auth'
 import { actionCodeSettings, auth } from '@/config/firebase'
 import cn from '@/helpers/cn'
 import { firePrettify } from '@/helpers/pretty-firebase-error'
-import { useFireAuthSlice } from '@/hooks/useFireAuth'
+import { useFireAuthStore } from '@/hooks/useFireAuth'
 import { useFormAction } from '@/hooks/useFormAction'
 
 export const Route = createFileRoute('/user/profile/')({ component: RouteComponent })
 
 function RouteComponent() {
-  const { user } = useFireAuthSlice((state) => state)
+  const { user } = useFireAuthStore()
   const goto = Route.useNavigate()
   const [opened, { open: openSignOut, close }] = useDisclosure(false)
   if (!user) return
