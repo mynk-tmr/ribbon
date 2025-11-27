@@ -29,7 +29,7 @@ interface MyDB extends DBSchema {
 
 let db: IDBPDatabase<MyDB> | undefined
 
-authStore.listen(async (store) => {
+authStore.subscribe(async (store) => {
   if (db) db.close()
 
   const uid = store.user?.uid || 'guest'
@@ -41,9 +41,6 @@ authStore.listen(async (store) => {
     },
   })
   console.log(`IDB opened: ${dbName}`)
-
-  //delete oldDB
-  window.indexedDB.deleteDatabase(`appdb-${uid}`)
 
   //refresh stores
   Search.refresh()

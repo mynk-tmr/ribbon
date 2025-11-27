@@ -3,6 +3,7 @@ import type { MediaItem } from '@/config/idb-store'
 import { tmdb } from '@/config/tmdb'
 import { FmtTrunc } from '@/helpers/formatters'
 import AddMedia from './add-media'
+import ChangeStatus from './change-status'
 import Poster from './poster'
 
 export default function CardMediaItem(props: MediaItem) {
@@ -12,8 +13,9 @@ export default function CardMediaItem(props: MediaItem) {
       : tmdb.streamUrl(props.id, props.season, props.episode)
   return (
     <div className="grid relative rounded-md w-full sm:w-auto">
-      <div className="absolute z-10 right-0">
+      <div className="absolute z-10 right-0 space-x-1">
         <AddMedia {...props} variant="small" />
+        <ChangeStatus id={props.id} />
       </div>
       <Link to={link} className="relative">
         <Poster path={props.poster_path} size="w342" className="h-36 aspect-video" />

@@ -8,16 +8,16 @@ export type AddMediaProp = Parameters<typeof MyMedias.add>[0] & { variant?: 'sma
 export default function AddMedia({ variant, ...props }: AddMediaProp) {
   const medias = useStore(MyMedias.store)
   const curr = medias.find((m) => m.id === props.id)
-  const addIcon = <Icon icon="mdi:bookmark-plus" className="inline text-2xl" />
-  const removeIcon = <Icon icon="typcn:delete" className="inline text-2xl" />
+  const addIcon = <Icon icon="mdi:bookmark-plus" className="inline" />
+  const removeIcon = <Icon icon="mdi:delete" className="inline" />
 
   if (variant === 'small') {
     return curr ? (
-      <ActionIcon color="red" onClick={() => MyMedias.remove(props.id)}>
+      <ActionIcon radius={'xl'} color="red" onClick={() => MyMedias.remove(props.id)}>
         {removeIcon}
       </ActionIcon>
     ) : (
-      <ActionIcon color="blue" onClick={() => MyMedias.add(props)}>
+      <ActionIcon radius={'xl'} color="blue" onClick={() => MyMedias.add(props)}>
         {addIcon}
       </ActionIcon>
     )
