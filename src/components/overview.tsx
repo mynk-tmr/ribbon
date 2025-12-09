@@ -3,7 +3,7 @@ import { Badge, Button } from '@mantine/core'
 import { getRouteApi, Link } from '@tanstack/react-router'
 import { tmdb } from '@/config/tmdb'
 import { FmtHour, FmtPlural, FmtYear } from '@/helpers/formatters'
-import AddMedia from './add-media'
+import AddorRemoveMedia from './add-media'
 import Poster from './poster'
 import { RatingCircle } from './rating-circle'
 
@@ -47,7 +47,14 @@ export default function Overview() {
 
         {/* User Action */}
         <div className="flex flex-wrap gap-2">
-          <AddMedia {...details} season={1} episode={1} />
+          <AddorRemoveMedia
+            id={details.id}
+            media_type={details.media_type}
+            poster_path={details.poster_path}
+            title={details.title}
+            season={1}
+            episode={1}
+          />
           {details.is_movie ? (
             <Button
               size="xs"

@@ -8,6 +8,13 @@ export default function SearchHistory() {
   const searches = useStore(Search.store)
   return (
     <>
+      <div className="w-full">
+        {searches.length > 0 && (
+          <Button size="compact-xs" bg="red" onClick={() => Search.clear()}>
+            Clear History
+          </Button>
+        )}
+      </div>
       {searches.length < 1 ? (
         <p className="text-sm text-gray-400">No search history found.</p>
       ) : (
@@ -45,13 +52,6 @@ export default function SearchHistory() {
           </div>
         ))
       )}
-      <div className="w-full">
-        {searches.length > 0 && (
-          <Button size="compact-xs" bg="red" onClick={() => Search.clear()}>
-            Clear History
-          </Button>
-        )}
-      </div>
     </>
   )
 }

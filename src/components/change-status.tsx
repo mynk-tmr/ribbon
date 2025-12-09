@@ -20,7 +20,7 @@ export default function ChangeStatus({ id }: { id: MediaItem['id'] }) {
         MyMedias.changeStatus(id, watching ? 'completed' : 'watching')
       }
     >
-      <Icon icon={watching ? 'mdi:list-box' : 'mdi:check'} />
+      <Icon icon={'mdi:check'} />
     </ActionIcon>
   )
 }

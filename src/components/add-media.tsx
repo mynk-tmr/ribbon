@@ -7,19 +7,19 @@ export type AddMediaProp = Parameters<typeof MyMedias.add>[0] & {
   variant?: 'small'
 }
 
-export default function AddMedia({ variant, ...props }: AddMediaProp) {
+export default function AddorRemoveMedia({ variant, ...props }: AddMediaProp) {
   const medias = useStore(MyMedias.store)
   const exists = medias.some((m) => m.id === props.id)
 
   const addIcon = <Icon icon="mdi:bookmark-plus" className="text-white" />
-  const removeIcon = <Icon icon="mdi:delete" className="text-white" />
+  const removeIcon = <Icon icon="mdi:delete" className="text-red-500" />
 
   const onAdd = () => MyMedias.add(props)
   const onRemove = () => MyMedias.remove(props.id)
 
   if (variant === 'small') {
     return exists ? (
-      <ActionIcon radius="xl" bg="red" onClick={onRemove}>
+      <ActionIcon radius="xl" bg="white" onClick={onRemove}>
         {removeIcon}
       </ActionIcon>
     ) : (
@@ -30,7 +30,7 @@ export default function AddMedia({ variant, ...props }: AddMediaProp) {
   }
 
   return exists ? (
-    <Button size="xs" bg="red" onClick={onRemove}>
+    <Button size="xs" bg="white" c="red.6" onClick={onRemove}>
       <span className="inline-flex items-center gap-1">
         {removeIcon} Untrack
       </span>

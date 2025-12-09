@@ -4,7 +4,7 @@ import { Link } from '@tanstack/react-router'
 import type { MediaItem } from '@/config/idb-store'
 import { tmdb } from '@/config/tmdb'
 import { FmtTrunc } from '@/helpers/formatters'
-import AddMedia from './add-media'
+import AddorRemoveMedia from './add-media'
 import ChangeStatus from './change-status'
 import Poster from './poster'
 
@@ -82,7 +82,7 @@ export default function CardMediaItem(props: MediaItem) {
             shadow-[0_4px_12px_rgba(0,0,0,0.4)]
           "
         >
-          <AddMedia {...props} variant="small" />
+          <AddorRemoveMedia {...props} variant="small" />
           <ActionIcon
             bg="blue"
             radius={'xl'}
