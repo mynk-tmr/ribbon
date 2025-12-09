@@ -5,7 +5,7 @@ import { useFormAction } from './useFormAction'
 export default function useFireBaseAction<R>(cb: () => Promise<R>) {
   const [state, action] = useFormAction(async () => {
     const d = await cb()
-    authStoreActions.refresh()
+    await authStoreActions.refresh()
     return d
   })
   if (state.error) state.error.message = firePrettify.auth(state.error.message)

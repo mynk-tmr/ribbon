@@ -8,7 +8,8 @@ export function useFormAction<T, ErrType = Error>(action: () => Promise<T>) {
   }
   const [state, start, pending] = useActionState(async () => {
     try {
-      return { success: true, error: null, data: await action() }
+      const data = await action()
+      return { success: true, error: null, data }
     } catch (error) {
       return { success: false, error: error as ErrType, data: null }
     }

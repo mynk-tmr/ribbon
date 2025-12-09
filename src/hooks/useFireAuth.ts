@@ -16,5 +16,8 @@ export function useFireAuthStore() {
 }
 
 export const authStoreActions = {
-  refresh: () => authStore.set({ loading: true, user: auth.currentUser }),
+  refresh: async () => {
+    await auth.currentUser?.reload()
+    authStore.set({ loading: false, user: auth.currentUser })
+  },
 }
