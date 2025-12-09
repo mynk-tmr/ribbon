@@ -38,7 +38,9 @@ function Header() {
         className="size-28 rounded-full ring p-1"
       />
       <div>
-        <h1 className="text-2xl font-bold">{user.displayName || 'Anonymous'}</h1>
+        <h1 className="text-2xl font-bold">
+          {user.displayName || 'Anonymous'}
+        </h1>
         <span className="text-sm">
           {user.email}
           <Icon

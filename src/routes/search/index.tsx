@@ -36,11 +36,13 @@ function RouteComponent() {
 
   const search = Route.useSearch()
   const goto = Route.useNavigate()
-  const changePage = (page: number) => goto({ to: '.', search: { ...search, page } })
+  const changePage = (page: number) =>
+    goto({ to: '.', search: { ...search, page } })
 
   let BODY = null
 
-  if (data === 'NEVER') BODY = <h1 className={tw_heading}>Results will appear here</h1>
+  if (data === 'NEVER')
+    BODY = <h1 className={tw_heading}>Results will appear here</h1>
   else if (data.results.length === 0)
     BODY = (
       <div className="space-y-4">
@@ -94,7 +96,9 @@ function SearchBox() {
   const goto = Route.useNavigate()
   const search = () => goto({ to: '/search', search: { ...state, page: 1 } })
   const getFiltered = (entity: Entity) =>
-    searches.filter((s) => s.entity === entity).map((s) => `${s.query} (${entity})`) //this pattern is used by regex in autocomplete
+    searches
+      .filter((s) => s.entity === entity)
+      .map((s) => `${s.query} (${entity})`) //this pattern is used by regex in autocomplete
   return (
     <form
       onSubmit={async (e) => {

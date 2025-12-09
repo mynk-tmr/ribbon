@@ -7,7 +7,13 @@ interface Props extends ImageProps {
   transition?: boolean
 }
 
-export default function Poster({ size, path, className, transition, ...props }: Props) {
+export default function Poster({
+  size,
+  path,
+  className,
+  transition,
+  ...props
+}: Props) {
   return (
     <Image
       loading="lazy"

@@ -58,7 +58,10 @@ function Controls() {
         multiple={false}
         value={domain}
         onChange={(value) =>
-          goto({ params: { domain: value as typeof domain, page: 1, by }, replace: true })
+          goto({
+            params: { domain: value as typeof domain, page: 1, by },
+            replace: true,
+          })
         }
       >
         <div className="flex gap-2 flex-wrap justify-center mt-2">

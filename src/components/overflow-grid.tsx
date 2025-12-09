@@ -15,7 +15,10 @@ export default function OverflowGrid(props: Props) {
     const scrollable = ref.current
     if (scrollable) {
       const amount = scrollable.clientWidth * 0.8
-      scrollable.scrollBy({ left: dir === 'left' ? -amount : amount, behavior: 'smooth' })
+      scrollable.scrollBy({
+        left: dir === 'left' ? -amount : amount,
+        behavior: 'smooth',
+      })
     }
   }
 
@@ -73,7 +76,9 @@ type HeadingProps = { title: React.ReactNode; linkProps: LinkProps }
 export function Heading({ title, linkProps }: HeadingProps) {
   return (
     <header className="flex items-baseline gap-x-6">
-      <h3 className="mb-5 text-2xl md:text-3xl font-bold capitalize">{title}</h3>
+      <h3 className="mb-5 text-2xl md:text-3xl font-bold capitalize">
+        {title}
+      </h3>
       <Link
         {...linkProps}
         className="text-sm font-bold hover:text-pink-600 text-pink-500"

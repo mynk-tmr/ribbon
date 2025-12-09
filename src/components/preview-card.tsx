@@ -10,7 +10,11 @@ interface Props {
 }
 
 export default function PreviewCard({ item }: Props) {
-  return item.media_type === 'person' ? <PersonCard {...item} /> : <MediaCard {...item} />
+  return item.media_type === 'person' ? (
+    <PersonCard {...item} />
+  ) : (
+    <MediaCard {...item} />
+  )
 }
 
 function MediaCard(props: TMDB.Media) {
@@ -41,8 +45,16 @@ function MediaCard(props: TMDB.Media) {
 }
 
 function PersonCard(props: TMDB.Person) {
-  const { name, profile_path, popularity, known_for, known_for_department, id } = props
-  const notable = known_for[0] === undefined ? 'N/A' : tmdb.normalise(known_for[0]).title
+  const {
+    name,
+    profile_path,
+    popularity,
+    known_for,
+    known_for_department,
+    id,
+  } = props
+  const notable =
+    known_for[0] === undefined ? 'N/A' : tmdb.normalise(known_for[0]).title
   const notableTitle = FmtTrunc(notable, 12)
 
   return (

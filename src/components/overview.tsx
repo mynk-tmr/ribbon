@@ -59,7 +59,12 @@ export default function Overview() {
               Watch now
             </Button>
           ) : (
-            <Button size="xs" color="violet.7" component={Link} to={details.link}>
+            <Button
+              size="xs"
+              color="violet.7"
+              component={Link}
+              to={details.link}
+            >
               View Episodes
             </Button>
           )}
@@ -80,7 +85,12 @@ export default function Overview() {
         {/* Tagline */}
         {details.tagline && (
           <div className="flex items-center gap-1">
-            <Icon icon="tabler:quote" width={24} height={24} className="text-gray-400" />
+            <Icon
+              icon="tabler:quote"
+              width={24}
+              height={24}
+              className="text-gray-400"
+            />
             <em className="text-sm italic">{details.tagline}</em>
           </div>
         )}
@@ -114,7 +124,9 @@ export default function Overview() {
         <div className="text-lightGray flex flex-wrap gap-4">
           <span>🌍 {details.origin_country.join(', ') || 'N/A'}</span>
           <span>
-            🗣️ {details.spoken_languages.map((l) => l.english_name).join(', ') || 'N/A'}
+            🗣️{' '}
+            {details.spoken_languages.map((l) => l.english_name).join(', ') ||
+              'N/A'}
           </span>
         </div>
       </article>

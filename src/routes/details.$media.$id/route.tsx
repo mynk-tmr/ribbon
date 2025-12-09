@@ -8,7 +8,10 @@ export const Route = createFileRoute('/details/$media/$id')({
   component: RouteComponent,
   params: { parse: (raw) => schema.assert(raw) },
   async loader({ params: { media, id } }) {
-    const details = await tmdb.details<TMDB.MovieDetail | TMDB.TVDetail>(media, id)
+    const details = await tmdb.details<TMDB.MovieDetail | TMDB.TVDetail>(
+      media,
+      id,
+    )
     return { details }
   },
 })

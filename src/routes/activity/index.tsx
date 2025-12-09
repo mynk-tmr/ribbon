@@ -1,32 +1,85 @@
 import { Icon } from '@iconify/react'
+import { Tabs } from '@mantine/core'
+import { useViewportSize } from '@mantine/hooks'
 import { useStore } from '@nanostores/react'
 import { createFileRoute } from '@tanstack/react-router'
+import { type } from 'arktype'
 import CardMediaItem from '@/components/card-media-item'
 import SearchHistory from '@/components/search-history'
 import { MyMedias } from '@/config/idb-store'
 
-export const Route = createFileRoute('/activity/')({ component: Page })
+const schema = type({ 'panel?': "'all' | 'watching' | 'history'" })
+
+export const Route = createFileRoute('/activity/')({
+  component: Page,
+  validateSearch(inp) {
+    return schema.assert(inp)
+  },
+})
 
 function Page() {
+  const { panel = 'watching' } = Route.useSearch()
+  const navigate = Route.useNavigate()
+  const { width } = useViewportSize()
+  const tabLabelText =
+    width < 400
+      ? ['History', 'Continue', 'Medias']
+      : (['Search History', 'Continue Watching', 'My Media'] as const)
   return (
-    <main className="px-4 pt-8 max-w-6xl mx-auto space-y-14">
-      <Container title="Search History" icon="mdi:history">
-        <SearchHistory />
-      </Container>
-      <ContinueWatching />
-      <AllMedias />
+    <main className="px-4 pt-6 pb-12 max-w-7xl mx-auto text-white">
+      {/* Mantine Tabs */}
+      <Tabs
+        color="red"
+        value={panel}
+        onChange={(v) =>
+          navigate({ search: { panel: (v ?? undefined) as typeof panel } })
+        }
+        keepMounted={false}
+        classNames={{
+          list: 'border-b border-zinc-800 overflow-x-auto flex-nowrap',
+          tabLabel: 'text-white',
+        }}
+      >
+        <Tabs.List className="mb-6">
+          <Tabs.Tab value="history" leftSection={<Icon icon="mdi:history" />}>
+            {tabLabelText[0]}
+          </Tabs.Tab>
+
+          <Tabs.Tab
+            value="watching"
+            leftSection={<Icon icon="mdi:play-circle" />}
+          >
+            {tabLabelText[1]}
+          </Tabs.Tab>
+
+          <Tabs.Tab value="all" leftSection={<Icon icon="mdi:list-box" />}>
+            {tabLabelText[2]}
+          </Tabs.Tab>
+        </Tabs.List>
+
+        {/* Panels */}
+        <Tabs.Panel value="history">
+          <Container>
+            <SearchHistory />
+          </Container>
+        </Tabs.Panel>
+
+        <Tabs.Panel value="watching">
+          <ContinueWatching />
+        </Tabs.Panel>
+
+        <Tabs.Panel value="all">
+          <AllMedias />
+        </Tabs.Panel>
+      </Tabs>
     </main>
   )
 }
 
-function Container(props: { title: string; icon: string; children: React.ReactNode }) {
+function Container({ children }: { children: React.ReactNode }) {
   return (
-    <section>
-      <h2 className="text-3xl font-bold mb-5 flex gap-2 items-center">
-        <Icon icon={props.icon} />
-        {props.title}
-      </h2>
-      <section className="flex gap-4 flex-wrap pb-4">{props.children}</section>
+    <section className="flex flex-wrap gap-4 pb-6 justify-start">
+      {children}
     </section>
   )
 }
@@ -34,8 +87,9 @@ function Container(props: { title: string; icon: string; children: React.ReactNo
 function ContinueWatching() {
   const items = useStore(MyMedias.store)
   const watchingItems = items.filter((i) => i.status === 'watching')
+
   return (
-    <Container title="Continue Watching" icon="mdi:play-circle">
+    <Container>
       {watchingItems.map((item) => (
         <CardMediaItem key={item.id} {...item} />
       ))}
@@ -48,13 +102,16 @@ function ContinueWatching() {
 
 function AllMedias() {
   const items = useStore(MyMedias.store)
+
   return (
-    <Container title="My Media" icon="mdi:list-box">
+    <Container>
       {items.map((item) => (
         <CardMediaItem key={item.id} {...item} />
       ))}
       {items.length === 0 && (
-        <p className="text-sm text-gray-400">No media found in your collection.</p>
+        <p className="text-sm text-gray-400">
+          No media found in your collection.
+        </p>
       )}
     </Container>
   )

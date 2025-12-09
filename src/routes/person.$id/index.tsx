@@ -54,7 +54,9 @@ function PersonDetails() {
         </p>
 
         <ul className="flex flex-wrap gap-4 text-sm text-lightGray mb-4">
-          {birthday && <MetaItem label={FmtDate(birthday)} icon="mdi:cake-variant" />}
+          {birthday && (
+            <MetaItem label={FmtDate(birthday)} icon="mdi:cake-variant" />
+          )}
           {birthday && (
             <MetaItem
               className="text-green-400"
@@ -62,8 +64,12 @@ function PersonDetails() {
               label={`Age ${FmtAge(birthday)}`}
             />
           )}
-          {deathday && <MetaItem icon="mdi:cross" label={`Died ${FmtDate(deathday)}`} />}
-          {place_of_birth && <MetaItem icon="mdi:map-marker" label={place_of_birth} />}
+          {deathday && (
+            <MetaItem icon="mdi:cross" label={`Died ${FmtDate(deathday)}`} />
+          )}
+          {place_of_birth && (
+            <MetaItem icon="mdi:map-marker" label={place_of_birth} />
+          )}
         </ul>
         <Spoiler hideLabel="Show less" showLabel="Show more">
           {biography || 'No biography available.'}
@@ -75,7 +81,10 @@ function PersonDetails() {
 
 function WorkExperience() {
   const { items } = Route.useLoaderData()
-  const [mode, toggle] = useReducer((s) => (s === 'movie' ? 'tv' : 'movie'), 'movie')
+  const [mode, toggle] = useReducer(
+    (s) => (s === 'movie' ? 'tv' : 'movie'),
+    'movie',
+  )
   const labelSuffix = mode === 'movie' ? `Movies` : `Series`
   return (
     <section className="space-y-16">

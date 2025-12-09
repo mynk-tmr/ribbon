@@ -14,7 +14,11 @@ function useRouteLinks() {
     { name: 'Activity', link: '/activity', icon: 'mdi:heart-pulse' },
     cn.first(
       loading && { name: 'Wait ..', link: '/', icon: 'mdi:dots-grid' },
-      user && { name: 'Profile', link: '/user/profile', icon: 'mdi:account-box' },
+      user && {
+        name: 'Profile',
+        link: '/user/profile',
+        icon: 'mdi:account-box',
+      },
       { name: 'Login', link: '/auth', icon: 'mdi:login' },
     ) as RouteLink,
   ]

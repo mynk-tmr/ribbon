@@ -16,10 +16,12 @@ export const Route = createFileRoute('/auth/passwordless')({
 
 function RouteComponent() {
   const search = Route.useSearch()
-  const action = search.t === 'login' ? sendSignInLinkToEmail : sendPasswordResetEmail
+  const action =
+    search.t === 'login' ? sendSignInLinkToEmail : sendPasswordResetEmail
   const [email, setEmail] = useState('')
   const [status, start] = useFireBaseAction(async () => {
-    if (search.t === 'login') window.localStorage.setItem('emailForSignIn', email)
+    if (search.t === 'login')
+      window.localStorage.setItem('emailForSignIn', email)
     action(auth, email, actionCodeSettings)
   })
 
@@ -29,7 +31,9 @@ function RouteComponent() {
     <main className="page">
       <form action={start} className="space-y-4 min-w-xs">
         <h2 className="text-2xl font-bold capitalize">Send {search.t} Link</h2>
-        {status.error && <p className="text-red-400 text-sm">{status.error.message}</p>}
+        {status.error && (
+          <p className="text-red-400 text-sm">{status.error.message}</p>
+        )}
         <TextInput
           required
           label="Email"
@@ -64,11 +68,15 @@ function EmailSendSuccess() {
   return (
     <main className="page space-y-4">
       <h2 className="text-2xl font-bold">
-        Email Sent <Icon icon="mdi:check" className="text-green-400 inline ml-2" />
+        Email Sent{' '}
+        <Icon icon="mdi:check" className="text-green-400 inline ml-2" />
       </h2>
       <p className="text-sm">
         Check your inbox for a link to{' '}
-        {search.t === 'login' ? 'sign in into your account' : 'reset your password'}.
+        {search.t === 'login'
+          ? 'sign in into your account'
+          : 'reset your password'}
+        .
       </p>
       <p className="text-sm">
         The sender name is <b className="text-violet-400">Ribbon</b> and url is{' '}

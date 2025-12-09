@@ -9,7 +9,9 @@ import { firePrettify } from '@/helpers/pretty-firebase-error'
 import { useFireAuthStore } from '@/hooks/useFireAuth'
 import { useFormAction } from '@/hooks/useFormAction'
 
-export const Route = createFileRoute('/user/profile/')({ component: RouteComponent })
+export const Route = createFileRoute('/user/profile/')({
+  component: RouteComponent,
+})
 
 function RouteComponent() {
   const { user } = useFireAuthStore()
@@ -20,7 +22,8 @@ function RouteComponent() {
   const actions: ActionProps[] = [
     {
       label: 'Reset Password',
-      action: () => sendPasswordResetEmail(auth, user.email!, actionCodeSettings),
+      action: () =>
+        sendPasswordResetEmail(auth, user.email!, actionCodeSettings),
       icon: 'mdi:lock-reset',
       successLabel: 'Email Sent',
     },
@@ -34,7 +37,11 @@ function RouteComponent() {
       action: () => goto({ to: '/user/profile/email', replace: true }),
       icon: 'mdi:email-edit',
     },
-    { label: 'Sign Out', action: async () => openSignOut(), icon: 'mdi:logout' },
+    {
+      label: 'Sign Out',
+      action: async () => openSignOut(),
+      icon: 'mdi:logout',
+    },
   ]
 
   if (!user.emailVerified)
@@ -59,7 +66,13 @@ function RouteComponent() {
           <ActionItem key={action.label} {...action} />
         ))}
       </div>
-      <Modal size={'xs'} opened={opened} onClose={close} title="Sign Out" centered>
+      <Modal
+        size={'xs'}
+        opened={opened}
+        onClose={close}
+        title="Sign Out"
+        centered
+      >
         <p className="mb-4 text-neutral-400">
           Are you sure you want to sign out? This will end your current session.
         </p>

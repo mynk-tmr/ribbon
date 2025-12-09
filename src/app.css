@@ -10,6 +10,7 @@
   --animate-progress: progress 1.2s ease-in-out infinite;
   --color-theme: #242da8;
   --color-dark: #141313;
+  --breakpoint-xs: 380px;
 }
 
 @layer base {

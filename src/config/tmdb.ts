@@ -21,7 +21,12 @@ function normalise(e: unknown): any {
   if (Array.isArray(e)) return e.map((e) => normalise(e))
   if ('release_date' in e) return { ...e, media_type: 'movie' }
   if ('first_air_date' in e && 'name' in e)
-    return { ...e, media_type: 'tv', title: e.name, release_date: e.first_air_date }
+    return {
+      ...e,
+      media_type: 'tv',
+      title: e.name,
+      release_date: e.first_air_date,
+    }
   return { ...e, media_type: 'person' }
 }
 
@@ -37,9 +42,10 @@ async function details<T>(entity: Entity, id: ID) {
 }
 
 async function similar(entity: Entity, id: ID, page: number) {
-  const res = await api<TMDB.Paginated<TMDB.Media>>(`/${entity}/${id}/recommendations`, {
-    params: { page },
-  })
+  const res = await api<TMDB.Paginated<TMDB.Media>>(
+    `/${entity}/${id}/recommendations`,
+    { params: { page } },
+  )
   return normalisePaginated(res)
 }
 
@@ -83,9 +89,9 @@ function isMovie(media: TMDB.Media): media is TMDB.MovieDetail {
 
 function streamUrl(id: ID, season?: number, episode?: number) {
   if (season === undefined || episode === undefined) {
-    return `https://player.videasy.net/movie/${id}?color=8e51ff`
+    return `https://vidsrc.xyz/embed/movie/${id}`
   } else {
-    return `https://player.videasy.net/tv/${id}/season/${season}/episode/${episode}?color=8e51ff`
+    return `https://vidsrc.xyz/embed/tv/${id}/${season}/${episode}`
   }
 }
 

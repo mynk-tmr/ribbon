@@ -11,11 +11,16 @@ import { useFireAuthStore } from '@/hooks/useFireAuth'
 import useFireBaseAction from '@/hooks/useFireBaseAction'
 import { useMergedState } from '@/hooks/useMergedState'
 
-export const Route = createFileRoute('/user/profile/email')({ component: RouteComponent })
+export const Route = createFileRoute('/user/profile/email')({
+  component: RouteComponent,
+})
 
 function RouteComponent() {
   const { user } = useFireAuthStore()
-  const [state, update] = useMergedState({ email: user?.email || '', password: '' })
+  const [state, update] = useMergedState({
+    email: user?.email || '',
+    password: '',
+  })
   const [status, action] = useFireBaseAction(async () => {
     await reauthenticateWithCredential(
       user!,
@@ -31,7 +36,9 @@ function RouteComponent() {
     <section>
       <form action={action} className="space-y-4">
         <h2 className="text-2xl font-bold">Update Email</h2>
-        {status.error && <p className="text-red-400 text-sm">{status.error.message}</p>}
+        {status.error && (
+          <p className="text-red-400 text-sm">{status.error.message}</p>
+        )}
         <TextInput
           required
           label="Email"
@@ -51,7 +58,13 @@ function RouteComponent() {
           <Button loading={status.pending} size="xs" type="submit">
             Update
           </Button>
-          <Button size="xs" color="gray.2" c="dark" component={Link} to="/user/profile">
+          <Button
+            size="xs"
+            color="gray.2"
+            c="dark"
+            component={Link}
+            to="/user/profile"
+          >
             Cancel
           </Button>
         </div>
@@ -65,7 +78,8 @@ function VerifyEmailDisplay() {
     <section className="space-y-4 max-w-sm">
       <h2 className="text-2xl font-bold">Verify Email</h2>
       <p>
-        Check new email for verification link. After verifying, you must log in again.
+        Check new email for verification link. After verifying, you must log in
+        again.
       </p>
       <div className="flex justify-end gap-x-4">
         <Button

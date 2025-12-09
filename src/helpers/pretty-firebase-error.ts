@@ -1,5 +1,8 @@
 function authErrors(message: string): string {
-  if (message.includes('auth/quota') || message.includes('auth/too-many-requests'))
+  if (
+    message.includes('auth/quota') ||
+    message.includes('auth/too-many-requests')
+  )
     return 'This service is temporarily unavailable. Please try again later.'
 
   if (message.includes('auth/invalid-cred')) return 'Invalid Email or Password'

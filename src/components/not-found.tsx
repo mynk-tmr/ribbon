@@ -10,7 +10,8 @@ export const NotFound = () => {
         <h1 className="font-bold text-3xl">Page not found</h1>
       </header>
       <p className="max-w-lg text-center">
-        The page you are looking for does not exist. You are at {window.location.href}.
+        The page you are looking for does not exist. You are at{' '}
+        {window.location.href}.
       </p>
       <div className="flex justify-center gap-4">
         <Button replace size="xs" color="teal" component={Link} to="/">

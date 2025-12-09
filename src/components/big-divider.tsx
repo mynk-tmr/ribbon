@@ -1,7 +1,13 @@
 import { Icon } from '@iconify/react'
 import { Divider } from '@mantine/core'
 
-export default function BigDivider({ icon, title }: { icon: string; title: string }) {
+export default function BigDivider({
+  icon,
+  title,
+}: {
+  icon: string
+  title: string
+}) {
   return (
     <Divider
       labelPosition="center"

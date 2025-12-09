@@ -1,4 +1,5 @@
 import { Icon } from '@iconify/react'
+import { Button } from '@mantine/core'
 import { useStore } from '@nanostores/react'
 import { Link } from '@tanstack/react-router'
 import { Search } from '@/config/idb-store'
@@ -46,13 +47,9 @@ export default function SearchHistory() {
       )}
       <div className="w-full">
         {searches.length > 0 && (
-          <button
-            type="button"
-            onClick={() => Search.clear()}
-            className="text-red-400 font-bold underline cursor-pointer"
-          >
+          <Button size="compact-xs" bg="red" onClick={() => Search.clear()}>
             Clear History
-          </button>
+          </Button>
         )}
       </div>
     </>

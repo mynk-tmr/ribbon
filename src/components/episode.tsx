@@ -26,10 +26,22 @@ export function Episode({ index }: { index: number }) {
           episode={index + 1}
           {...{ media_type, poster_path, title }}
         />
-        <Poster className="rounded-t-md h-full" path={episode.still_path} size="w500" />
-        <RatingCircle className="absolute top-0 right-0" rating={episode.vote_average} />
+        <Poster
+          className="rounded-t-md h-full"
+          path={episode.still_path}
+          size="w500"
+        />
+        <RatingCircle
+          className="absolute top-0 right-0"
+          rating={episode.vote_average}
+        />
         {episode.episode_type === 'finale' && (
-          <Badge variant="filled" size="xs" color="red" className="absolute top-2 left-2">
+          <Badge
+            variant="filled"
+            size="xs"
+            color="red"
+            className="absolute top-2 left-2"
+          >
             Finale
           </Badge>
         )}
