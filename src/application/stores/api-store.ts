@@ -9,6 +9,8 @@ import type {
 } from '@/dtos/media.dto'
 import type { SearchAddInput, SearchItem } from '@/dtos/search.dto'
 import { authStoreActions } from '@/shared/hooks/useAuth'
+import { mediaStore } from './media.store'
+import { searchStore } from './search.store'
 
 const API_BASE = '/api'
 
@@ -239,6 +241,8 @@ export async function initializeApp(): Promise<void> {
 
   // Check auth state
   await authStoreActions.refresh()
+  await mediaStore.refresh()
+  await searchStore.refresh()
 }
 
 // Export all APIs as a single object
