@@ -79,12 +79,19 @@ function Overview(prop: MediaAddInput & { season: number; episode: number }) {
       rel="noopener noreferrer"
       onClick={(e) => {
         e.preventDefault()
-        mediaStore.add({
-          id: prop.id,
-          title: prop.title,
-          media_type: prop.media_type,
-          poster_path: prop.poster_path,
-        })
+        if (mediaStore.has(prop.id)) {
+          mediaStore.updateProgress(prop.id, {
+            season: prop.season,
+            episode: prop.episode,
+          })
+        } else {
+          mediaStore.add({
+            id: prop.id,
+            title: prop.title,
+            media_type: prop.media_type,
+            poster_path: prop.poster_path,
+          })
+        }
         window.open(link, '_blank', 'noopener,noreferrer')
       }}
     >

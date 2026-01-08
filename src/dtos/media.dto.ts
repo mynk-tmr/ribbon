@@ -28,13 +28,13 @@ export interface MediaAddInput {
   poster_path: string | null
 }
 
-export interface MediaProgressInput {
+export type MediaProgressInput = Partial<{
   progress: number
   timestamp: number
   duration: number
   season: number | null
   episode: number | null
-}
+}>
 
 export interface MediaStatusInput {
   status: MediaStatus

@@ -1,5 +1,10 @@
 import { atom } from 'nanostores'
-import type { MediaAddInput, MediaItem, MediaStatus } from '@/dtos/media.dto'
+import type {
+  MediaAddInput,
+  MediaItem,
+  MediaProgressInput,
+  MediaStatus,
+} from '@/dtos/media.dto'
 import { MediaAPI } from './api-store'
 import { authStore } from './auth.store'
 
@@ -17,6 +22,10 @@ export const mediaStore = {
 
     const items = await MediaAPI.getAll()
     $media.set(items)
+  },
+
+  has(id: number): boolean {
+    return $media.get().some((m) => m.id === id)
   },
 
   async add(item: MediaAddInput): Promise<void> {
@@ -50,18 +59,12 @@ export const mediaStore = {
 
   async updateProgress(
     id: number,
-    progress: { progress: number; timestamp: number; duration: number },
+    progress: MediaProgressInput,
   ): Promise<void> {
     const user = authStore.value.user
     if (!user) return
 
-    await MediaAPI.updateProgress(id, {
-      progress: progress.progress,
-      timestamp: progress.timestamp,
-      duration: progress.duration,
-      season: null,
-      episode: null,
-    })
+    await MediaAPI.updateProgress(id, progress)
     await this.refresh()
   },
 }

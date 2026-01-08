@@ -1,4 +1,5 @@
 import { type } from 'arktype'
+import type { MongoClientOptions } from 'mongodb'
 
 const scheme = type({
   TMDB_TOKEN: 'string > 1',
@@ -26,6 +27,7 @@ export const ENV = {
     minPoolSize: 2,
     serverSelectionTimeoutMS: 5000,
     socketTimeoutMS: 45000,
-  },
+    ignoreUndefined: true,
+  } satisfies MongoClientOptions,
   EMAIL_ACTION_URL: `${env.APP_URL}/magic`,
 }

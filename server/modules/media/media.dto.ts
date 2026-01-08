@@ -18,7 +18,7 @@ export const mediaProgressInputSchema = type({
   duration: 'number > 0',
   season: 'number >= 0 | null',
   episode: 'number >= 0 | null',
-})
+}).partial()
 
 export const mediaStatusInputSchema = type({
   status: "'completed' | 'watching'",
