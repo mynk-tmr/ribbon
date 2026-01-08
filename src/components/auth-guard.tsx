@@ -1,8 +1,8 @@
 import { Icon } from '@iconify/react'
-import { useFireAuthStore } from '@/hooks/useFireAuth'
+import { useAuth } from '@/shared/hooks/useAuth'
 
 export function AuthGuard(props: Props) {
-  const state = useFireAuthStore()
+  const state = useAuth()
   if (state.loading) return props.loader || <DefaultLoader />
   if (state.user) return props.authenticated
   return props.missing

@@ -1,6 +1,6 @@
 import { Pagination, type PaginationProps } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
-import type { TMDB } from '@/config/tmdb'
+import type { TMDB } from '@/application/api/tmdb/tmdb.client'
 import PreviewCard from './preview-card'
 
 type T = TMDB.Media | TMDB.Person

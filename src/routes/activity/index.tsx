@@ -4,9 +4,10 @@ import { useViewportSize } from '@mantine/hooks'
 import { useStore } from '@nanostores/react'
 import { createFileRoute } from '@tanstack/react-router'
 import { type } from 'arktype'
+import { mediaStore } from '@/application/stores/media.store'
 import CardMediaItem from '@/components/card-media-item'
 import SearchHistory from '@/components/search-history'
-import { MyMedias } from '@/config/idb-store'
+import type { MediaItem } from '@/domain/entities'
 
 const schema = type({ 'panel?': "'all' | 'watching' | 'history'" })
 
@@ -85,8 +86,8 @@ function Container({ children }: { children: React.ReactNode }) {
 }
 
 function ContinueWatching() {
-  const items = useStore(MyMedias.store)
-  const watchingItems = items.filter((i) => i.status === 'watching')
+  const items = useStore(mediaStore.store)
+  const watchingItems = items.filter((i: MediaItem) => i.status === 'watching')
 
   return (
     <Container>
@@ -101,11 +102,11 @@ function ContinueWatching() {
 }
 
 function AllMedias() {
-  const items = useStore(MyMedias.store)
+  const items = useStore(mediaStore.store)
 
   return (
     <Container>
-      {items.map((item) => (
+      {items.map((item: MediaItem) => (
         <CardMediaItem key={item.id} {...item} />
       ))}
       {items.length === 0 && (

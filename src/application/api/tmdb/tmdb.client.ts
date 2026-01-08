@@ -1,5 +1,5 @@
 import { ofetch } from 'ofetch'
-import type * as TMDB from './+tmdb.types'
+import type * as TMDB from '@/domain/entities/tmdb.entity'
 
 type Entity = 'movie' | 'tv' | 'person'
 type Criteria = 'popular' | 'top_rated' | 'upcoming' | 'now_playing'
@@ -90,9 +90,8 @@ function isMovie(media: TMDB.Media): media is TMDB.MovieDetail {
 function streamUrl(id: ID, season?: number, episode?: number) {
   if (season === undefined || episode === undefined) {
     return `https://vidsrc.xyz/embed/movie/${id}`
-  } else {
-    return `https://vidsrc.xyz/embed/tv/${id}/${season}/${episode}`
   }
+  return `https://vidsrc.xyz/embed/tv/${id}/${season}/${episode}`
 }
 
 export const tmdb = {

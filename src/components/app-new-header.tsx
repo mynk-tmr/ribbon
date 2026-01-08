@@ -1,13 +1,13 @@
 import { Icon } from '@iconify/react'
 import { Link } from '@tanstack/react-router'
-import cn from '@/helpers/cn'
-import { useFireAuthStore } from '@/hooks/useFireAuth'
+import { useAuth } from '@/shared/hooks/useAuth'
+import cn from '@/shared/utils/cn'
 import Logo from './logo'
 
 type RouteLink = { name: string; link: string; icon: string }
 
 function useRouteLinks() {
-  const { loading, user } = useFireAuthStore()
+  const { loading, user } = useAuth()
   const routes: RouteLink[] = [
     { name: 'Discover', link: '/discover', icon: 'mdi:compass' },
     { name: 'Search', link: '/search', icon: 'mdi:magnify' },

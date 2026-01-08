@@ -1,8 +1,8 @@
 import { Badge, Spoiler } from '@mantine/core'
 import { getRouteApi } from '@tanstack/react-router'
-import { MyMedias } from '@/config/idb-store'
-import { tmdb } from '@/config/tmdb'
-import type { AddMediaProp } from './add-media'
+import { tmdb } from '@/application/api/tmdb/tmdb.client'
+import { mediaStore } from '@/application/stores/media.store'
+import type { MediaItemInput } from '@/domain/entities'
 import { MetaItem } from './meta-item'
 import Poster from './poster'
 import { RatingCircle } from './rating-circle'
@@ -69,7 +69,12 @@ export function Episode({ index }: { index: number }) {
   )
 }
 
-function Overview(prop: Omit<AddMediaProp, 'link'>) {
+function Overview(
+  prop: Omit<MediaItemInput, 'season' | 'episode'> & {
+    season: number
+    episode: number
+  },
+) {
   const link = tmdb.streamUrl(prop.id, prop.season, prop.episode)
   return (
     <a
@@ -79,7 +84,14 @@ function Overview(prop: Omit<AddMediaProp, 'link'>) {
       rel="noopener noreferrer"
       onClick={(e) => {
         e.preventDefault()
-        MyMedias.add(prop)
+        mediaStore.add({
+          id: prop.id,
+          title: prop.title,
+          media_type: prop.media_type,
+          poster_path: prop.poster_path,
+          season: prop.season,
+          episode: prop.episode,
+        })
         window.open(link, '_blank', 'noopener,noreferrer')
       }}
     >

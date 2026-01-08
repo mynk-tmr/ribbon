@@ -1,9 +1,9 @@
 import { Icon } from '@iconify/react'
 import { createFileRoute, Navigate, Outlet } from '@tanstack/react-router'
 import { AuthGuard } from '@/components/auth-guard'
-import cn from '@/helpers/cn'
-import { dicebear } from '@/helpers/freebies'
-import { useFireAuthStore } from '@/hooks/useFireAuth'
+import { authStoreActions, useAuth } from '@/shared/hooks/useAuth'
+import cn from '@/shared/utils/cn'
+import { dicebear } from '@/shared/utils/freebies'
 
 export const Route = createFileRoute('/user')({
   component: () => (
@@ -28,8 +28,9 @@ function RouteComponent() {
 }
 
 function Header() {
-  const { user } = useFireAuthStore()
-  if (!user) return
+  const { user } = useAuth()
+  const firebaseUser = authStoreActions.getFirebaseUser()
+  if (!user || !firebaseUser) return
   return (
     <header className="flex flex-wrap items-center gap-6">
       <img
@@ -46,7 +47,7 @@ function Header() {
           <Icon
             className="inline ml-2"
             icon={cn.filter(
-              user.emailVerified
+              firebaseUser.emailVerified
                 ? 'material-symbols:verified'
                 : 'mdi:alert-circle-outline',
             )}
@@ -58,7 +59,7 @@ function Header() {
 }
 
 function UserID() {
-  const { user } = useFireAuthStore()
+  const { user } = useAuth()
   if (!user) return
   return (
     <div className="mt-4 grid gap-y-2 *:text-center opacity-30">

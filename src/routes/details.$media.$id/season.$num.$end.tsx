@@ -1,10 +1,10 @@
 import { Icon } from '@iconify/react'
 import { Pagination } from '@mantine/core'
 import { createFileRoute } from '@tanstack/react-router'
+import { tmdb } from '@/application/api/tmdb/tmdb.client'
 import { Episode } from '@/components/episode'
 import Poster from '@/components/poster'
 import { RatingCircle } from '@/components/rating-circle'
-import { tmdb } from '@/config/tmdb'
 
 export const Route = createFileRoute('/details/$media/$id/season/$num/$end')({
   component: RouteComponent,

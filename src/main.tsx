@@ -3,8 +3,8 @@ import { MantineProvider } from '@mantine/core'
 import { createRouter, RouterProvider } from '@tanstack/react-router'
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
-import theme from './config/theme'
 import { routeTree } from './routeTree.gen'
+import theme from './shared/config/theme'
 
 // Create a new router instance
 const router = createRouter({

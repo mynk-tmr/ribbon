@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { tmdb } from '@/application/api/tmdb/tmdb.client'
 import EntityGrid from '@/components/entity-grid'
 import Overview from '@/components/overview'
-import { tmdb } from '@/config/tmdb'
 
 export const Route = createFileRoute('/details/$media/$id/$similar')({
   component: RouteComponent,

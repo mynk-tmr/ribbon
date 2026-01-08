@@ -25,3 +25,5 @@ dist-ssr
 
 #artifacts
 *.gen.ts
+.vercel
+_api

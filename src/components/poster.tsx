@@ -1,5 +1,5 @@
 import { Image, type ImageProps } from '@mantine/core'
-import cn from '@/helpers/cn'
+import cn from '@/shared/utils/cn'
 
 interface Props extends ImageProps {
   size: 'w185' | 'w342' | 'w500' | 'w780' | 'original'

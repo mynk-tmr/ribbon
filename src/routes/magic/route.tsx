@@ -1,7 +1,7 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
 import { isSignInWithEmailLink, signInWithEmailLink } from 'firebase/auth'
-import { auth } from '@/config/firebase'
-import { authStoreActions } from '@/hooks/useFireAuth'
+import { firebaseAuth as auth } from '@/application/api/firebase/firebase.client'
+import { authStoreActions } from '@/shared/hooks/useAuth'
 
 export const Route = createFileRoute('/magic')({
   beforeLoad: async () => {

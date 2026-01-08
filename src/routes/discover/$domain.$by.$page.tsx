@@ -1,9 +1,9 @@
 import { Chip } from '@mantine/core'
 import { createFileRoute } from '@tanstack/react-router'
 import { type } from 'arktype'
+import { type TMDB, tmdb } from '@/application/api/tmdb/tmdb.client'
 import EntityGrid from '@/components/entity-grid'
-import { type TMDB, tmdb } from '@/config/tmdb'
-import { FmtTitle } from '@/helpers/formatters'
+import { FmtTitle } from '@/shared/utils/formatters'
 
 const schema = type({
   domain: "'now_playing' | 'top_rated' | 'upcoming' | 'popular'",

@@ -1,11 +1,11 @@
 import { Chip, Spoiler } from '@mantine/core'
 import { createFileRoute } from '@tanstack/react-router'
 import { useReducer } from 'react'
+import { type TMDB, tmdb } from '@/application/api/tmdb/tmdb.client'
 import EntityGrid from '@/components/entity-grid'
 import { MetaItem } from '@/components/meta-item'
 import Poster from '@/components/poster'
-import { type TMDB, tmdb } from '@/config/tmdb'
-import { FmtAge, FmtDate, FmtPopularity } from '@/helpers/formatters'
+import { FmtAge, FmtDate, FmtPopularity } from '@/shared/utils/formatters'
 
 export const Route = createFileRoute('/person/$id/')({
   component: RouteComponent,

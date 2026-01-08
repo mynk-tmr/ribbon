@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react'
-import cn from '@/helpers/cn'
+import cn from '@/shared/utils/cn'
 
 interface Props {
   icon: string

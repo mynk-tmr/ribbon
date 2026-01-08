@@ -6,30 +6,31 @@ import {
   reauthenticateWithCredential,
   verifyBeforeUpdateEmail,
 } from 'firebase/auth'
-import { actionCodeSettings } from '@/config/firebase'
-import { useFireAuthStore } from '@/hooks/useFireAuth'
-import useFireBaseAction from '@/hooks/useFireBaseAction'
-import { useMergedState } from '@/hooks/useMergedState'
+import { actionCodeSettings } from '@/application/api/firebase/firebase.client'
+import { authStoreActions } from '@/shared/hooks/useAuth'
+import useFireBaseAction from '@/shared/hooks/useFireBaseAction'
+import { useMergedState } from '@/shared/hooks/useMergedState'
 
 export const Route = createFileRoute('/user/profile/email')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  const { user } = useFireAuthStore()
+  const firebaseUser = authStoreActions.getFirebaseUser()
   const [state, update] = useMergedState({
-    email: user?.email || '',
+    email: firebaseUser?.email || '',
     password: '',
   })
   const [status, action] = useFireBaseAction(async () => {
+    if (!firebaseUser) return
     await reauthenticateWithCredential(
-      user!,
-      EmailAuthProvider.credential(user!.email!, state.password),
+      firebaseUser,
+      EmailAuthProvider.credential(firebaseUser.email!, state.password),
     )
-    await verifyBeforeUpdateEmail(user!, state.email, actionCodeSettings)
+    await verifyBeforeUpdateEmail(firebaseUser, state.email, actionCodeSettings)
   })
-  if (!user) return
 
+  if (!firebaseUser) return null
   if (status.success) return <VerifyEmailDisplay />
 
   return (

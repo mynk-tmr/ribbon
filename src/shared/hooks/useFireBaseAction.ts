@@ -1,5 +1,5 @@
-import { firePrettify } from '@/helpers/pretty-firebase-error'
-import { authStoreActions } from './useFireAuth'
+import { firePrettify } from '@/shared/utils/pretty-firebase-error'
+import { authStoreActions } from './useAuth'
 import { useFormAction } from './useFormAction'
 
 export default function useFireBaseAction<R>(cb: () => Promise<R>) {

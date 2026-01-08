@@ -1,21 +1,20 @@
 import { Icon } from '@iconify/react'
 import { ActionIcon, Button } from '@mantine/core'
 import { useStore } from '@nanostores/react'
-import { MyMedias } from '@/config/idb-store'
+import { mediaStore } from '@/application/stores/media.store'
+import type { MediaItemInput } from '@/domain/entities'
 
-export type AddMediaProp = Parameters<typeof MyMedias.add>[0] & {
-  variant?: 'small'
-}
+export type AddMediaProp = MediaItemInput & { variant?: 'small' }
 
 export default function AddorRemoveMedia({ variant, ...props }: AddMediaProp) {
-  const medias = useStore(MyMedias.store)
+  const medias = useStore(mediaStore.store)
   const exists = medias.some((m) => m.id === props.id)
 
   const addIcon = <Icon icon="mdi:bookmark-plus" className="text-white" />
   const removeIcon = <Icon icon="mdi:delete" className="text-red-500" />
 
-  const onAdd = () => MyMedias.add(props)
-  const onRemove = () => MyMedias.remove(props.id)
+  const onAdd = () => mediaStore.add(props)
+  const onRemove = () => mediaStore.remove(props.id)
 
   if (variant === 'small') {
     return exists ? (

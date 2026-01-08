@@ -1,6 +1,6 @@
 import { createFileRoute, Outlet } from '@tanstack/react-router'
 import { type } from 'arktype'
-import { type TMDB, tmdb } from '@/config/tmdb'
+import { type TMDB, tmdb } from '@/application/api/tmdb/tmdb.client'
 
 const schema = type({ media: '"movie" | "tv"', id: 'string.integer.parse' })
 

@@ -3,7 +3,7 @@ import { ActionIcon, ScrollArea } from '@mantine/core'
 import { Link, type LinkProps } from '@tanstack/react-router'
 import type React from 'react'
 import { useRef } from 'react'
-import type { TMDB } from '@/config/tmdb'
+import type { TMDB } from '@/application/api/tmdb/tmdb.client'
 import PreviewCard from './preview-card'
 
 type Props = { items: Array<TMDB.Media | TMDB.Person> }

@@ -2,28 +2,28 @@ import { Icon } from '@iconify/react'
 import { Button, TextInput } from '@mantine/core'
 import { createFileRoute, Link, Navigate } from '@tanstack/react-router'
 import { updateProfile } from 'firebase/auth'
-import { useFireAuthStore } from '@/hooks/useFireAuth'
-import useFireBaseAction from '@/hooks/useFireBaseAction'
-import { useMergedState } from '@/hooks/useMergedState'
+import { authStoreActions } from '@/shared/hooks/useAuth'
+import useFireBaseAction from '@/shared/hooks/useFireBaseAction'
+import { useMergedState } from '@/shared/hooks/useMergedState'
 
 export const Route = createFileRoute('/user/profile/edit')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  const { user } = useFireAuthStore()
+  const firebaseUser = authStoreActions.getFirebaseUser()
   const [state, update] = useMergedState({
-    displayName: user?.displayName || '',
-    photoURL: user?.photoURL || '',
+    displayName: firebaseUser?.displayName || '',
+    photoURL: firebaseUser?.photoURL || '',
   })
   const [status, action] = useFireBaseAction(() =>
-    updateProfile(user!, {
+    updateProfile(firebaseUser!, {
       displayName: state.displayName,
       photoURL: state.photoURL,
     }),
   )
-  if (!user) return
 
+  if (!firebaseUser) return null
   if (status.success) return <Navigate to="/user/profile" replace />
 
   return (

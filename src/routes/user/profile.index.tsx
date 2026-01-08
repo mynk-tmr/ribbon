@@ -3,27 +3,31 @@ import { Button, Modal } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { createFileRoute } from '@tanstack/react-router'
 import { sendEmailVerification, sendPasswordResetEmail } from 'firebase/auth'
-import { actionCodeSettings, auth } from '@/config/firebase'
-import cn from '@/helpers/cn'
-import { firePrettify } from '@/helpers/pretty-firebase-error'
-import { useFireAuthStore } from '@/hooks/useFireAuth'
-import { useFormAction } from '@/hooks/useFormAction'
+import {
+  actionCodeSettings,
+  firebaseAuth as auth,
+} from '@/application/api/firebase/firebase.client'
+import { authStoreActions } from '@/shared/hooks/useAuth'
+import { useFormAction } from '@/shared/hooks/useFormAction'
+import cn from '@/shared/utils/cn'
+import { firePrettify } from '@/shared/utils/pretty-firebase-error'
 
 export const Route = createFileRoute('/user/profile/')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  const { user } = useFireAuthStore()
+  const firebaseUser = authStoreActions.getFirebaseUser()
   const goto = Route.useNavigate()
   const [opened, { open: openSignOut, close }] = useDisclosure(false)
-  if (!user) return
+
+  if (!firebaseUser) return null
 
   const actions: ActionProps[] = [
     {
       label: 'Reset Password',
       action: () =>
-        sendPasswordResetEmail(auth, user.email!, actionCodeSettings),
+        sendPasswordResetEmail(auth, firebaseUser.email!, actionCodeSettings),
       icon: 'mdi:lock-reset',
       successLabel: 'Email Sent',
     },
@@ -44,10 +48,10 @@ function RouteComponent() {
     },
   ]
 
-  if (!user.emailVerified)
+  if (!firebaseUser.emailVerified)
     actions.unshift({
       label: 'Verify Email',
-      action: () => sendEmailVerification(user, actionCodeSettings),
+      action: () => sendEmailVerification(firebaseUser, actionCodeSettings),
       icon: 'mdi:email-check',
       successLabel: 'Email Sent',
     })

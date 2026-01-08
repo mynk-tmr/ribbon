@@ -4,8 +4,11 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { type } from 'arktype'
 import { sendPasswordResetEmail, sendSignInLinkToEmail } from 'firebase/auth'
 import { useState } from 'react'
-import { actionCodeSettings, auth } from '@/config/firebase'
-import useFireBaseAction from '@/hooks/useFireBaseAction'
+import {
+  actionCodeSettings,
+  firebaseAuth as auth,
+} from '@/application/api/firebase/firebase.client'
+import useFireBaseAction from '@/shared/hooks/useFireBaseAction'
 
 const schema = type({ t: "'login' | 'reset'" })
 

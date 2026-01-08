@@ -1,6 +1,6 @@
 import { Pill } from '@mantine/core'
-import { type TMDB, tmdb } from '@/config/tmdb'
-import { FmtPopularity, FmtTrunc, FmtYear } from '@/helpers/formatters'
+import { type TMDB, tmdb } from '@/application/api/tmdb/tmdb.client'
+import { FmtPopularity, FmtTrunc, FmtYear } from '@/shared/utils/formatters'
 import BaseEntityCard from './base-entity-card'
 import { MetaItem } from './meta-item'
 import { RatingCircle } from './rating-circle'

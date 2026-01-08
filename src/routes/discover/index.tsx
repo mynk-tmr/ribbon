@@ -2,9 +2,9 @@
 
 import { Await, createFileRoute } from '@tanstack/react-router'
 import { Suspense } from 'react'
+import { type TMDB, tmdb } from '@/application/api/tmdb/tmdb.client'
 import BigDivider from '@/components/big-divider'
 import OverflowGrid from '@/components/overflow-grid'
-import { type TMDB, tmdb } from '@/config/tmdb'
 
 export const Route = createFileRoute('/discover/')({
   component: RouteComponent,

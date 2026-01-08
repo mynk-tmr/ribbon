@@ -5,10 +5,10 @@ import {
   signInWithEmailAndPassword,
 } from 'firebase/auth'
 import type React from 'react'
-import { auth } from '@/config/firebase'
-import { firePrettify } from '@/helpers/pretty-firebase-error'
-import { useFormAction } from '@/hooks/useFormAction'
-import { useMergedState } from '@/hooks/useMergedState'
+import { firebaseAuth as auth } from '@/application/api/firebase/firebase.client'
+import { useFormAction } from '@/shared/hooks/useFormAction'
+import { useMergedState } from '@/shared/hooks/useMergedState'
+import { firePrettify } from '@/shared/utils/pretty-firebase-error'
 
 export const Route = createFileRoute('/auth/')({
   component: RouteComponent,

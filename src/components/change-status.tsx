@@ -1,10 +1,11 @@
 import { Icon } from '@iconify/react'
 import { ActionIcon } from '@mantine/core'
 import { useStore } from '@nanostores/react'
-import { type MediaItem, MyMedias } from '@/config/idb-store'
+import { mediaStore } from '@/application/stores/media.store'
+import type { MediaItem } from '@/domain/entities'
 
 export default function ChangeStatus({ id }: { id: MediaItem['id'] }) {
-  const medias = useStore(MyMedias.store)
+  const medias = useStore(mediaStore.store)
   const curr = medias.find((m) => m.id === id)
 
   if (!curr) return null
@@ -17,7 +18,7 @@ export default function ChangeStatus({ id }: { id: MediaItem['id'] }) {
       variant="filled"
       color={watching ? 'dark' : 'teal'}
       onClick={() =>
-        MyMedias.changeStatus(id, watching ? 'completed' : 'watching')
+        mediaStore.updateStatus(id, watching ? 'completed' : 'watching')
       }
     >
       <Icon icon={'mdi:check'} />

@@ -3,10 +3,11 @@ import { Autocomplete, Button, Select } from '@mantine/core'
 import { useStore } from '@nanostores/react'
 import { createFileRoute } from '@tanstack/react-router'
 import { type } from 'arktype'
+import { type TMDB, tmdb } from '@/application/api/tmdb/tmdb.client'
+import { searchStore } from '@/application/stores/search.store'
 import EntityGrid from '@/components/entity-grid'
-import { Search } from '@/config/idb-store'
-import { type TMDB, tmdb } from '@/config/tmdb'
-import { useMergedState } from '@/hooks/useMergedState'
+import type { SearchItem } from '@/domain/entities'
+import { useMergedState } from '@/shared/hooks/useMergedState'
 
 const schema = type({
   query: "string = ''",
@@ -92,11 +93,11 @@ type Entity = 'movie' | 'tv' | 'person'
 function SearchBox() {
   const sparam = Route.useSearch()
   const [state, update] = useMergedState(sparam)
-  const searches = useStore(Search.store)
+  const searches = useStore(searchStore.store)
   const goto = Route.useNavigate()
   const search = () => goto({ to: '/search', search: { ...state, page: 1 } })
   const getFiltered = (entity: Entity) =>
-    searches
+    (searches as SearchItem[])
       .filter((s) => s.entity === entity)
       .map((s) => `${s.query} (${entity})`) //this pattern is used by regex in autocomplete
   return (
@@ -104,7 +105,7 @@ function SearchBox() {
       onSubmit={async (e) => {
         e.preventDefault()
         const { query, by } = state
-        await Search.add({ query, entity: by })
+        await searchStore.add(query, by)
         search()
       }}
       className="flex flex-wrap gap-6 justify-center"
