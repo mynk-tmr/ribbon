@@ -181,7 +181,6 @@ utils/
 TMDB_TOKEN=string > 1
 VERCEL=boolean
 MONGODB_URI=string > 1
-DB_NAME=string > 1
 JWT_SECRET=string >= 32
 ```
 
