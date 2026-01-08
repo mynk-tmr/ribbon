@@ -2,7 +2,7 @@ import { Icon } from '@iconify/react'
 import { ActionIcon } from '@mantine/core'
 import { Link } from '@tanstack/react-router'
 import { tmdb } from '@/application/api/tmdb/tmdb.client'
-import type { MediaItem } from '@/domain/entities'
+import type { MediaItem } from '@/dtos/media.dto'
 import { FmtTrunc } from '@/shared/utils/formatters'
 import AddorRemoveMedia from './add-media'
 import ChangeStatus from './change-status'
@@ -14,7 +14,7 @@ export default function CardMediaItem(props: MediaItem) {
   const link =
     media_type === 'movie'
       ? tmdb.streamUrl(id)
-      : tmdb.streamUrl(id, season, episode)
+      : tmdb.streamUrl(id, season ?? undefined, episode ?? undefined)
 
   return (
     <div className="relative group w-[calc(50%-1rem)] xs:w-42 select-none">

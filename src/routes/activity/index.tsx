@@ -7,7 +7,7 @@ import { type } from 'arktype'
 import { mediaStore } from '@/application/stores/media.store'
 import CardMediaItem from '@/components/card-media-item'
 import SearchHistory from '@/components/search-history'
-import type { MediaItem } from '@/domain/entities'
+import type { MediaItem } from '@/dtos/media.dto'
 
 const schema = type({ 'panel?': "'all' | 'watching' | 'history'" })
 

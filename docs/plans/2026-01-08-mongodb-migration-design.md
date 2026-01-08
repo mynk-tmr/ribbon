@@ -231,7 +231,7 @@ export async function initializeApp(): Promise<void> {
 ```json
 {
   "dependencies": {
-    "mongodb": "^6.15.0"
+    "mongodb": "^7"
   }
 }
 ```

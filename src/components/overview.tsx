@@ -52,8 +52,6 @@ export default function Overview() {
             media_type={details.media_type}
             poster_path={details.poster_path}
             title={details.title}
-            season={1}
-            episode={1}
           />
           {details.is_movie ? (
             <Button

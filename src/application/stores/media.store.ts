@@ -1,6 +1,7 @@
 import { atom } from 'nanostores'
-import type { MediaItem, MediaItemInput, MediaStatus } from '@/domain/entities'
-import { getDb } from '../api/idb/idb.client'
+import type { MediaAddInput, MediaItem, MediaStatus } from '@/dtos/media.dto'
+import { MediaAPI } from './api-store'
+import { authStore } from './auth.store'
 
 const $media = atom<MediaItem[]>([])
 
@@ -8,38 +9,59 @@ export const mediaStore = {
   store: $media,
 
   async refresh(): Promise<void> {
-    const uid = 'guest' // TODO: Get from auth
-    const db = await getDb(uid)
-    const items = await db.getAll('media')
+    const user = authStore.value.user
+    if (!user) {
+      $media.set([])
+      return
+    }
+
+    const items = await MediaAPI.getAll()
     $media.set(items)
   },
 
-  async add(item: MediaItemInput): Promise<void> {
-    const uid = 'guest'
-    const db = await getDb(uid)
-    await db.put('media', {
-      ...item,
-      duration: 0,
-      timestamp: 0,
-      progress: 0,
-      status: 'watching',
+  async add(item: MediaAddInput): Promise<void> {
+    const user = authStore.value.user
+    if (!user) return
+
+    await MediaAPI.add({
+      id: item.id,
+      media_type: item.media_type,
+      title: item.title,
+      poster_path: item.poster_path,
     })
     await this.refresh()
   },
 
   async remove(id: number): Promise<void> {
-    const uid = 'guest'
-    const db = await getDb(uid)
-    await db.delete('media', id)
+    const user = authStore.value.user
+    if (!user) return
+
+    await MediaAPI.remove(id)
     await this.refresh()
   },
 
   async updateStatus(id: number, status: MediaStatus): Promise<void> {
-    const uid = 'guest'
-    const db = await getDb(uid)
-    const media = await db.get('media', id)
-    if (!media) return
-    await db.put('media', { ...media, status })
+    const user = authStore.value.user
+    if (!user) return
+
+    await MediaAPI.updateStatus(id, { status })
+    await this.refresh()
+  },
+
+  async updateProgress(
+    id: number,
+    progress: { progress: number; timestamp: number; duration: number },
+  ): Promise<void> {
+    const user = authStore.value.user
+    if (!user) return
+
+    await MediaAPI.updateProgress(id, {
+      progress: progress.progress,
+      timestamp: progress.timestamp,
+      duration: progress.duration,
+      season: null,
+      episode: null,
+    })
     await this.refresh()
   },
 }

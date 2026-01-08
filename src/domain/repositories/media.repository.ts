@@ -1,12 +1,8 @@
-import type {
-  MediaItem,
-  MediaItemInput,
-  MediaStatus,
-} from '../entities/media.entity'
+import type { MediaAddInput, MediaItem, MediaStatus } from '@/dtos/media.dto'
 
 export interface IMediaRepository {
   getAll(): Promise<MediaItem[]>
-  add(item: MediaItemInput): Promise<void>
+  add(item: MediaAddInput): Promise<void>
   remove(id: number): Promise<void>
   updateStatus(id: number, status: MediaStatus): Promise<void>
 }

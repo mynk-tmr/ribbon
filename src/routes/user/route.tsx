@@ -1,8 +1,6 @@
-import { Icon } from '@iconify/react'
 import { createFileRoute, Navigate, Outlet } from '@tanstack/react-router'
 import { AuthGuard } from '@/components/auth-guard'
-import { authStoreActions, useAuth } from '@/shared/hooks/useAuth'
-import cn from '@/shared/utils/cn'
+import { useAuth } from '@/shared/hooks/useAuth'
 import { dicebear } from '@/shared/utils/freebies'
 
 export const Route = createFileRoute('/user')({
@@ -29,30 +27,17 @@ function RouteComponent() {
 
 function Header() {
   const { user } = useAuth()
-  const firebaseUser = authStoreActions.getFirebaseUser()
-  if (!user || !firebaseUser) return
+  if (!user) return
   return (
     <header className="flex flex-wrap items-center gap-6">
       <img
-        src={user.photoURL || dicebear(user.uid)}
+        src={dicebear(user.uid)}
         alt="User Avatar"
         className="size-28 rounded-full ring p-1"
       />
       <div>
-        <h1 className="text-2xl font-bold">
-          {user.displayName || 'Anonymous'}
-        </h1>
-        <span className="text-sm">
-          {user.email}
-          <Icon
-            className="inline ml-2"
-            icon={cn.filter(
-              firebaseUser.emailVerified
-                ? 'material-symbols:verified'
-                : 'mdi:alert-circle-outline',
-            )}
-          />
-        </span>
+        <h1 className="text-2xl font-bold">{user.email}</h1>
+        <span className="text-sm">{user.email}</span>
       </div>
     </header>
   )

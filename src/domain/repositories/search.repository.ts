@@ -1,4 +1,4 @@
-import type { SearchEntity, SearchItem } from '../entities/search.entity'
+import type { SearchEntity, SearchItem } from '@/dtos/search.dto'
 
 export interface ISearchRepository {
   getAll(): Promise<SearchItem[]>

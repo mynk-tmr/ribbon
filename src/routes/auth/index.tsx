@@ -1,14 +1,9 @@
 import { Button, PasswordInput, TextInput } from '@mantine/core'
 import { createFileRoute, Link } from '@tanstack/react-router'
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-} from 'firebase/auth'
 import type React from 'react'
-import { firebaseAuth as auth } from '@/application/api/firebase/firebase.client'
+import { AuthAPI } from '@/application/stores/api-store'
 import { useFormAction } from '@/shared/hooks/useFormAction'
 import { useMergedState } from '@/shared/hooks/useMergedState'
-import { firePrettify } from '@/shared/utils/pretty-firebase-error'
 
 export const Route = createFileRoute('/auth/')({
   component: RouteComponent,
@@ -35,18 +30,17 @@ function RouteComponent() {
 const Form: React.FC = () => {
   const [state, set] = useMergedState({ email: '', password: '' })
   const search = Route.useSearch()
-  const [status, action] = useFormAction(() =>
+  const [status, action] = useFormAction(async () => {
     search.login
-      ? signInWithEmailAndPassword(auth, state.email, state.password)
-      : createUserWithEmailAndPassword(auth, state.email, state.password),
-  )
+      ? await AuthAPI.login({ email: state.email, password: state.password })
+      : await AuthAPI.register({ email: state.email, password: state.password })
+  })
+
   return (
-    <form action={action} className="space-y-4 sm:max-w-[340px]">
+    <form action={action} className="space-y-4 w-82.5 sm:w-92.5">
       <div>
         {!status.pending && status.error && (
-          <p className="text-red-400 text-sm">
-            {firePrettify.auth(status.error.message)}
-          </p>
+          <p className="text-red-400 text-sm">{status.error.message}</p>
         )}
       </div>
       <TextInput
@@ -62,7 +56,7 @@ const Form: React.FC = () => {
         onChange={(e) => set({ password: e.target.value })}
         label="Password"
         required
-        description="8-32 characters, including a number, a letter, and a special character"
+        description="8-32 characters"
         placeholder="••••••••••••••••"
       />
       <OtherLinks />

@@ -1,6 +1,7 @@
 import { atom } from 'nanostores'
-import type { SearchEntity, SearchItem } from '@/domain/entities'
-import { getDb } from '../api/idb/idb.client'
+import type { SearchEntity, SearchItem } from '@/dtos/search.dto'
+import { SearchAPI } from './api-store'
+import { authStore } from './auth.store'
 
 const $search = atom<SearchItem[]>([])
 
@@ -8,32 +9,37 @@ export const searchStore = {
   store: $search,
 
   async refresh(): Promise<void> {
-    const uid = 'guest' // TODO: Get from auth
-    const db = await getDb(uid)
-    const items = await db.getAll('search')
+    const user = authStore.value.user
+    if (!user) {
+      $search.set([])
+      return
+    }
+
+    const items = await SearchAPI.getAll()
     $search.set(items)
   },
 
   async add(query: string, entity: SearchEntity): Promise<void> {
-    const uid = 'guest'
-    const db = await getDb(uid)
-    const id = `${entity}-${query}`
-    if (await db.get('search', id)) return
-    await db.add('search', { id, query, entity, addedAt: new Date() })
+    const user = authStore.value.user
+    if (!user) return
+
+    await SearchAPI.add({ query, entity })
     await this.refresh()
   },
 
   async remove(id: string): Promise<void> {
-    const uid = 'guest'
-    const db = await getDb(uid)
-    await db.delete('search', id)
+    const user = authStore.value.user
+    if (!user) return
+
+    await SearchAPI.remove(id)
     await this.refresh()
   },
 
   async clear(): Promise<void> {
-    const uid = 'guest'
-    const db = await getDb(uid)
-    await db.clear('search')
+    const user = authStore.value.user
+    if (!user) return
+
+    await SearchAPI.clear()
     await this.refresh()
   },
 }

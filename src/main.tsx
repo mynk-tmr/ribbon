@@ -3,6 +3,7 @@ import { MantineProvider } from '@mantine/core'
 import { createRouter, RouterProvider } from '@tanstack/react-router'
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
+import { initializeApp } from './application/stores/api-store'
 import { routeTree } from './routeTree.gen'
 import theme from './shared/config/theme'
 
@@ -20,6 +21,9 @@ declare module '@tanstack/react-router' {
     router: typeof router
   }
 }
+
+// Initialize app (clear IndexedDB, check auth)
+initializeApp().catch(console.error)
 
 // Render the app
 const rootElement = document.getElementById('root')

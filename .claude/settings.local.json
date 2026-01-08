@@ -1,5 +1,9 @@
 {
   "permissions": {
-    "allow": ["Bash(xargs sed:*)", "Bash(xargs:*)"]
+    "allow": [
+      "Bash(xargs sed:*)",
+      "Bash(xargs:*)",
+      "Bash(if not exist \"server\\\\services\" mkdir \"server\\\\services\")"
+    ]
   }
 }

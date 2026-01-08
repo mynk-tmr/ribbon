@@ -6,7 +6,7 @@ import { type } from 'arktype'
 import { type TMDB, tmdb } from '@/application/api/tmdb/tmdb.client'
 import { searchStore } from '@/application/stores/search.store'
 import EntityGrid from '@/components/entity-grid'
-import type { SearchItem } from '@/domain/entities'
+import type { SearchItem } from '@/dtos/search.dto'
 import { useMergedState } from '@/shared/hooks/useMergedState'
 
 const schema = type({

@@ -2,7 +2,7 @@ import { Badge, Spoiler } from '@mantine/core'
 import { getRouteApi } from '@tanstack/react-router'
 import { tmdb } from '@/application/api/tmdb/tmdb.client'
 import { mediaStore } from '@/application/stores/media.store'
-import type { MediaItemInput } from '@/domain/entities'
+import type { MediaAddInput } from '@/dtos/media.dto'
 import { MetaItem } from './meta-item'
 import Poster from './poster'
 import { RatingCircle } from './rating-circle'
@@ -69,12 +69,7 @@ export function Episode({ index }: { index: number }) {
   )
 }
 
-function Overview(
-  prop: Omit<MediaItemInput, 'season' | 'episode'> & {
-    season: number
-    episode: number
-  },
-) {
+function Overview(prop: MediaAddInput & { season: number; episode: number }) {
   const link = tmdb.streamUrl(prop.id, prop.season, prop.episode)
   return (
     <a
@@ -89,8 +84,6 @@ function Overview(
           title: prop.title,
           media_type: prop.media_type,
           poster_path: prop.poster_path,
-          season: prop.season,
-          episode: prop.episode,
         })
         window.open(link, '_blank', 'noopener,noreferrer')
       }}

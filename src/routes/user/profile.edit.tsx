@@ -1,65 +1,11 @@
-import { Icon } from '@iconify/react'
-import { Button, TextInput } from '@mantine/core'
-import { createFileRoute, Link, Navigate } from '@tanstack/react-router'
-import { updateProfile } from 'firebase/auth'
-import { authStoreActions } from '@/shared/hooks/useAuth'
-import useFireBaseAction from '@/shared/hooks/useFireBaseAction'
-import { useMergedState } from '@/shared/hooks/useMergedState'
+import { createFileRoute, Navigate } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/user/profile/edit')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  const firebaseUser = authStoreActions.getFirebaseUser()
-  const [state, update] = useMergedState({
-    displayName: firebaseUser?.displayName || '',
-    photoURL: firebaseUser?.photoURL || '',
-  })
-  const [status, action] = useFireBaseAction(() =>
-    updateProfile(firebaseUser!, {
-      displayName: state.displayName,
-      photoURL: state.photoURL,
-    }),
-  )
-
-  if (!firebaseUser) return null
-  if (status.success) return <Navigate to="/user/profile" replace />
-
-  return (
-    <section>
-      <form action={action} className="space-y-4">
-        <h2 className="text-2xl font-bold">Update Profile</h2>
-        {status.error && (
-          <p className="text-red-400 text-sm">{status.error.message}</p>
-        )}
-        <TextInput
-          label="Display Name"
-          value={state.displayName}
-          leftSection={<Icon icon="mdi:robot-happy" />}
-          onChange={(e) => update({ displayName: e.target.value })}
-        />
-        <TextInput
-          label="Profile Pic"
-          leftSection={<Icon icon="mdi:image" />}
-          value={state.photoURL}
-          onChange={(e) => update({ photoURL: e.target.value })}
-        />
-        <div className="flex justify-end gap-x-4">
-          <Button loading={status.pending} size="xs" type="submit">
-            Update
-          </Button>
-          <Button
-            size="xs"
-            color="gray.2"
-            c="dark"
-            component={Link}
-            to="/user/profile"
-          >
-            Cancel
-          </Button>
-        </div>
-      </form>
-    </section>
-  )
+  // Profile editing not available with MongoDB authentication
+  // This feature used Firebase Auth's displayName and photoURL
+  return <Navigate to="/user/profile" replace />
 }
