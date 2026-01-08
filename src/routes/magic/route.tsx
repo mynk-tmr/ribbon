@@ -1,17 +1,24 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
-import { isSignInWithEmailLink, signInWithEmailLink } from 'firebase/auth'
-import { firebaseAuth as auth } from '@/application/api/firebase/firebase.client'
+import { PasswordlessAPI } from '@/application/stores/api-store'
 import { authStoreActions } from '@/shared/hooks/useAuth'
 
 export const Route = createFileRoute('/magic')({
   beforeLoad: async () => {
-    if (isSignInWithEmailLink(auth, window.location.href)) {
-      const email = window.localStorage.getItem('emailForSignIn')
-      await signInWithEmailLink(auth, email!, window.location.href)
-      window.localStorage.removeItem('emailForSignIn')
+    const urlParams = new URLSearchParams(window.location.search)
+    const token = urlParams.get('token')
+
+    if (token) {
+      try {
+        // Verify the token with the server
+        await PasswordlessAPI.verifyToken(token)
+      } catch (error) {
+        console.error('Failed to verify magic link:', error)
+      }
     } else {
-      authStoreActions.refresh()
+      // Regular auth check
+      await authStoreActions.refresh()
     }
+
     throw redirect({ to: '/user/profile', replace: true })
   },
 })

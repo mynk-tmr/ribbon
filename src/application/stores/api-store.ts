@@ -187,6 +187,38 @@ export const SearchAPI = {
   },
 }
 
+// Passwordless API
+export const PasswordlessAPI = {
+  async sendLoginLink(email: string): Promise<{ success: boolean }> {
+    return handleRequest(
+      api<{ success: boolean }>('/passwordless/send-login', {
+        method: 'POST',
+        body: { email },
+      }),
+    )
+  },
+
+  async sendPasswordReset(email: string): Promise<{ success: boolean }> {
+    return handleRequest(
+      api<{ success: boolean }>('/passwordless/send-reset', {
+        method: 'POST',
+        body: { email },
+      }),
+    )
+  },
+
+  async verifyToken(token: string): Promise<AuthUser> {
+    const result = await handleRequest(
+      api<AuthUser>('/passwordless/verify', {
+        method: 'POST',
+        body: { token },
+      }),
+    )
+    await authStoreActions.refresh()
+    return result
+  },
+}
+
 // Migration: Clear old IndexedDB databases
 async function clearOldIndexedDB(): Promise<void> {
   const databases = await indexedDB.databases()

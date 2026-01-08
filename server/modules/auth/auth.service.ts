@@ -1,3 +1,4 @@
+import { compare, hash } from 'bcryptjs'
 import { ObjectId } from 'mongodb'
 import { generateToken } from '../../services/jwt.service'
 import { getCollections } from '../../services/mongodb.service'
@@ -23,7 +24,7 @@ export async function register(input: RegisterInput): Promise<AuthUser> {
   }
 
   // Hash password
-  const passwordHash = await Bun.password.hash(input.password)
+  const passwordHash = await hash(input.password, 10)
 
   // Create user
   const result = await users.insertOne({
@@ -44,7 +45,7 @@ export async function login(input: LoginInput): Promise<AuthUser> {
     throw new AuthError('INVALID_CREDENTIALS', 'Invalid email or password')
   }
 
-  const isValid = await Bun.password.verify(input.password, user.passwordHash)
+  const isValid = await compare(input.password, user.passwordHash)
   if (!isValid) {
     throw new AuthError('INVALID_CREDENTIALS', 'Invalid email or password')
   }

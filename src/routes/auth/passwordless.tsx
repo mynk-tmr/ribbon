@@ -2,13 +2,9 @@ import { Icon } from '@iconify/react'
 import { Button, TextInput } from '@mantine/core'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { type } from 'arktype'
-import { sendPasswordResetEmail, sendSignInLinkToEmail } from 'firebase/auth'
 import { useState } from 'react'
-import {
-  actionCodeSettings,
-  firebaseAuth as auth,
-} from '@/application/api/firebase/firebase.client'
-import useFireBaseAction from '@/shared/hooks/useFireBaseAction'
+import { PasswordlessAPI } from '@/application/stores/api-store'
+import { useFormAction } from '@/shared/hooks/useFormAction'
 
 const schema = type({ t: "'login' | 'reset'" })
 
@@ -19,20 +15,20 @@ export const Route = createFileRoute('/auth/passwordless')({
 
 function RouteComponent() {
   const search = Route.useSearch()
-  const action =
-    search.t === 'login' ? sendSignInLinkToEmail : sendPasswordResetEmail
   const [email, setEmail] = useState('')
-  const [status, start] = useFireBaseAction(async () => {
-    if (search.t === 'login')
-      window.localStorage.setItem('emailForSignIn', email)
-    action(auth, email, actionCodeSettings)
+  const [status, action] = useFormAction(async () => {
+    if (search.t === 'login') {
+      await PasswordlessAPI.sendLoginLink(email)
+    } else {
+      await PasswordlessAPI.sendPasswordReset(email)
+    }
   })
 
   if (status.success) return <EmailSendSuccess />
 
   return (
     <main className="page">
-      <form action={start} className="space-y-4 min-w-xs">
+      <form action={action} className="space-y-4 min-w-xs">
         <h2 className="text-2xl font-bold capitalize">Send {search.t} Link</h2>
         {status.error && (
           <p className="text-red-400 text-sm">{status.error.message}</p>
