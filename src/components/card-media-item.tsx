@@ -82,7 +82,13 @@ export default function CardMediaItem(props: MediaItem) {
             shadow-[0_4px_12px_rgba(0,0,0,0.4)]
           "
         >
-          <AddorRemoveMedia {...props} variant="small" />
+          <AddorRemoveMedia
+            id={props.id}
+            media_type={props.media_type}
+            poster_path={props.poster_path}
+            title={props.title}
+            variant="small"
+          />
           <ActionIcon
             bg="blue"
             radius={'xl'}

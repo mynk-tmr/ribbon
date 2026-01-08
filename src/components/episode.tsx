@@ -90,6 +90,8 @@ function Overview(prop: MediaAddInput & { season: number; episode: number }) {
             title: prop.title,
             media_type: prop.media_type,
             poster_path: prop.poster_path,
+            season: prop.season,
+            episode: prop.episode,
           })
         }
         window.open(link, '_blank', 'noopener,noreferrer')

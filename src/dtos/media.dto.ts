@@ -26,6 +26,8 @@ export interface MediaAddInput {
   media_type: MediaType
   title: string
   poster_path: string | null
+  season?: number
+  episode?: number
 }
 
 export type MediaProgressInput = Partial<{

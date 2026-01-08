@@ -18,7 +18,7 @@ export default function AddorRemoveMedia({ variant, ...props }: AddMediaProp) {
   const onAdd = async () => {
     setLoading(true)
     try {
-      await mediaStore.add(props)
+      await mediaStore.add({ season: 1, episode: 1, ...props })
     } finally {
       setLoading(false)
     }

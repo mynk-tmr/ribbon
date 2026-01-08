@@ -10,6 +10,8 @@ export const mediaAddInputSchema = type({
   media_type: "'movie' | 'tv'",
   title: 'string > 0',
   poster_path: 'string | null',
+  'season?': 'number >= 0',
+  'episode?': 'number >= 0',
 })
 
 export const mediaProgressInputSchema = type({
