@@ -1,7 +1,11 @@
 import type { Context } from 'hono'
 import { HTTPException } from 'hono/http-exception'
 import { connect } from '../../services/mongodb.service'
-import { loginInputSchema, registerInputSchema } from './auth.dto'
+import {
+  type AuthUser,
+  loginInputSchema,
+  registerInputSchema,
+} from './auth.dto'
 import { AuthError, generateUserToken, login, register } from './auth.service'
 
 export async function registerController(c: Context) {
@@ -12,6 +16,7 @@ export async function registerController(c: Context) {
 
   try {
     const user = await register(input)
+    await setJWTCookie(c, user)
     return c.json({ uid: user.uid, email: user.email }, 201)
   } catch (error) {
     if (error instanceof AuthError) {
@@ -29,12 +34,7 @@ export async function loginController(c: Context) {
 
   try {
     const user = await login(input)
-    const token = await generateUserToken(user.uid, user.email)
-
-    c.header(
-      'Set-Cookie',
-      `jwt=${token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${7 * 24 * 60 * 60}`,
-    )
+    await setJWTCookie(c, user)
     return c.json({ uid: user.uid, email: user.email })
   } catch (error) {
     if (error instanceof AuthError) {
@@ -54,4 +54,12 @@ export async function meController(c: Context) {
   const email = c.get('userEmail')
 
   return c.json({ uid, email })
+}
+
+async function setJWTCookie(c: Context, user: AuthUser) {
+  const token = await generateUserToken(user.uid, user.email)
+  c.header(
+    'Set-Cookie',
+    `jwt=${token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${7 * 24 * 60 * 60}`,
+  )
 }
