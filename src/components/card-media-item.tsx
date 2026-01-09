@@ -3,7 +3,7 @@ import { ActionIcon } from '@mantine/core'
 import { Link } from '@tanstack/react-router'
 import { tmdb } from '@/application/api/tmdb/tmdb.client'
 import type { MediaItem } from '@/dtos/media.dto'
-import { FmtTrunc } from '@/shared/utils/formatters'
+import { fmtTrunc } from '@/shared/utils/formatters'
 import AddorRemoveMedia from './add-media'
 import ChangeStatus from './change-status'
 import Poster from './poster'
@@ -59,7 +59,7 @@ export default function CardMediaItem(props: MediaItem) {
               "
             >
               <div className="font-semibold text-lg tracking-wide drop-shadow-lg">
-                {FmtTrunc(title, 26)}
+                {fmtTrunc(title, 26)}
               </div>
 
               {media_type === 'tv' && (

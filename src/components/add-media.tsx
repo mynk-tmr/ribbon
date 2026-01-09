@@ -2,6 +2,7 @@ import { Icon } from '@iconify/react'
 import { ActionIcon, Button } from '@mantine/core'
 import { useStore } from '@nanostores/react'
 import { useState } from 'react'
+import { authStore } from '@/application/stores/auth.store'
 import { mediaStore } from '@/application/stores/media.store'
 import type { MediaAddInput } from '@/dtos/media.dto'
 
@@ -9,6 +10,7 @@ export type AddMediaProp = MediaAddInput & { variant?: 'small' }
 
 export default function AddorRemoveMedia({ variant, ...props }: AddMediaProp) {
   const medias = useStore(mediaStore.store)
+  const { user } = useStore(authStore.store)
   const [loading, setLoading] = useState(false)
   const exists = medias.some((m) => m.id === props.id)
 
@@ -54,6 +56,14 @@ export default function AddorRemoveMedia({ variant, ...props }: AddMediaProp) {
       >
         {addIcon}
       </ActionIcon>
+    )
+  }
+
+  if (!user) {
+    return (
+      <Button size="xs" bg="gray" disabled>
+        Login to Track
+      </Button>
     )
   }
 

@@ -1,7 +1,7 @@
 import { Button, PasswordInput, TextInput } from '@mantine/core'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import type React from 'react'
-import { AuthAPI } from '@/application/stores/api-store'
+import { API } from '@/application/api'
 import { useFormAction } from '@/shared/hooks/useFormAction'
 import { useMergedState } from '@/shared/hooks/useMergedState'
 
@@ -32,8 +32,11 @@ const Form: React.FC = () => {
   const search = Route.useSearch()
   const [status, action] = useFormAction(async () => {
     search.login
-      ? await AuthAPI.login({ email: state.email, password: state.password })
-      : await AuthAPI.register({ email: state.email, password: state.password })
+      ? await API.auth.login({ email: state.email, password: state.password })
+      : await API.auth.register({
+          email: state.email,
+          password: state.password,
+        })
   })
 
   return (

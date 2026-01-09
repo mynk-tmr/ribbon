@@ -2,7 +2,7 @@ import { Icon } from '@iconify/react'
 import { Badge, Button } from '@mantine/core'
 import { getRouteApi, Link } from '@tanstack/react-router'
 import { tmdb } from '@/application/api/tmdb/tmdb.client'
-import { FmtHour, FmtPlural, FmtYear } from '@/shared/utils/formatters'
+import { fmtHour, fmtPlural, fmtYear } from '@/shared/utils/formatters'
 import AddorRemoveMedia from './add-media'
 import Poster from './poster'
 import { RatingCircle } from './rating-circle'
@@ -15,9 +15,9 @@ function useDetails() {
     ...details,
     is_movie,
     runtime: is_movie
-      ? FmtHour(details.runtime)
-      : FmtPlural(details.number_of_seasons, 'season'),
-    year: FmtYear(details.release_date),
+      ? fmtHour(details.runtime)
+      : fmtPlural(details.number_of_seasons, 'season'),
+    year: fmtYear(details.release_date),
     link: is_movie
       ? tmdb.streamUrl(details.id)
       : `/details/tv/${details.id}/season/1/${details.number_of_seasons}`,
@@ -76,7 +76,8 @@ export default function Overview() {
           {details.homepage && (
             <Button
               size="xs"
-              color="gray"
+              c="dark"
+              color="yellow.3"
               component={'a'}
               href={details.homepage}
               target="_blank"

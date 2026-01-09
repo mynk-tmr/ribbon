@@ -3,6 +3,7 @@
 export interface AuthUser {
   uid: string
   email: string
+  createdAt: string
 }
 
 export type AuthState = { loading: boolean; user: AuthUser | null }

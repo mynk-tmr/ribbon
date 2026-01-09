@@ -3,7 +3,7 @@ import { MantineProvider } from '@mantine/core'
 import { createRouter, RouterProvider } from '@tanstack/react-router'
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
-import { initializeApp } from './application/stores/api-store'
+import { initializeApp } from './application/api'
 import { routeTree } from './routeTree.gen'
 import theme from './shared/config/theme'
 

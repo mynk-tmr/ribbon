@@ -1,12 +1,16 @@
 import { atom } from 'nanostores'
 import type { AuthState } from '@/dtos/auth.dto'
-import { AuthAPI } from './api-store'
+import { API } from '../api'
 
-export const authStore = atom<AuthState>({ loading: true, user: null })
+const $auth = atom<AuthState>({ loading: true, user: null })
 
-export const authStoreActions = {
+export const authStore = {
+  store: $auth,
   refresh: async () => {
-    const user = await AuthAPI.check()
-    authStore.set({ loading: false, user })
+    const user = await API.auth.check()
+    $auth.set({ loading: false, user })
+  },
+  get value() {
+    return $auth.get()
   },
 }

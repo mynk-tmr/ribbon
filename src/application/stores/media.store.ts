@@ -5,7 +5,7 @@ import type {
   MediaProgressInput,
   MediaStatus,
 } from '@/dtos/media.dto'
-import { MediaAPI } from './api-store'
+import { API } from '../api'
 import { authStore } from './auth.store'
 
 const $media = atom<MediaItem[]>([])
@@ -13,58 +13,36 @@ const $media = atom<MediaItem[]>([])
 export const mediaStore = {
   store: $media,
 
-  async refresh(): Promise<void> {
-    const user = authStore.value.user
-    if (!user) {
-      $media.set([])
-      return
-    }
+  async refresh() {
+    // Only fetch if we have a user, otherwise reset
+    if (!authStore.value.user) return $media.set([])
 
-    const items = await MediaAPI.getAll()
+    const items = await API.media.getAll()
     $media.set(items)
   },
 
-  has(id: number): boolean {
-    return $media.get().some((m) => m.id === id)
-  },
+  has: (id: number) => $media.get().some((m) => m.id === id),
 
-  async add(item: MediaAddInput): Promise<void> {
-    const user = authStore.value.user
-    if (!user) return
-
-    await MediaAPI.add({
-      id: item.id,
-      media_type: item.media_type,
-      title: item.title,
-      poster_path: item.poster_path,
-    })
+  async add(body: MediaAddInput) {
+    await API.media.add(body)
     await this.refresh()
   },
 
-  async remove(id: number): Promise<void> {
-    const user = authStore.value.user
-    if (!user) return
-
-    await MediaAPI.remove(id)
+  async remove(id: number) {
+    await API.media.remove(id)
     await this.refresh()
   },
 
-  async updateStatus(id: number, status: MediaStatus): Promise<void> {
-    const user = authStore.value.user
-    if (!user) return
-
-    await MediaAPI.updateStatus(id, { status })
+  async updateStatus(id: number, status: MediaStatus) {
+    await API.media.updateStatus(id, { status })
     await this.refresh()
   },
 
-  async updateProgress(
-    id: number,
-    progress: MediaProgressInput,
-  ): Promise<void> {
-    const user = authStore.value.user
-    if (!user) return
-
-    await MediaAPI.updateProgress(id, progress)
+  async updateProgress(id: number, progress: MediaProgressInput) {
+    await API.media.updateProgress(id, progress)
     await this.refresh()
   },
 }
+
+// Auto-refresh media whenever auth state changes
+authStore.store.subscribe(() => mediaStore.refresh())

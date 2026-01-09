@@ -3,7 +3,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { type } from 'arktype'
 import { type TMDB, tmdb } from '@/application/api/tmdb/tmdb.client'
 import EntityGrid from '@/components/entity-grid'
-import { FmtTitle } from '@/shared/utils/formatters'
+import { fmtTitle } from '@/shared/utils/formatters'
 
 const schema = type({
   domain: "'now_playing' | 'top_rated' | 'upcoming' | 'popular'",
@@ -28,7 +28,7 @@ function RouteComponent() {
   return (
     <main className="page">
       <h1 className="text-3xl text-yellow-400 mb-4 font-bold text-center capitalize">
-        {FmtTitle(domain)} {by}
+        {fmtTitle(domain)} {by}
       </h1>
       <EntityGrid
         controls={<Controls />}

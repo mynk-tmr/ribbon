@@ -1,6 +1,7 @@
 import { createFileRoute, Navigate, Outlet } from '@tanstack/react-router'
 import { AuthGuard } from '@/components/auth-guard'
 import { useAuth } from '@/shared/hooks/useAuth'
+import { fmtFullDate } from '@/shared/utils/formatters'
 import { dicebear } from '@/shared/utils/freebies'
 
 export const Route = createFileRoute('/user')({
@@ -37,7 +38,7 @@ function Header() {
       />
       <div>
         <h1 className="text-2xl font-bold">{user.email}</h1>
-        <span className="text-sm">{user.email}</span>
+        <span>Member since {fmtFullDate(user.createdAt)}</span>
       </div>
     </header>
   )

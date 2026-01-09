@@ -3,7 +3,7 @@ import { Button, TextInput } from '@mantine/core'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { type } from 'arktype'
 import { useState } from 'react'
-import { PasswordlessAPI } from '@/application/stores/api-store'
+import { API } from '@/application/api'
 import { useFormAction } from '@/shared/hooks/useFormAction'
 
 const schema = type({ t: "'login' | 'reset'" })
@@ -18,9 +18,9 @@ function RouteComponent() {
   const [email, setEmail] = useState('')
   const [status, action] = useFormAction(async () => {
     if (search.t === 'login') {
-      await PasswordlessAPI.sendLoginLink(email)
+      await API.passwordLess.sendLoginLink(email)
     } else {
-      await PasswordlessAPI.sendPasswordReset(email)
+      await API.passwordLess.sendPasswordReset(email)
     }
   })
 

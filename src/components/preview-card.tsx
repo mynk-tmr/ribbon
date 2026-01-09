@@ -1,6 +1,6 @@
 import { Pill } from '@mantine/core'
 import { type TMDB, tmdb } from '@/application/api/tmdb/tmdb.client'
-import { FmtPopularity, FmtTrunc, FmtYear } from '@/shared/utils/formatters'
+import { fmtPopularity, fmtTrunc, fmtYear } from '@/shared/utils/formatters'
 import BaseEntityCard from './base-entity-card'
 import { MetaItem } from './meta-item'
 import { RatingCircle } from './rating-circle'
@@ -36,7 +36,7 @@ function MediaCard(props: TMDB.Media) {
       topRight={<RatingCircle rating={vote_average} />}
       footer={
         <>
-          <MetaItem icon="mdi:calendar" label={FmtYear(release_date)} />
+          <MetaItem icon="mdi:calendar" label={fmtYear(release_date)} />
           <MetaItem icon="mdi:translate" label={original_language} />
         </>
       }
@@ -55,7 +55,7 @@ function PersonCard(props: TMDB.Person) {
   } = props
   const notable =
     known_for[0] === undefined ? 'N/A' : tmdb.normalise(known_for[0]).title
-  const notableTitle = FmtTrunc(notable, 12)
+  const notableTitle = fmtTrunc(notable, 12)
 
   return (
     <BaseEntityCard
@@ -74,7 +74,7 @@ function PersonCard(props: TMDB.Person) {
           <MetaItem
             className="text-yellow-200"
             icon="mdi:star"
-            label={FmtPopularity(popularity, true)}
+            label={fmtPopularity(popularity, true)}
           />
         </>
       }

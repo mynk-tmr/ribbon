@@ -5,7 +5,7 @@ import { type TMDB, tmdb } from '@/application/api/tmdb/tmdb.client'
 import EntityGrid from '@/components/entity-grid'
 import { MetaItem } from '@/components/meta-item'
 import Poster from '@/components/poster'
-import { FmtAge, FmtDate, FmtPopularity } from '@/shared/utils/formatters'
+import { fmtAge, fmtFullDate, fmtPopularity } from '@/shared/utils/formatters'
 
 export const Route = createFileRoute('/person/$id/')({
   component: RouteComponent,
@@ -50,22 +50,25 @@ function PersonDetails() {
       <div className="flex-1">
         <h1 className="text-3xl md:text-5xl font-bold mb-2">{name}</h1>
         <p className=" text-gray-400 mb-4">
-          {known_for_department} | ⭐ Popularity {FmtPopularity(popularity)}
+          {known_for_department} | ⭐ Popularity {fmtPopularity(popularity)}
         </p>
 
         <ul className="flex flex-wrap gap-4 text-sm text-lightGray mb-4">
           {birthday && (
-            <MetaItem label={FmtDate(birthday)} icon="mdi:cake-variant" />
+            <MetaItem label={fmtFullDate(birthday)} icon="mdi:cake-variant" />
           )}
           {birthday && (
             <MetaItem
               className="text-green-400"
               icon="mdi:robot-happy"
-              label={`Age ${FmtAge(birthday)}`}
+              label={`Age ${fmtAge(birthday)}`}
             />
           )}
           {deathday && (
-            <MetaItem icon="mdi:cross" label={`Died ${FmtDate(deathday)}`} />
+            <MetaItem
+              icon="mdi:cross"
+              label={`Died ${fmtFullDate(deathday)}`}
+            />
           )}
           {place_of_birth && (
             <MetaItem icon="mdi:map-marker" label={place_of_birth} />

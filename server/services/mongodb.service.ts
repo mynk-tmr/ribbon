@@ -1,8 +1,8 @@
 import { type Collection, type Db, MongoClient } from 'mongodb'
 import { ENV } from '../utils/dotenv'
 
-let client: MongoClient | null = null
-let db: Db | null = null
+const client = new MongoClient(ENV.MONGODB_URI, ENV.MONGODB_OPTIONS)
+const db = client.db()
 
 export interface Collections {
   users: Collection
@@ -12,22 +12,7 @@ export interface Collections {
 }
 
 export async function connect(): Promise<Db> {
-  if (db) {
-    return db
-  }
-
-  client = new MongoClient(ENV.MONGODB_URI, ENV.MONGODB_OPTIONS)
-
   await client.connect()
-  db = client.db()
-
-  // Create indexes
-  // await createIndexes(db)
-
-  // Handle graceful shutdown
-  process.on('SIGTERM', closeConnection)
-  process.on('SIGINT', closeConnection)
-
   return db
 }
 
@@ -53,10 +38,6 @@ async function createIndexes(database: Db): Promise<void> {
 }
 
 export function getCollections(): Collections {
-  if (!db) {
-    throw new Error('Database not connected. Call connect() first.')
-  }
-
   return {
     users: db.collection('users'),
     tmdb_metadata: db.collection('tmdb_metadata'),
@@ -66,9 +47,5 @@ export function getCollections(): Collections {
 }
 
 export async function closeConnection(): Promise<void> {
-  if (client) {
-    await client.close()
-    client = null
-    db = null
-  }
+  await client.close()
 }

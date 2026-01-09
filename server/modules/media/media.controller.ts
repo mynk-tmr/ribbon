@@ -26,7 +26,6 @@ export async function getAllMediaController(c: Context) {
 export async function addMediaController(c: Context) {
   await connect()
   const uid = c.get('uid')
-
   const body = await c.req.json()
   const input = mediaAddInputSchema.assert(body)
 

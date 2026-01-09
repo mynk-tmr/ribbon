@@ -1,7 +1,7 @@
 import { Icon } from '@iconify/react'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
-import { AuthAPI } from '@/application/stores/api-store'
-import { authStore, authStoreActions } from '@/application/stores/auth.store'
+import { API } from '@/application/api'
+import { authStore } from '@/application/stores/auth.store'
 import { useFormAction } from '@/shared/hooks/useFormAction'
 
 export const Route = createFileRoute('/user/profile/')({
@@ -18,8 +18,8 @@ function RouteComponent() {
     {
       label: 'Sign Out',
       action: async () => {
-        await AuthAPI.logout()
-        await authStoreActions.refresh()
+        await API.auth.logout()
+        await authStore.refresh()
         router.invalidate()
       },
       icon: 'mdi:logout',
@@ -28,7 +28,6 @@ function RouteComponent() {
 
   return (
     <div>
-      <p className="text-neutral-400 mb-4">Signed in as: {user.email}</p>
       {actions.map((action) => (
         <ActionItem key={action.label} {...action} />
       ))}

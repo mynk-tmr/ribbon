@@ -50,10 +50,8 @@ export async function logoutController(c: Context) {
 }
 
 export async function meController(c: Context) {
-  const uid = c.get('uid')
-  const email = c.get('userEmail')
-
-  return c.json({ uid, email })
+  const { passwordHash: _, ...safeUser } = c.get('user')
+  return c.json(safeUser)
 }
 
 async function setJWTCookie(c: Context, user: AuthUser) {
